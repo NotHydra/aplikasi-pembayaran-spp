@@ -69,28 +69,78 @@
                 if (roleCheckMinimum($sessionLevel, "admin")) {
                     $pageArray[2] = [
                         "id" => 2,
-                        "title" => "Pengguna",
-                        "icon" => "fas fa-users",
+                        "title" => "Petugas",
+                        "icon" => "fas fa-user-tie",
+                        "link" => "sources/models/petugas",
+                        "child" => null
+                    ];
+                };
+
+                if (roleCheckMinimum($sessionLevel, "petugas")) {
+                    $pageArray[3] = [
+                        "id" => 3,
+                        "title" => "Siswa",
+                        "icon" => "fas fa-user",
+                        "link" => "sources/models/siswa",
+                        "child" => null
+                    ];
+                };
+
+                if (roleCheckMinimum($sessionLevel, "admin")) {
+                    $pageArray[4] = [
+                        "id" => 4,
+                        "title" => "Instansi",
+                        "icon" => "fas fa-building",
                         "link" => null,
                         "child" => [
                             1 => [
                                 "id" => 1,
-                                "title" => "Petugas",
-                                "icon" => "fas fa-user-tie",
-                                "link" => "sources/models/pengguna/petugas",
+                                "title" => "Rombel",
+                                "icon" => "fas fa-archway",
+                                "link" => "sources/models/instansi/rombel",
                             ],
                             2 => [
                                 "id" => 2,
-                                "title" => "Masyarakat",
-                                "icon" => "fas fa-user",
-                                "link" => "sources/models/pengguna/masyarakat",
+                                "title" => "Kompetensi Keahlian",
+                                "icon" => "fas fa-microchip",
+                                "link" => "sources/models/instansi/kompetensi-keahlian",
+                            ],
+                            3 => [
+                                "id" => 3,
+                                "title" => "Jurusan",
+                                "icon" => "fas fa-wrench",
+                                "link" => "sources/models/instansi/jurusan",
+                            ],
+                            4 => [
+                                "id" => 4,
+                                "title" => "Tingkat",
+                                "icon" => "fas fa-layer-group",
+                                "link" => "sources/models/instansi/tingkat",
                             ]
                         ]
                     ];
+
+                    $pageArray[5] = [
+                        "id" => 5,
+                        "title" => "SPP",
+                        "icon" => "fas fa-clipboard",
+                        "link" => "sources/models/spp",
+                        "child" => null
+                    ];
                 };
 
-                $pageArray[6] = [
-                    "id" => 6,
+                if (roleCheckSingle($sessionLevel, "siswa")) {
+                    $pageArray[6] = [
+                        "id" => 6,
+                        "title" => "Histori",
+                        "icon" => "fas fa-history",
+                        "link" => "sources/models/histori",
+                        "child" => null
+                    ];
+                };
+
+                $pageArray[7] = [
+                    "id" => 7,
                     "title" => "Pengaturan",
                     "icon" => "fas fa-cog",
                     "link" => null,
