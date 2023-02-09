@@ -132,9 +132,9 @@
                 if (roleCheckSingle($sessionLevel, "siswa")) {
                     $pageArray[6] = [
                         "id" => 6,
-                        "title" => "Histori",
+                        "title" => "Riwayat",
                         "icon" => "fas fa-history",
-                        "link" => "sources/models/histori",
+                        "link" => "sources/models/riwayat",
                         "child" => null
                     ];
                 };
