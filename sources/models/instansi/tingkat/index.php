@@ -10,7 +10,7 @@ include "$sourcePath/utilities/session/data.php";
 include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 
-roleGuardMinimum($sessionLevel, "administrator", "/$originalPath");
+roleGuardMinimum($sessionLevel, "admin", "/$originalPath");
 ?>
 
 <!DOCTYPE html>
@@ -18,7 +18,7 @@ roleGuardMinimum($sessionLevel, "administrator", "/$originalPath");
 
 <head>
   <?php
-  $headTitle = "Masyarakat";
+  $headTitle = "Tingkat";
   include "$sourcePath/components/head.php";
   include "$sourcePath/components/data-table/head.php";
   include "$sourcePath/components/select/head.php";
@@ -29,7 +29,7 @@ roleGuardMinimum($sessionLevel, "administrator", "/$originalPath");
 <body class="hold-transition layout-navbar-fixed layout-fixed light-mode" id="body-theme">
   <div class="wrapper">
     <?php
-    $navActive = [2, 2];
+    $navActive = [4, 4];
     include "$sourcePath/components/nav.php";
     ?>
 
@@ -58,7 +58,7 @@ roleGuardMinimum($sessionLevel, "administrator", "/$originalPath");
                           "value" => [
                             array_merge([[0, "Semua"]], array_map(function ($yearObject) {
                               return [$yearObject[0], $yearObject[0]];
-                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT DISTINCT YEAR(dibuat) FROM masyarakat WHERE dihapus='0' ORDER BY dibuat DESC;")))), isset($_POST["tahun"]) ? $_POST["tahun"] : null
+                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT DISTINCT YEAR(dibuat) FROM tingkat WHERE dihapus='0' ORDER BY dibuat DESC;")))), isset($_POST["tahun"]) ? $_POST["tahun"] : null
                           ],
                           "placeholder" => "Pilih tahun disini",
                           "enable" => true
@@ -114,10 +114,7 @@ roleGuardMinimum($sessionLevel, "administrator", "/$originalPath");
                         <thead>
                           <tr>
                             <th class="text-center align-middle export">No.</th>
-                            <th class="text-center align-middle export">NIK</th>
-                            <th class="text-center align-middle export">Nama</th>
-                            <th class="text-center align-middle export">Username</th>
-                            <th class="text-center align-middle export">Telepon</th>
+                            <th class="text-center align-middle export">Tingkat</th>
                             <th class="text-center align-middle export">Dibuat</th>
                             <th class="text-center align-middle export">Diubah</th>
                             <th class="text-center align-middle">Aksi</th>
@@ -142,15 +139,12 @@ roleGuardMinimum($sessionLevel, "administrator", "/$originalPath");
                             };
                           };
 
-                          $result = mysqli_query($connection, "SELECT id, nik, nama, username, telepon, dibuat, diubah FROM masyarakat WHERE dihapus='0' $extraFilter ORDER BY dibuat DESC;");
+                          $result = mysqli_query($connection, "SELECT id, tingkat, dibuat, diubah FROM tingkat WHERE dihapus='0' $extraFilter ORDER BY dibuat DESC;");
                           foreach ($result as $i => $data) {
                           ?>
                             <tr>
                               <td class="text-center align-middle"><?php echo $i + 1; ?>.</td>
-                              <td class="align-middle"><?php echo $data["nik"]; ?></td>
-                              <td class="align-middle"><?php echo $data["nama"]; ?></td>
-                              <td class="align-middle"><?php echo $data["username"]; ?></td>
-                              <td class="align-middle"><?php echo $data["telepon"]; ?></td>
+                              <td class="text-center align-middle"><?php echo $data["tingkat"]; ?></td>
                               <td class="text-center align-middle"><?php echo $data["dibuat"]; ?></td>
                               <td class="text-center align-middle"><?php echo dateInterval($data["diubah"], $currentDate); ?></td>
 
@@ -158,10 +152,6 @@ roleGuardMinimum($sessionLevel, "administrator", "/$originalPath");
                                 <div class="btn-group">
                                   <a class="btn btn-app bg-warning m-0" href="./ubah.php?id=<?php echo $data['id']; ?>">
                                     <i class="fas fa-edit"></i> Ubah
-                                  </a>
-
-                                  <a class="btn btn-app bg-danger m-0" href="./ubah-password.php?id=<?php echo $data['id']; ?>">
-                                    <i class="fas fa-edit"></i> Ubah Password
                                   </a>
 
                                   <a class="btn btn-app bg-danger m-0" href="./hapus.php?id=<?php echo $data['id']; ?>">
