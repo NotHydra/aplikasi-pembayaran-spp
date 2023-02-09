@@ -1,5 +1,5 @@
 <?php
-$sourcePath = "../..";
+$sourcePath = "../../..";
 include "$sourcePath/utilities/environment.php";
 include "$sourcePath/utilities/connection.php";
 include "$sourcePath/utilities/session/start.php";
@@ -9,8 +9,21 @@ include "$sourcePath/middlewares/isNotAuthenticated.php";
 include "$sourcePath/utilities/session/data.php";
 include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
+include "$sourcePath/utilities/currency.php";
 
 roleGuardMinimum($sessionLevel, "petugas", "/$originalPath");
+
+$id = $_GET["id"];
+$result = mysqli_query($connection, "SELECT id FROM siswa WHERE id='$id' AND dihapus='0';");
+if (mysqli_num_rows($result) <= 0) {
+  echo "<script>window.location='./..';</script>";
+};
+
+$idSPP = $_GET["idSPP"];
+$result = mysqli_query($connection, "SELECT id FROM spp WHERE id='$idSPP' AND dihapus='0';");
+if (mysqli_num_rows($result) <= 0) {
+  echo "<script>window.location='./..';</script>";
+};
 ?>
 
 <!DOCTYPE html>
@@ -41,7 +54,7 @@ roleGuardMinimum($sessionLevel, "petugas", "/$originalPath");
               <div class="card">
                 <?php
                 $pageItemObject = $pageArray[$navActive[0]];
-                $extraTitle = "Utama";
+                $extraTitle = "Pembayaran";
                 include "$sourcePath/components/content/head.php";
                 ?>
 
@@ -58,7 +71,7 @@ roleGuardMinimum($sessionLevel, "petugas", "/$originalPath");
                           "value" => [
                             array_merge([[0, "Semua"]], array_map(function ($yearObject) {
                               return [$yearObject[0], $yearObject[0]];
-                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT DISTINCT YEAR(dibuat) FROM siswa WHERE dihapus='0' ORDER BY dibuat DESC;")))), isset($_POST["tahun"]) ? $_POST["tahun"] : null
+                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT DISTINCT YEAR(dibuat) FROM pembayaran WHERE id_siswa='$id' AND id_spp='$idSPP' AND dihapus='0' ORDER BY dibuat DESC;")))), isset($_POST["tahun"]) ? $_POST["tahun"] : null
                           ],
                           "placeholder" => "Pilih tahun disini",
                           "enable" => true
@@ -114,14 +127,12 @@ roleGuardMinimum($sessionLevel, "petugas", "/$originalPath");
                         <thead>
                           <tr>
                             <th class="text-center align-middle export">No.</th>
-                            <th class="text-center align-middle export">NISN</th>
-                            <th class="text-center align-middle export">NIS</th>
-                            <th class="text-center align-middle export">Nama</th>
-                            <th class="text-center align-middle export">Rombel</th>
-                            <th class="text-center align-middle export">Alamat</th>
-                            <th class="text-center align-middle export">Telepon</th>
+                            <th class="text-center align-middle export">Petugas</th>
+                            <th class="text-center align-middle export">Bukti Pembayaran</th>
+                            <th class="text-center align-middle export">Tanggal Pembayaran</th>
+                            <th class="text-center align-middle export">Bulan Pembayaran</th>
+                            <th class="text-center align-middle export">Jumlah Pembayaran</th>
                             <th class="text-center align-middle export">Dibuat</th>
-                            <th class="text-center align-middle export">Diubah</th>
                             <th class="text-center align-middle">Aksi</th>
                           </tr>
                         </thead>
@@ -133,42 +144,35 @@ roleGuardMinimum($sessionLevel, "petugas", "/$originalPath");
                           if (isset($_POST["tahun"])) {
                             $tahunFilter = $_POST["tahun"];
                             if ($tahunFilter != 0) {
-                              $extraFilter = $extraFilter . " AND YEAR(siswa.dibuat)='$tahunFilter'";
+                              $extraFilter = $extraFilter . " AND YEAR(pembayaran.dibuat)='$tahunFilter'";
                             };
                           };
 
                           if (isset($_POST["bulan"])) {
                             $bulanFilter = $_POST["bulan"];
                             if ($bulanFilter != 0) {
-                              $extraFilter = $extraFilter . " AND MONTH(siswa.dibuat)='$bulanFilter'";
+                              $extraFilter = $extraFilter . " AND MONTH(pembayaran.dibuat)='$bulanFilter'";
                             };
                           };
 
-                          $result = mysqli_query($connection, "SELECT siswa.id, siswa.nisn, siswa.nis, siswa.nama, rombel.rombel, siswa.alamat, siswa.telepon, siswa.dibuat, siswa.diubah FROM siswa INNER JOIN rombel ON siswa.id_rombel=rombel.id WHERE siswa.dihapus='0' $extraFilter ORDER BY siswa.dibuat DESC;");
+                          $result = mysqli_query($connection, "SELECT pembayaran.id, petugas.nama AS `petugas_nama`, pembayaran.bukti_pembayaran, pembayaran.tanggal_pembayaran, pembayaran.bulan_pembayaran, pembayaran.jumlah_pembayaran, pembayaran.dibuat FROM pembayaran INNER JOIN petugas ON pembayaran.id_petugas=petugas.id WHERE pembayaran.id_siswa='$id' AND pembayaran.id_spp='$idSPP' AND pembayaran.dihapus='0' $extraFilter ORDER BY pembayaran.dibuat DESC;");
                           foreach ($result as $i => $data) {
+                            $idPembayaran = $data["id"];
                           ?>
                             <tr>
                               <td class="text-center align-middle"><?php echo $i + 1; ?>.</td>
-                              <td class="text-center align-middle"><?php echo $data["nisn"]; ?></td>
-                              <td class="text-center align-middle"><?php echo $data["nis"]; ?></td>
-                              <td class="text-center align-middle"><?php echo $data["nama"]; ?></td>
-                              <td class="text-center align-middle"><?php echo $data["rombel"]; ?></td>
-                              <td class="text-center align-middle"><?php echo $data["alamat"]; ?></td>
-                              <td class="text-center align-middle"><?php echo $data["telepon"]; ?></td>
+                              <td class="text-center align-middle"><?php echo $data["petugas_nama"]; ?></td>
+                              <td class="text-center align-middle">
+                                <img class="m-auto d-block" src="<?php echo $sourcePath; ?>/public/dist/img/storage/<?php echo $data["bukti_pembayaran"]; ?>" width="250px">
+                              </td>
+                              <td class="text-center align-middle"><?php echo $data["tanggal_pembayaran"]; ?></td>
+                              <td class="text-center align-middle"><?php echo numberToMonth($data["bulan_pembayaran"]); ?></td>
+                              <td class="text-center align-middle"><?php echo numberToCurrency($data["jumlah_pembayaran"]); ?></td>
                               <td class="text-center align-middle"><?php echo $data["dibuat"]; ?></td>
-                              <td class="text-center align-middle"><?php echo dateInterval($data["diubah"], $currentDate); ?></td>
 
                               <td class="text-center align-middle">
                                 <div class="btn-group">
-                                  <a class="btn btn-app bg-primary m-0" href="./spp.php?id=<?php echo $data['id']; ?>">
-                                    <i class="fas fa-clipboard"></i> SPP
-                                  </a>
-
-                                  <a class="btn btn-app bg-warning m-0" href="./ubah.php?id=<?php echo $data['id']; ?>">
-                                    <i class="fas fa-edit"></i> Ubah
-                                  </a>
-
-                                  <a class="btn btn-app bg-danger m-0" href="./hapus.php?id=<?php echo $data['id']; ?>">
+                                  <a class="btn btn-app bg-danger m-0" href="./hapus.php?id=<?php echo $id; ?>&idSPP=<?php echo $idSPP; ?>&idPembayaran=<?php echo $idPembayaran; ?>">
                                     <i class="fas fa-trash"></i> Hapus
                                   </a>
                                 </div>
@@ -182,7 +186,8 @@ roleGuardMinimum($sessionLevel, "petugas", "/$originalPath");
                     </div>
                   </div>
 
-                  <a class="btn btn-primary btn-block mt-1" href="./buat.php"><i class="fa fa-plus"></i> Buat</a>
+                  <a class="btn btn-primary btn-block mt-1" href="./buat.php?id=<?php echo $id; ?>&idSPP=<?php echo $idSPP; ?>"><i class="fa fa-plus"></i> Buat</a>
+                  <a class="btn btn-danger btn-block" role="button" onclick="confirmModal('location', './../spp.php?id=<?php echo $id; ?>');"><i class="fa fa-undo"></i> Kembali</a>
                 </div>
               </div>
             </div>
