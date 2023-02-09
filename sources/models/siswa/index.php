@@ -168,6 +168,10 @@ roleGuardMinimum($sessionLevel, "petugas", "/$originalPath");
                                     <i class="fas fa-edit"></i> Ubah
                                   </a>
 
+                                  <a class="btn btn-app bg-danger m-0" href="./ubah-password.php?id=<?php echo $data['id']; ?>">
+                                    <i class="fas fa-lock"></i> Ubah Password
+                                  </a>
+
                                   <a class="btn btn-app bg-danger m-0" href="./hapus.php?id=<?php echo $data['id']; ?>">
                                     <i class="fas fa-trash"></i> Hapus
                                   </a>
