@@ -1,5 +1,5 @@
 <?php
-$sourcePath = "../../..";
+$sourcePath = "../..";
 include "$sourcePath/utilities/environment.php";
 include "$sourcePath/utilities/connection.php";
 include "$sourcePath/utilities/session/start.php";
@@ -10,7 +10,7 @@ include "$sourcePath/utilities/session/data.php";
 include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 
-roleGuardMinimum($sessionLevel, "administrator", "/$originalPath");
+roleGuardMinimum($sessionLevel, "admin", "/$originalPath");
 
 $id = $_GET["id"];
 $result = mysqli_query($connection, "SELECT level FROM petugas WHERE id='$id' AND dihapus='0';");
@@ -35,7 +35,7 @@ if (mysqli_num_rows($result) <= 0 or !roleCheckMinimum($sessionLevel, roleConver
 <body class="hold-transition layout-navbar-fixed layout-fixed light-mode" id="body-theme">
   <div class="wrapper">
     <?php
-    $navActive = [2, 1];
+    $navActive = [2, null];
     include "$sourcePath/components/nav.php";
     ?>
 
@@ -46,7 +46,7 @@ if (mysqli_num_rows($result) <= 0 or !roleCheckMinimum($sessionLevel, roleConver
             <div class="col-sm">
               <div class="card">
                 <?php
-                $pageItemObject = $pageArray[$navActive[0]]["child"][$navActive[1]];
+                $pageItemObject = $pageArray[$navActive[0]];
                 $extraTitle = "Ubah Password";
                 include "$sourcePath/components/content/head.php";
                 ?>

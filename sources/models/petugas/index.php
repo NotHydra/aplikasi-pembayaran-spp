@@ -1,5 +1,5 @@
 <?php
-$sourcePath = "../../..";
+$sourcePath = "../..";
 include "$sourcePath/utilities/environment.php";
 include "$sourcePath/utilities/connection.php";
 include "$sourcePath/utilities/session/start.php";
@@ -10,7 +10,7 @@ include "$sourcePath/utilities/session/data.php";
 include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 
-roleGuardMinimum($sessionLevel, "administrator", "/$originalPath");
+roleGuardMinimum($sessionLevel, "admin", "/$originalPath");
 ?>
 
 <!DOCTYPE html>
@@ -29,7 +29,7 @@ roleGuardMinimum($sessionLevel, "administrator", "/$originalPath");
 <body class="hold-transition layout-navbar-fixed layout-fixed light-mode" id="body-theme">
   <div class="wrapper">
     <?php
-    $navActive = [2, 1];
+    $navActive = [2, null];
     include "$sourcePath/components/nav.php";
     ?>
 
@@ -40,7 +40,7 @@ roleGuardMinimum($sessionLevel, "administrator", "/$originalPath");
             <div class="col-sm">
               <div class="card">
                 <?php
-                $pageItemObject = $pageArray[$navActive[0]]["child"][$navActive[1]];
+                $pageItemObject = $pageArray[$navActive[0]];
                 $extraTitle = "Utama";
                 include "$sourcePath/components/content/head.php";
                 ?>

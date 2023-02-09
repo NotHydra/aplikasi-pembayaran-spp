@@ -1,5 +1,5 @@
 <?php
-$sourcePath = "../../..";
+$sourcePath = "../..";
 include "$sourcePath/utilities/environment.php";
 include "$sourcePath/utilities/connection.php";
 include "$sourcePath/utilities/session/start.php";
@@ -10,7 +10,14 @@ include "$sourcePath/utilities/session/data.php";
 include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 
-roleGuardMinimum($sessionLevel, "administrator", "/$originalPath");
+roleGuardMinimum($sessionLevel, "admin", "/$originalPath");
+
+$id = $_GET["id"];
+$result = mysqli_query($connection, "SELECT level FROM petugas WHERE id='$id' AND dihapus='0';");
+$data = mysqli_fetch_assoc($result);
+if (mysqli_num_rows($result) <= 0 or !roleCheckMinimum($sessionLevel, roleConvert($data["level"]) + 1)) {
+  echo "<script>window.location='.';</script>";
+};
 ?>
 
 <!DOCTYPE html>
@@ -28,7 +35,7 @@ roleGuardMinimum($sessionLevel, "administrator", "/$originalPath");
 <body class="hold-transition layout-navbar-fixed layout-fixed light-mode" id="body-theme">
   <div class="wrapper">
     <?php
-    $navActive = [2, 1];
+    $navActive = [2, null];
     include "$sourcePath/components/nav.php";
     ?>
 
@@ -39,8 +46,8 @@ roleGuardMinimum($sessionLevel, "administrator", "/$originalPath");
             <div class="col-sm">
               <div class="card">
                 <?php
-                $pageItemObject = $pageArray[$navActive[0]]["child"][$navActive[1]];
-                $extraTitle = "Buat";
+                $pageItemObject = $pageArray[$navActive[0]];
+                $extraTitle = "Ubah";
                 include "$sourcePath/components/content/head.php";
                 ?>
 
@@ -49,13 +56,14 @@ roleGuardMinimum($sessionLevel, "administrator", "/$originalPath");
                     <div class="col-sm">
                       <form action="<?php $_SERVER["PHP_SELF"]; ?>" method="POST" onsubmit="return confirmModal('form', this);">
                         <?php
+                        $data = mysqli_fetch_assoc(mysqli_query($connection, "SELECT nama, username, telepon, level, status FROM petugas WHERE id='$id' AND dihapus='0';"));
                         $inputArray = [
                           [
                             "id" => 1,
                             "display" => "Nama",
                             "name" => "nama",
                             "type" => "text",
-                            "value" => isset($_POST["nama"]) ? $_POST["nama"] : null,
+                            "value" => isset($_POST["nama"]) ? $_POST["nama"] : $data["nama"],
                             "placeholder" => "Masukkan nama disini",
                             "enable" => true
                           ],
@@ -64,7 +72,7 @@ roleGuardMinimum($sessionLevel, "administrator", "/$originalPath");
                             "display" => "Username",
                             "name" => "username",
                             "type" => "text",
-                            "value" => isset($_POST["username"]) ? $_POST["username"] : null,
+                            "value" => isset($_POST["username"]) ? $_POST["username"] : $data["username"],
                             "placeholder" => "Masukkan username disini",
                             "enable" => true
 
@@ -74,7 +82,7 @@ roleGuardMinimum($sessionLevel, "administrator", "/$originalPath");
                             "display" => "Telepon",
                             "name" => "telepon",
                             "type" => "number",
-                            "value" => isset($_POST["telepon"]) ? $_POST["telepon"] : null,
+                            "value" => isset($_POST["telepon"]) ? $_POST["telepon"] : $data["telepon"],
                             "placeholder" => "Masukkan telepon disini",
                             "enable" => true
                           ],
@@ -83,10 +91,10 @@ roleGuardMinimum($sessionLevel, "administrator", "/$originalPath");
                             "display" => "Level",
                             "name" => "level",
                             "type" => "select",
-                            "value" => [$sessionLevel == "superadministrator" ? [
-                              ["administrator", "Administrator"],
+                            "value" => [$sessionLevel == "superadmin" ? [
+                              ["admin", "Admin"],
                               ["petugas", "Petugas"],
-                            ] : [["petugas", "Petugas"]], isset($_POST["level"]) ? $_POST["level"] : null],
+                            ] : [["petugas", "Petugas"]], isset($_POST["level"]) ? $_POST["level"] : $data["level"]],
                             "placeholder" => "Masukkan level disini",
                             "enable" => true
                           ],
@@ -98,34 +106,16 @@ roleGuardMinimum($sessionLevel, "administrator", "/$originalPath");
                             "value" => [[
                               ["tidak aktif", "Tidak Aktif"],
                               ["aktif", "Aktif"],
-                            ], isset($_POST["status"]) ? $_POST["status"] : null],
+                            ], isset($_POST["status"]) ? $_POST["status"] : $data["status"]],
                             "placeholder" => "Masukkan status disini",
                             "enable" => true
                           ],
-                          [
-                            "id" => 6,
-                            "display" => "Password",
-                            "name" => "password",
-                            "type" => "password",
-                            "value" => isset($_POST["password"]) ? $_POST["password"] : null,
-                            "placeholder" => "Masukkan password disini",
-                            "enable" => true
-                          ],
-                          [
-                            "id" => 7,
-                            "display" => "Konfirmasi Password",
-                            "name" => "konfirmasi_password",
-                            "type" => "password",
-                            "value" => isset($_POST["konfirmasi_password"]) ? $_POST["konfirmasi_password"] : null,
-                            "placeholder" => "Masukkan konfirmasi password disini",
-                            "enable" => true
-                          ]
                         ];
 
                         include "$sourcePath/components/input/detail.php";
                         ?>
 
-                        <button class="btn btn-primary btn-block" type="submit"><i class="fa fa-plus"></i> Buat</button>
+                        <button class="btn btn-warning btn-block" type="submit"><i class="fa fa-edit"></i> Ubah</button>
                         <a class="btn btn-danger btn-block" role="button" onclick="confirmModal('location', '.');"><i class="fa fa-undo"></i> Kembali</a>
                       </form>
                     </div>
@@ -148,38 +138,31 @@ roleGuardMinimum($sessionLevel, "administrator", "/$originalPath");
   include "$sourcePath/components/select/script.php";
 
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $password = md5($_POST["password"]);
-    $konfirmasiPassword = md5($_POST["konfirmasi_password"]);
+    $nama = $_POST["nama"];
+    $username = $_POST["username"];
+    $telepon = $_POST["telepon"];
+    $level = $_POST["level"];
+    $status = $_POST["status"];
 
-    if ($password == $konfirmasiPassword) {
-      $nama = $_POST["nama"];
-      $username = $_POST["username"];
-      $telepon = $_POST["telepon"];
-      $level = $_POST["level"];
-      $status = $_POST["status"];
+    try {
+      $result = mysqli_query($connection, "UPDATE petugas SET nama='$nama', username='$username', telepon='$telepon', level='$level', status='$status' WHERE id='$id' AND dihapus='0';");
 
-      try {
-        $result = mysqli_query($connection, "INSERT INTO petugas (nama, username, password, telepon, level, status) VALUES ('$nama', '$username', '$password', '$telepon', '$level', '$status');");
-
-        if ($result) {
-          echo "<script>successModal(null, null);</script>";
-        } else {
-          echo "<script>errorModal(null, null);</script>";
-        };
-      } catch (exception $e) {
-        $message = null;
-        $errorMessage = mysqli_error($connection);
-
-        if (str_contains($errorMessage, "Duplicate entry")) {
-          if (str_contains($errorMessage, "'username'")) {
-            $message = "Username sudah digunakan";
-          };
-        };
-
-        echo "<script>errorModal('$message', null);</script>";
+      if ($result) {
+        echo "<script>successModal(null, null);</script>";
+      } else {
+        echo "<script>errorModal(null, null);</script>";
       };
-    } else {
-      echo "<script>errorModal('Konfirmasi password salah', null);</script>";
+    } catch (exception $e) {
+      $message = null;
+      $errorMessage = mysqli_error($connection);
+
+      if (str_contains($errorMessage, "Duplicate entry")) {
+        if (str_contains($errorMessage, "'username'")) {
+          $message = "Username sudah digunakan";
+        };
+      };
+
+      echo "<script>errorModal('$message', null);</script>";
     };
   };
   ?>
