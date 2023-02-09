@@ -16,7 +16,7 @@ $tableButton = [
     "colvis"
 ];
 
-if (roleCheckMinimum($sessionLevel, "administrator")) {
+if (roleCheckMinimum($sessionLevel, "admin")) {
     array_push($tableButton, [
         "extend" => "excel",
         "exportOptions" => [
