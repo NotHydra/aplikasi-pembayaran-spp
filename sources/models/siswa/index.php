@@ -164,17 +164,23 @@ roleGuardMinimum($sessionLevel, "petugas", "/$originalPath");
                                     <i class="fas fa-clipboard"></i> SPP
                                   </a>
 
-                                  <a class="btn btn-app bg-warning m-0" href="./ubah.php?id=<?php echo $data['id']; ?>">
-                                    <i class="fas fa-edit"></i> Ubah
-                                  </a>
+                                  <?php
+                                  if (roleCheckMinimum($sessionLevel, "admin")) {
+                                  ?>
+                                    <a class="btn btn-app bg-warning m-0" href="./ubah.php?id=<?php echo $data['id']; ?>">
+                                      <i class="fas fa-edit"></i> Ubah
+                                    </a>
 
-                                  <a class="btn btn-app bg-danger m-0" href="./ubah-password.php?id=<?php echo $data['id']; ?>">
-                                    <i class="fas fa-lock"></i> Ubah Password
-                                  </a>
+                                    <a class="btn btn-app bg-danger m-0" href="./ubah-password.php?id=<?php echo $data['id']; ?>">
+                                      <i class="fas fa-lock"></i> Ubah Password
+                                    </a>
 
-                                  <a class="btn btn-app bg-danger m-0" href="./hapus.php?id=<?php echo $data['id']; ?>">
-                                    <i class="fas fa-trash"></i> Hapus
-                                  </a>
+                                    <a class="btn btn-app bg-danger m-0" href="./hapus.php?id=<?php echo $data['id']; ?>">
+                                      <i class="fas fa-trash"></i> Hapus
+                                    </a>
+                                  <?php
+                                  };
+                                  ?>
                                 </div>
                               </td>
                             </tr>
@@ -186,7 +192,13 @@ roleGuardMinimum($sessionLevel, "petugas", "/$originalPath");
                     </div>
                   </div>
 
-                  <a class="btn btn-primary btn-block mt-1" href="./buat.php"><i class="fa fa-plus"></i> Buat</a>
+                  <?php
+                  if (roleCheckMinimum($sessionLevel, "admin")) {
+                  ?>
+                    <a class="btn btn-primary btn-block mt-1" href="./buat.php"><i class="fa fa-plus"></i> Buat</a>
+                  <?php
+                  };
+                  ?>
                 </div>
               </div>
             </div>
