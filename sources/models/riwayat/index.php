@@ -11,7 +11,7 @@ include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 include "$sourcePath/utilities/currency.php";
 
-roleGuardMinimum($sessionLevel, "siswa", "/$originalPath/sources/models/authentication/logout.php");
+roleGuardSingle($sessionLevel, "siswa", "/$originalPath");
 ?>
 
 <!DOCTYPE html>
