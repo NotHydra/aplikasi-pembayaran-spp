@@ -36,6 +36,42 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath");
     <div class="content-wrapper">
       <div class="content-header">
         <div class="container-fluid">
+          <?php
+          $cardArray = [
+            [
+              "id" => 1,
+              "child" => [
+                [
+                  "id" => 1,
+                  "title" => "Total Pengguna",
+                  "icon" => "users",
+                  "value" => mysqli_fetch_assoc(mysqli_query($connection, "SELECT COUNT(id) AS `total` FROM petugas WHERE dihapus='0';"))["total"]
+                ],
+                [
+                  "id" => 2,
+                  "title" => "Total Petugas",
+                  "icon" => "user",
+                  "value" => mysqli_fetch_assoc(mysqli_query($connection, "SELECT COUNT(id) AS `total` FROM petugas WHERE level='petugas' AND dihapus='0';"))["total"]
+                ],
+                [
+                  "id" => 3,
+                  "title" => "Total Admin",
+                  "icon" => "user-tie",
+                  "value" => mysqli_fetch_assoc(mysqli_query($connection, "SELECT COUNT(id) AS `total` FROM petugas WHERE level='admin' AND dihapus='0';"))["total"]
+                ],
+                [
+                  "id" => 4,
+                  "title" => "Total Superadmin",
+                  "icon" => "user-secret",
+                  "value" => mysqli_fetch_assoc(mysqli_query($connection, "SELECT COUNT(id) AS `total` FROM petugas WHERE level='superadmin' AND dihapus='0';"))["total"]
+                ]
+              ]
+            ]
+          ];
+
+          include "$sourcePath/components/card.php";
+          ?>
+
           <div class="row">
             <div class="col-sm">
               <div class="card">

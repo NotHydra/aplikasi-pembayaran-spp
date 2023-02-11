@@ -43,6 +43,30 @@ if (mysqli_num_rows($result) <= 0) {
     <div class="content-wrapper">
       <div class="content-header">
         <div class="container-fluid">
+          <?php
+          $cardArray = [
+            [
+              "id" => 1,
+              "child" => [
+                [
+                  "id" => 1,
+                  "title" => "Total Pembayaran",
+                  "icon" => "envelope",
+                  "value" => mysqli_fetch_assoc(mysqli_query($connection, "SELECT COUNT(id) AS `total` FROM pembayaran WHERE id_siswa='$sessionId' AND id_spp='$id' AND dihapus='0';"))["total"]
+                ],
+                [
+                  "id" => 2,
+                  "title" => "Total Jumlah Pembayaran",
+                  "icon" => "wallet",
+                  "value" => numberToCurrency(mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(jumlah_pembayaran) AS `total` FROM pembayaran WHERE id_siswa='$sessionId' AND id_spp='$id' AND dihapus='0';"))["total"])
+                ]
+              ]
+            ]
+          ];
+
+          include "$sourcePath/components/card.php";
+          ?>
+
           <div class="row">
             <div class="col-sm">
               <div class="card">

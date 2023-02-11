@@ -36,6 +36,24 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath");
     <div class="content-wrapper">
       <div class="content-header">
         <div class="container-fluid">
+          <?php
+          $cardArray = [
+            [
+              "id" => 1,
+              "child" => [
+                [
+                  "id" => 1,
+                  "title" => "Total Kompetensi Keahlian",
+                  "icon" => "microchip",
+                  "value" => mysqli_fetch_assoc(mysqli_query($connection, "SELECT COUNT(id) AS `total` FROM kompetensi_keahlian WHERE dihapus='0';"))["total"]
+                ]
+              ]
+            ]
+          ];
+
+          include "$sourcePath/components/card.php";
+          ?>
+
           <div class="row">
             <div class="col-sm">
               <div class="card">

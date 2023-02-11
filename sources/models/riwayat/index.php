@@ -37,6 +37,47 @@ roleGuardSingle($sessionLevel, "siswa", "/$originalPath");
     <div class="content-wrapper">
       <div class="content-header">
         <div class="container-fluid">
+          <?php
+          $cardArray = [
+            [
+              "id" => 1,
+              "child" => [
+                [
+                  "id" => 1,
+                  "title" => "Total SPP",
+                  "icon" => "book",
+                  "value" => mysqli_fetch_assoc(mysqli_query($connection, "SELECT COUNT(id) AS `total` FROM spp WHERE dihapus='0';"))["total"]
+                ],
+                [
+                  "id" => 2,
+                  "title" => "Total Nominal",
+                  "icon" => "wallet",
+                  "value" => numberToCurrency(mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(nominal) AS `total` FROM spp WHERE dihapus='0';"))["total"])
+                ]
+              ]
+            ],
+            [
+              "id" => 2,
+              "child" => [
+                [
+                  "id" => 1,
+                  "title" => "Total Sudah Dibayar",
+                  "icon" => "check",
+                  "value" => numberToCurrency(mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(jumlah_pembayaran) AS `total` FROM pembayaran WHERE id_siswa='$sessionId' AND dihapus='0';"))["total"])
+                ],
+                [
+                  "id" => 2,
+                  "title" => "Total Belum Dibayar",
+                  "icon" => "times",
+                  "value" => numberToCurrency(mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(nominal) AS `total` FROM spp WHERE dihapus='0';"))["total"] - mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(jumlah_pembayaran) AS `total` FROM pembayaran WHERE id_siswa='$sessionId' AND dihapus='0';"))["total"])
+                ]
+              ]
+            ]
+          ];
+
+          include "$sourcePath/components/card.php";
+          ?>
+
           <div class="row">
             <div class="col-sm">
               <div class="card">
