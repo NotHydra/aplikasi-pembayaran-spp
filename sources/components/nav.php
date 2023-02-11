@@ -61,7 +61,7 @@
                         "id" => 1,
                         "title" => "Utama",
                         "icon" => "fas fa-home",
-                        "link" => "",
+                        "link" => "sources/models/utama",
                         "child" => null,
                     ]
                 ];

@@ -11,7 +11,7 @@ include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 include "$sourcePath/utilities/currency.php";
 
-roleGuardSingle($sessionLevel, "siswa", "/$originalPath");
+roleGuardSingle($sessionLevel, "siswa", "/$originalPath/sources/models/utama");
 
 $id = $_GET["id"];
 $result = mysqli_query($connection, "SELECT id FROM spp WHERE id='$id' AND dihapus='0';");

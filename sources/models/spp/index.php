@@ -11,7 +11,7 @@ include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 include "$sourcePath/utilities/currency.php";
 
-roleGuardMinimum($sessionLevel, "admin", "/$originalPath");
+roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
 ?>
 
 <!DOCTYPE html>

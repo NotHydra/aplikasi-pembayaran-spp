@@ -55,15 +55,10 @@ include "$sourcePath/utilities/date.php";
           <div class="row">
             <div class="col-sm">
               <button type="submit" class="btn btn-primary btn-block">Login Petugas</button>
+              <a class="btn btn-danger btn-block" role="button" onclick="confirmModal('location', '<?php echo $sourcePath; ?>/..', 'login-container');">Kembali</a>
             </div>
           </div>
         </form>
-
-        <div class="mt-1">
-          <p class="mb-0">
-            <a href="./siswa.php" class="text-center">Login Siswa</a>
-          </p>
-        </div>
       </div>
     </div>
   </div>
@@ -86,7 +81,7 @@ include "$sourcePath/utilities/date.php";
         $_SESSION["id"] = $data["id"];
         $_SESSION["type"] = "petugas";
 
-        echo "<script>successModal(null, '/$originalPath', 'login-container');</script>";
+        echo "<script>successModal(null, '/$originalPath/sources/models/utama', 'login-container');</script>";
       } else {
         echo "<script>errorModal('Akun belum aktif', null, 'login-container');</script>";
       }

@@ -11,7 +11,7 @@ include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 include "$sourcePath/utilities/currency.php";
 
-roleGuardSingle($sessionLevel, "siswa", "/$originalPath");
+roleGuardSingle($sessionLevel, "siswa", "/$originalPath/sources/models/utama");
 ?>
 
 <!DOCTYPE html>

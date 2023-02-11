@@ -1,4 +1,4 @@
 <?php
 if (!isset($_SESSION["id"])) {
-    echo "<script>window.location='/$originalPath/sources/models/authentication/login/siswa.php';</script>";
+    echo "<script>window.location='/$originalPath';</script>";
 };
