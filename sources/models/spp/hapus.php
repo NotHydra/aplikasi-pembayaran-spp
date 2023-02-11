@@ -32,7 +32,7 @@ if (mysqli_num_rows($result) <= 0) {
   ?>
 </head>
 
-<body class="hold-transition layout-navbar-fixed layout-fixed light-mode" id="body-theme">
+<body class="hold-transition layout-navbar-fixed layout-fixed" id="body-theme">
   <div class="wrapper">
     <?php
     $navActive = [5, null];
