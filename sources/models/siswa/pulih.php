@@ -10,7 +10,7 @@ include "$sourcePath/utilities/session/data.php";
 include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 
-roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama");
+roleGuardMinimum($sessionLevel, "superadmin", "/$originalPath/sources/models/utama");
 ?>
 
 <!DOCTYPE html>
@@ -36,30 +36,12 @@ roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama"
     <div class="content-wrapper">
       <div class="content-header">
         <div class="container-fluid">
-          <?php
-          $cardArray = [
-            [
-              "id" => 1,
-              "child" => [
-                [
-                  "id" => 1,
-                  "title" => "Total Siswa",
-                  "icon" => "users",
-                  "value" => mysqli_fetch_assoc(mysqli_query($connection, "SELECT COUNT(id) AS `total` FROM siswa WHERE dihapus='0';"))["total"]
-                ]
-              ]
-            ]
-          ];
-
-          include "$sourcePath/components/card.php";
-          ?>
-
           <div class="row">
             <div class="col-sm">
               <div class="card">
                 <?php
                 $pageItemObject = $pageArray[$navActive[0]];
-                $extraTitle = "Utama";
+                $extraTitle = "Pulih";
                 include "$sourcePath/components/content/head.php";
                 ?>
 
@@ -76,7 +58,7 @@ roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama"
                           "value" => [
                             array_merge([[0, "Semua"]], array_map(function ($yearObject) {
                               return [$yearObject[0], $yearObject[0]];
-                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT DISTINCT YEAR(dibuat) FROM siswa WHERE dihapus='0' ORDER BY dibuat DESC;")))), isset($_POST["tahun"]) ? $_POST["tahun"] : null
+                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT DISTINCT YEAR(dibuat) FROM siswa WHERE dihapus='1' ORDER BY dibuat DESC;")))), isset($_POST["tahun"]) ? $_POST["tahun"] : null
                           ],
                           "placeholder" => "Pilih tahun disini",
                           "enable" => true
@@ -162,8 +144,9 @@ roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama"
                             };
                           };
 
-                          $result = mysqli_query($connection, "SELECT siswa.id, siswa.nisn, siswa.nis, siswa.nama, rombel.rombel, siswa.alamat, siswa.telepon, siswa.dibuat, siswa.diubah FROM siswa INNER JOIN rombel ON siswa.id_rombel=rombel.id WHERE siswa.dihapus='0' $extraFilter ORDER BY siswa.dibuat DESC;");
+                          $result = mysqli_query($connection, "SELECT siswa.id, siswa.nisn, siswa.nis, siswa.nama, rombel.rombel, siswa.alamat, siswa.telepon, siswa.dibuat, siswa.diubah FROM siswa INNER JOIN rombel ON siswa.id_rombel=rombel.id WHERE siswa.dihapus='1' $extraFilter ORDER BY siswa.dibuat DESC;");
                           foreach ($result as $i => $data) {
+                            $id = $data['id'];
                           ?>
                             <tr>
                               <td class="text-center align-middle"><?php echo $i + 1; ?>.</td>
@@ -178,27 +161,9 @@ roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama"
 
                               <td class="text-center align-middle">
                                 <div class="btn-group">
-                                  <a class="btn btn-app bg-primary m-0" href="./spp.php?id=<?php echo $data['id']; ?>">
-                                    <i class="fas fa-clipboard"></i> SPP
+                                  <a class="btn btn-app bg-success m-0" onclick="confirmModal('location', './pulih.php?id=<?php echo $id; ?>');">
+                                    <i class="fas fa-history"></i> Pulih
                                   </a>
-
-                                  <?php
-                                  if (roleCheckMinimum($sessionLevel, "admin")) {
-                                  ?>
-                                    <a class="btn btn-app bg-warning m-0" href="./ubah.php?id=<?php echo $data['id']; ?>">
-                                      <i class="fas fa-edit"></i> Ubah
-                                    </a>
-
-                                    <a class="btn btn-app bg-danger m-0" href="./ubah-password.php?id=<?php echo $data['id']; ?>">
-                                      <i class="fas fa-lock"></i> Ubah Password
-                                    </a>
-
-                                    <a class="btn btn-app bg-danger m-0" href="./hapus.php?id=<?php echo $data['id']; ?>">
-                                      <i class="fas fa-trash"></i> Hapus
-                                    </a>
-                                  <?php
-                                  };
-                                  ?>
                                 </div>
                               </td>
                             </tr>
@@ -210,21 +175,7 @@ roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama"
                     </div>
                   </div>
 
-                  <?php
-                  if (roleCheckMinimum($sessionLevel, "admin")) {
-                  ?>
-                    <a class="btn btn-primary btn-block mt-1" href="./buat.php"><i class="fa fa-plus"></i> Buat</a>
-                  <?php
-                  };
-                  ?>
-
-                  <?php
-                  if (roleCheckMinimum($sessionLevel, "superadmin")) {
-                  ?>
-                    <a class="btn btn-success btn-block mt-1" href="./pulih.php"><i class="fa fa-history"></i> Pulih</a>
-                  <?php
-                  }
-                  ?>
+                  <a class="btn btn-danger btn-block mt-1" role="button" onclick="confirmModal('location', '.');"><i class="fa fa-undo"></i> Kembali</a>
                 </div>
               </div>
             </div>
@@ -242,6 +193,23 @@ roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama"
   include "$sourcePath/components/script.php";
   include "$sourcePath/components/data-table/script.php";
   include "$sourcePath/components/select/script.php";
+
+  if ($_SERVER["REQUEST_METHOD"] == "GET") {
+    if (isset($_GET["id"])) {
+      try {
+        $id = $_GET["id"];
+        $result = mysqli_query($connection, "UPDATE siswa SET dihapus='0' WHERE id='$id' AND dihapus='1';");
+
+        if ($result) {
+          echo "<script>successModal(null, './pulih.php');</script>";
+        } else {
+          echo "<script>errorModal(null, null);</script>";
+        };
+      } catch (exception $e) {
+        echo "<script>errorModal(null, null);</script>";
+      };
+    }
+  };
   ?>
 </body>
 
