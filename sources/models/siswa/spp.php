@@ -176,7 +176,7 @@ if (mysqli_num_rows($result) <= 0) {
                     </div>
                   </div>
 
-                  <a class="btn btn-danger btn-block" role="button" onclick="confirmModal('location', '.');"><i class="fa fa-undo"></i> Kembali</a>
+                  <a class="btn btn-danger btn-block mt-1" role="button" onclick="confirmModal('location', '.');"><i class="fa fa-undo"></i> Kembali</a>
                 </div>
               </div>
             </div>

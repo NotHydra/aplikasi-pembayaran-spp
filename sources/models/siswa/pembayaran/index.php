@@ -210,7 +210,7 @@ if (mysqli_num_rows($result) <= 0) {
                     </div>
                   </div>
 
-                  <a class="btn btn-primary btn-block mt-1" href="./buat.php?id=<?php echo $id; ?>&idSPP=<?php echo $idSPP; ?>"><i class="fa fa-plus"></i> Buat</a>
+                  <a class="btn btn-primary btn-block" href="./buat.php?id=<?php echo $id; ?>&idSPP=<?php echo $idSPP; ?>"><i class="fa fa-plus"></i> Buat</a>
                   <a class="btn btn-danger btn-block" role="button" onclick="confirmModal('location', './../spp.php?id=<?php echo $id; ?>');"><i class="fa fa-undo"></i> Kembali</a>
                 </div>
               </div>

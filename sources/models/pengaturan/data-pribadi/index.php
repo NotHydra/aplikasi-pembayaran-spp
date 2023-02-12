@@ -159,8 +159,8 @@ roleGuardMinimum($sessionLevel, "siswa", "/$originalPath/sources/models/authenti
                         include "$sourcePath/components/input/detail.php";
                         ?>
 
-                        <a class="btn btn-warning btn-block mt-1" href="./ubah.php"><i class="fa fa-edit"></i> Ubah</a>
-                        <a class="btn btn-danger btn-block mt-1" href="./ubah-password.php"><i class="fa fa-lock"></i> Ubah Password</a>
+                        <a class="btn btn-warning btn-block" href="./ubah.php"><i class="fa fa-edit"></i> Ubah</a>
+                        <a class="btn btn-danger btn-block" href="./ubah-password.php"><i class="fa fa-lock"></i> Ubah Password</a>
 
                       </form>
                     </div>
