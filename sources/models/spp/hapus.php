@@ -105,7 +105,7 @@ if (mysqli_num_rows($result) <= 0) {
 
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
-      $result = mysqli_query($connection, "UPDATE tingkat SET dihapus='1' WHERE id='$id' AND dihapus='0';");
+      $result = mysqli_query($connection, "UPDATE spp SET dihapus='1' WHERE id='$id' AND dihapus='0';");
 
       if ($result) {
         echo "<script>successModal(null, '.');</script>";
