@@ -5,11 +5,13 @@ include "$sourcePath/utilities/connection.php";
 include "$sourcePath/utilities/session/start.php";
 
 include "$sourcePath/middlewares/isNotAuthenticated.php";
+include "$sourcePath/middlewares/activity.php";
 
 include "$sourcePath/utilities/session/data.php";
 include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 
+activity("Mengunjungi halaman petugas");
 roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
 ?>
 
@@ -197,6 +199,16 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
                                 if (roleCheckMinimum($sessionLevel, roleConvert($data["level"]) + 1)) {
                                 ?>
                                   <div class="btn-group">
+                                    <?php
+                                    if (roleCheckMinimum($sessionLevel, "superadmin")) {
+                                    ?>
+                                      <a class="btn btn-app bg-primary m-0" href="./aktivitas.php?id=<?php echo $data['id']; ?>">
+                                        <i class="fas fa-eye"></i> Aktivitas
+                                      </a>
+                                    <?php
+                                    }
+                                    ?>
+
                                     <a class="btn btn-app bg-warning m-0" href="./ubah.php?id=<?php echo $data['id']; ?>">
                                       <i class="fas fa-edit"></i> Ubah
                                     </a>

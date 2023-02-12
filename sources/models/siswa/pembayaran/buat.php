@@ -5,11 +5,13 @@ include "$sourcePath/utilities/connection.php";
 include "$sourcePath/utilities/session/start.php";
 
 include "$sourcePath/middlewares/isNotAuthenticated.php";
+include "$sourcePath/middlewares/activity.php";
 
 include "$sourcePath/utilities/session/data.php";
 include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 
+activity("Mengunjungi halaman buat pembayaran spp siswa");
 roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama");
 
 $id = $_GET["id"];
@@ -151,6 +153,7 @@ if (mysqli_num_rows($result) <= 0) {
       $result = mysqli_query($connection, "INSERT INTO pembayaran (id_petugas, id_siswa, id_spp, bukti_pembayaran, tanggal_pembayaran, bulan_pembayaran, jumlah_pembayaran) VALUES ('$sessionId', '$id', '$idSPP', '$buktiPembayaran', '$tanggalPembayaran','$bulanPembayaran', '$jumlahPembayaran');");
 
       if ($result) {
+        activity("Membuat pembayaran spp siswa");
         echo "<script>successModal(null, null);</script>";
       } else {
         echo "<script>errorModal(null, null);</script>";

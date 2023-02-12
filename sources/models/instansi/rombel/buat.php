@@ -5,11 +5,13 @@ include "$sourcePath/utilities/connection.php";
 include "$sourcePath/utilities/session/start.php";
 
 include "$sourcePath/middlewares/isNotAuthenticated.php";
+include "$sourcePath/middlewares/activity.php";
 
 include "$sourcePath/utilities/session/data.php";
 include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 
+activity("Mengunjungi halaman buat rombel");
 roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
 ?>
 
@@ -129,6 +131,7 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
       $result = mysqli_query($connection, "INSERT INTO rombel (id_kompetensi_keahlian, id_jurusan, id_tingkat, rombel) VALUES ('$idKompetensiKeahlian', '$idJurusan', '$idTingkat', '$rombel');");
 
       if ($result) {
+        activity("Membuat rombel");
         echo "<script>successModal(null, null);</script>";
       } else {
         echo "<script>errorModal(null, null);</script>";

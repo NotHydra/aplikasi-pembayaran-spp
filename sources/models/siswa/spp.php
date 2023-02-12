@@ -5,12 +5,14 @@ include "$sourcePath/utilities/connection.php";
 include "$sourcePath/utilities/session/start.php";
 
 include "$sourcePath/middlewares/isNotAuthenticated.php";
+include "$sourcePath/middlewares/activity.php";
 
 include "$sourcePath/utilities/session/data.php";
 include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 include "$sourcePath/utilities/currency.php";
 
+activity("Mengunjungi halaman spp siswa");
 roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama");
 
 $id = $_GET["id"];

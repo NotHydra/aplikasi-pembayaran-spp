@@ -5,11 +5,13 @@ include "$sourcePath/utilities/connection.php";
 include "$sourcePath/utilities/session/start.php";
 
 include "$sourcePath/middlewares/isNotAuthenticated.php";
+include "$sourcePath/middlewares/activity.php";
 
 include "$sourcePath/utilities/session/data.php";
 include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 
+activity("Mengunjungi halaman ubah data pribadi");
 roleGuardMinimum($sessionLevel, "siswa", "/$originalPath/sources/models/authentication/logout.php");
 ?>
 
@@ -177,6 +179,7 @@ roleGuardMinimum($sessionLevel, "siswa", "/$originalPath/sources/models/authenti
         $result = mysqli_query($connection, "UPDATE petugas SET nama='$nama', username='$username', telepon='$telepon' WHERE id='$sessionId' AND dihapus='0';");
 
         if ($result) {
+          activity("Mengubah data pribadi");
           echo "<script>successModal(null, null);</script>";
         } else {
           echo "<script>errorModal(null, null);</script>";

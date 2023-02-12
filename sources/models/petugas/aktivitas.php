@@ -1,5 +1,5 @@
 <?php
-$sourcePath = "../../..";
+$sourcePath = "../..";
 include "$sourcePath/utilities/environment.php";
 include "$sourcePath/utilities/connection.php";
 include "$sourcePath/utilities/session/start.php";
@@ -10,21 +10,15 @@ include "$sourcePath/middlewares/activity.php";
 include "$sourcePath/utilities/session/data.php";
 include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
-include "$sourcePath/utilities/currency.php";
 
-activity("Mengunjungi halaman pulih pembayaran spp siswa");
+activity("Mengunjungi halaman aktivitas petugas");
 roleGuardMinimum($sessionLevel, "superadmin", "/$originalPath/sources/models/utama");
 
 $id = $_GET["id"];
-$result = mysqli_query($connection, "SELECT id FROM siswa WHERE id='$id' AND dihapus='0';");
-if (mysqli_num_rows($result) <= 0) {
-  echo "<script>window.location='./..';</script>";
-};
-
-$idSPP = $_GET["idSPP"];
-$result = mysqli_query($connection, "SELECT id FROM spp WHERE id='$idSPP' AND dihapus='0';");
-if (mysqli_num_rows($result) <= 0) {
-  echo "<script>window.location='./..';</script>";
+$result = mysqli_query($connection, "SELECT level FROM petugas WHERE id='$id' AND dihapus='0';");
+$data = mysqli_fetch_assoc($result);
+if (mysqli_num_rows($result) <= 0 or !roleCheckMinimum($sessionLevel, roleConvert($data["level"]) + 1)) {
+  echo "<script>window.location='.';</script>";
 };
 ?>
 
@@ -33,7 +27,7 @@ if (mysqli_num_rows($result) <= 0) {
 
 <head>
   <?php
-  $headTitle = "Siswa";
+  $headTitle = "Petugas";
   include "$sourcePath/components/head.php";
   include "$sourcePath/components/data-table/head.php";
   include "$sourcePath/components/select/head.php";
@@ -44,19 +38,37 @@ if (mysqli_num_rows($result) <= 0) {
 <body class="hold-transition layout-navbar-fixed layout-fixed" id="body-theme">
   <div class="wrapper">
     <?php
-    $navActive = [3, null];
+    $navActive = [2, null];
     include "$sourcePath/components/nav.php";
     ?>
 
     <div class="content-wrapper">
       <div class="content-header">
         <div class="container-fluid">
+          <?php
+          $cardArray = [
+            [
+              "id" => 1,
+              "child" => [
+                [
+                  "id" => 1,
+                  "title" => "Total Aktivitas",
+                  "icon" => "eye",
+                  "value" => mysqli_fetch_assoc(mysqli_query($connection, "SELECT COUNT(id) AS `total` FROM aktivitas WHERE id_petugas='$id';"))["total"]
+                ]
+              ]
+            ]
+          ];
+
+          include "$sourcePath/components/card.php";
+          ?>
+
           <div class="row">
             <div class="col-sm">
               <div class="card">
                 <?php
                 $pageItemObject = $pageArray[$navActive[0]];
-                $extraTitle = "Pulih Pembayaran";
+                $extraTitle = "Aktivitas";
                 include "$sourcePath/components/content/head.php";
                 ?>
 
@@ -73,7 +85,7 @@ if (mysqli_num_rows($result) <= 0) {
                           "value" => [
                             array_merge([[0, "Semua"]], array_map(function ($yearObject) {
                               return [$yearObject[0], $yearObject[0]];
-                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT DISTINCT YEAR(dibuat) FROM pembayaran WHERE id_siswa='$id' AND id_spp='$idSPP' AND dihapus='1' ORDER BY dibuat DESC;")))), isset($_POST["tahun"]) ? $_POST["tahun"] : null
+                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT DISTINCT YEAR(dibuat) FROM aktivitas WHERE id_petugas='$id' ORDER BY dibuat DESC;")))), isset($_POST["tahun"]) ? $_POST["tahun"] : null
                           ],
                           "placeholder" => "Pilih tahun disini",
                           "enable" => true
@@ -129,13 +141,8 @@ if (mysqli_num_rows($result) <= 0) {
                         <thead>
                           <tr>
                             <th class="text-center align-middle export">No.</th>
-                            <th class="text-center align-middle export">Petugas</th>
-                            <th class="text-center align-middle export">Bukti Pembayaran</th>
-                            <th class="text-center align-middle export">Tanggal Pembayaran</th>
-                            <th class="text-center align-middle export">Bulan Pembayaran</th>
-                            <th class="text-center align-middle export">Jumlah Pembayaran</th>
+                            <th class="text-center align-middle export">Aktivitas</th>
                             <th class="text-center align-middle export">Dibuat</th>
-                            <th class="text-center align-middle">Aksi</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -146,39 +153,24 @@ if (mysqli_num_rows($result) <= 0) {
                           if (isset($_POST["tahun"])) {
                             $tahunFilter = $_POST["tahun"];
                             if ($tahunFilter != 0) {
-                              $extraFilter = $extraFilter . " AND YEAR(pembayaran.dibuat)='$tahunFilter'";
+                              $extraFilter = $extraFilter . " AND YEAR(dibuat)='$tahunFilter'";
                             };
                           };
 
                           if (isset($_POST["bulan"])) {
                             $bulanFilter = $_POST["bulan"];
                             if ($bulanFilter != 0) {
-                              $extraFilter = $extraFilter . " AND MONTH(pembayaran.dibuat)='$bulanFilter'";
+                              $extraFilter = $extraFilter . " AND MONTH(dibuat)='$bulanFilter'";
                             };
                           };
 
-                          $result = mysqli_query($connection, "SELECT pembayaran.id, petugas.nama AS `petugas_nama`, pembayaran.bukti_pembayaran, pembayaran.tanggal_pembayaran, pembayaran.bulan_pembayaran, pembayaran.jumlah_pembayaran, pembayaran.dibuat FROM pembayaran INNER JOIN petugas ON pembayaran.id_petugas=petugas.id WHERE pembayaran.id_siswa='$id' AND pembayaran.id_spp='$idSPP' AND pembayaran.dihapus='1' $extraFilter ORDER BY pembayaran.dibuat DESC;");
+                          $result = mysqli_query($connection, "SELECT aktivitas, dibuat FROM aktivitas WHERE id_petugas='$id' $extraFilter ORDER BY dibuat DESC;");
                           foreach ($result as $i => $data) {
-                            $idPembayaran = $data["id"];
                           ?>
                             <tr>
                               <td class="text-center align-middle"><?php echo $i + 1; ?>.</td>
-                              <td class="text-center align-middle"><?php echo $data["petugas_nama"]; ?></td>
-                              <td class="text-center align-middle">
-                                <img class="m-auto d-block" src="<?php echo $sourcePath; ?>/public/dist/img/storage/<?php echo $data["bukti_pembayaran"]; ?>" width="250px">
-                              </td>
-                              <td class="text-center align-middle"><?php echo $data["tanggal_pembayaran"]; ?></td>
-                              <td class="text-center align-middle"><?php echo numberToMonth($data["bulan_pembayaran"]); ?></td>
-                              <td class="text-center align-middle"><?php echo numberToCurrency($data["jumlah_pembayaran"]); ?></td>
+                              <td class="align-middle"><?php echo $data["aktivitas"]; ?></td>
                               <td class="text-center align-middle"><?php echo $data["dibuat"]; ?></td>
-
-                              <td class="text-center align-middle">
-                                <div class="btn-group">
-                                  <a class="btn btn-app bg-success m-0" onclick="confirmModal('location', './pulih.php?id=<?php echo $id; ?>&idSPP=<?php echo $idSPP; ?>&idPembayaran=<?php echo $idPembayaran; ?>');">
-                                    <i class="fas fa-history"></i> Pulih
-                                  </a>
-                                </div>
-                              </td>
                             </tr>
                           <?php
                           };
@@ -188,7 +180,7 @@ if (mysqli_num_rows($result) <= 0) {
                     </div>
                   </div>
 
-                  <a class="btn btn-danger btn-block mt-1" role="button" onclick="confirmModal('location', '.?id=<?php echo $id; ?>&idSPP=<?php echo $idSPP; ?>');"><i class="fa fa-undo"></i> Kembali</a>
+                  <a class="btn btn-danger btn-block mt-1" role="button" onclick="confirmModal('location', '.');"><i class="fa fa-undo"></i> Kembali</a>
                 </div>
               </div>
             </div>
@@ -206,24 +198,6 @@ if (mysqli_num_rows($result) <= 0) {
   include "$sourcePath/components/script.php";
   include "$sourcePath/components/data-table/script.php";
   include "$sourcePath/components/select/script.php";
-
-  if ($_SERVER["REQUEST_METHOD"] == "GET") {
-    if (isset($_GET["idPembayaran"])) {
-      try {
-        $idPembayaran = $_GET["idPembayaran"];
-        $result = mysqli_query($connection, "UPDATE pembayaran SET dihapus='0' WHERE id='$idPembayaran' AND dihapus='1';");
-
-        if ($result) {
-          activity("Memulihkan pembayaran spp siswa");
-          echo "<script>successModal(null, './pulih.php?id=$id&idSPP=$idSPP');</script>";
-        } else {
-          echo "<script>errorModal(null, null);</script>";
-        };
-      } catch (exception $e) {
-        echo "<script>errorModal(null, null);</script>";
-      };
-    }
-  };
   ?>
 </body>
 

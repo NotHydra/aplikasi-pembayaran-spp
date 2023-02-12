@@ -5,11 +5,13 @@ include "$sourcePath/utilities/connection.php";
 include "$sourcePath/utilities/session/start.php";
 
 include "$sourcePath/middlewares/isNotAuthenticated.php";
+include "$sourcePath/middlewares/activity.php";
 
 include "$sourcePath/utilities/session/data.php";
 include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 
+activity("Mengunjungi halaman ubah password data pribadi");
 roleGuardMinimum($sessionLevel, "siswa", "/$originalPath/sources/models/authentication/logout.php");
 ?>
 
@@ -108,6 +110,10 @@ roleGuardMinimum($sessionLevel, "siswa", "/$originalPath/sources/models/authenti
         };
 
         if ($result) {
+          if ($sessionType == "petugas") {
+            activity("Mengubah password data pribadi");
+          };
+
           echo "<script>successModal(null, null);</script>";
         } else {
           echo "<script>errorModal(null, null);</script>";

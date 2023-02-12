@@ -5,12 +5,14 @@ include "$sourcePath/utilities/connection.php";
 include "$sourcePath/utilities/session/start.php";
 
 include "$sourcePath/middlewares/isNotAuthenticated.php";
+include "$sourcePath/middlewares/activity.php";
 
 include "$sourcePath/utilities/session/data.php";
 include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 include "$sourcePath/utilities/currency.php";
 
+activity("Mengunjungi halaman pulih spp");
 roleGuardMinimum($sessionLevel, "superadmin", "/$originalPath/sources/models/utama");
 ?>
 
@@ -194,6 +196,7 @@ roleGuardMinimum($sessionLevel, "superadmin", "/$originalPath/sources/models/uta
         $result = mysqli_query($connection, "UPDATE spp SET dihapus='0' WHERE id='$id' AND dihapus='1';");
 
         if ($result) {
+          activity("Memulihkan spp");
           echo "<script>successModal(null, './pulih.php');</script>";
         } else {
           echo "<script>errorModal(null, null);</script>";

@@ -5,12 +5,14 @@ include "$sourcePath/utilities/connection.php";
 include "$sourcePath/utilities/session/start.php";
 
 include "$sourcePath/middlewares/isNotAuthenticated.php";
+include "$sourcePath/middlewares/activity.php";
 
 include "$sourcePath/utilities/session/data.php";
 include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 include "$sourcePath/utilities/currency.php";
 
+activity("Mengunjungi halaman hapus pembayaran spp siswa");
 roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama");
 
 $id = $_GET["id"];
@@ -138,6 +140,7 @@ if (mysqli_num_rows($result) <= 0) {
       $result = mysqli_query($connection, "UPDATE pembayaran SET dihapus='1' WHERE id='$idPembayaran' AND dihapus='0';");
 
       if ($result) {
+        activity("Menghapus pembayaran spp siswa");
         echo "<script>successModal(null, '.?id=$id&idSPP=$idSPP');</script>";
       } else {
         echo "<script>errorModal(null, null);</script>";

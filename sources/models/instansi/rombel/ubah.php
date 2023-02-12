@@ -5,11 +5,13 @@ include "$sourcePath/utilities/connection.php";
 include "$sourcePath/utilities/session/start.php";
 
 include "$sourcePath/middlewares/isNotAuthenticated.php";
+include "$sourcePath/middlewares/activity.php";
 
 include "$sourcePath/utilities/session/data.php";
 include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 
+activity("Mengunjungi halaman ubah rombel");
 roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
 
 $id = $_GET["id"];
@@ -136,6 +138,7 @@ if (mysqli_num_rows($result) <= 0) {
       $result = mysqli_query($connection, "UPDATE rombel SET id_kompetensi_keahlian='$idKompetensiKeahlian', id_jurusan='$idJurusan', id_tingkat='$idTingkat', rombel='$rombel' WHERE id='$id' AND dihapus='0';");
 
       if ($result) {
+        activity("Mengubah rombel");
         echo "<script>successModal(null, null);</script>";
       } else {
         echo "<script>errorModal(null, null);</script>";

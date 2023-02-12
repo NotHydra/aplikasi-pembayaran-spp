@@ -5,11 +5,13 @@ include "$sourcePath/utilities/connection.php";
 include "$sourcePath/utilities/session/start.php";
 
 include "$sourcePath/middlewares/isNotAuthenticated.php";
+include "$sourcePath/middlewares/activity.php";
 
 include "$sourcePath/utilities/session/data.php";
 include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 
+activity("Mengunjungi halaman buat spp");
 roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
 ?>
 
@@ -103,6 +105,7 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
       $result = mysqli_query($connection, "INSERT INTO spp (tahun, nominal) VALUES ('$tahun', '$nominal');");
 
       if ($result) {
+        activity("Membuat spp");
         echo "<script>successModal(null, null);</script>";
       } else {
         echo "<script>errorModal(null, null);</script>";

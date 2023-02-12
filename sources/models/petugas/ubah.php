@@ -5,11 +5,13 @@ include "$sourcePath/utilities/connection.php";
 include "$sourcePath/utilities/session/start.php";
 
 include "$sourcePath/middlewares/isNotAuthenticated.php";
+include "$sourcePath/middlewares/activity.php";
 
 include "$sourcePath/utilities/session/data.php";
 include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 
+activity("Mengunjungi halaman ubah petugas");
 roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
 
 $id = $_GET["id"];
@@ -148,6 +150,7 @@ if (mysqli_num_rows($result) <= 0 or !roleCheckMinimum($sessionLevel, roleConver
       $result = mysqli_query($connection, "UPDATE petugas SET nama='$nama', username='$username', telepon='$telepon', level='$level', status='$status' WHERE id='$id' AND dihapus='0';");
 
       if ($result) {
+        activity("Mengubah petugas");
         echo "<script>successModal(null, null);</script>";
       } else {
         echo "<script>errorModal(null, null);</script>";
