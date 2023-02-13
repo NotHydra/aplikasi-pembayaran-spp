@@ -160,11 +160,25 @@ roleGuardMinimum($sessionLevel, "superadmin", "/$originalPath/sources/models/uta
                               <td class="text-center align-middle"><?php echo dateInterval($data["diubah"], $currentDate); ?></td>
 
                               <td class="text-center align-middle">
-                                <div class="btn-group">
-                                  <a class="btn btn-app bg-success m-0" onclick="confirmModal('location', './pulih.php?id=<?php echo $id; ?>');">
-                                    <i class="fas fa-history"></i> Pulih
-                                  </a>
-                                </div>
+                                <?php
+                                if (roleCheckMinimum($sessionLevel, roleConvert($data["level"]) + 1)) {
+                                ?>
+                                  <div class="btn-group">
+                                    <a class="btn btn-app bg-success m-0" onclick="confirmModal('location', './pulih.php?id=<?php echo $id; ?>');">
+                                      <i class="fas fa-history"></i> Pulih
+                                    </a>
+                                  </div>
+                                <?php
+                                } else {
+                                ?>
+                                  <div class="btn-group">
+                                    <a class="btn btn-app bg-gray disabled m-0">
+                                      <i class="fas fa-history"></i> Pulih
+                                    </a>
+                                  </div>
+                                <?php
+                                };
+                                ?>
                               </td>
                             </tr>
                           <?php
@@ -196,18 +210,25 @@ roleGuardMinimum($sessionLevel, "superadmin", "/$originalPath/sources/models/uta
 
   if ($_SERVER["REQUEST_METHOD"] == "GET") {
     if (isset($_GET["id"])) {
-      try {
-        $id = $_GET["id"];
-        $result = mysqli_query($connection, "UPDATE petugas SET dihapus='0' WHERE id='$id' AND dihapus='1';");
+      $id = $_GET["id"];
+      $result = mysqli_query($connection, "SELECT level FROM petugas WHERE id='$id' AND dihapus='1';");
+      $data = mysqli_fetch_assoc($result);
 
-        if ($result) {
-          activity("Memulihkan petugas");
-          echo "<script>successModal(null, './pulih.php');</script>";
-        } else {
+      if (mysqli_num_rows($result) <= 0 or !roleCheckMinimum($sessionLevel, roleConvert($data["level"]) + 1)) {
+        echo "<script>window.location='./pulih.php';</script>";
+      } else {
+        try {
+          $result = mysqli_query($connection, "UPDATE petugas SET dihapus='0' WHERE id='$id' AND dihapus='1';");
+
+          if ($result) {
+            activity("Memulihkan petugas");
+            echo "<script>successModal(null, './pulih.php');</script>";
+          } else {
+            echo "<script>errorModal(null, null);</script>";
+          };
+        } catch (exception $e) {
           echo "<script>errorModal(null, null);</script>";
-        };
-      } catch (exception $e) {
-        echo "<script>errorModal(null, null);</script>";
+        }
       };
     }
   };
