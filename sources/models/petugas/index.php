@@ -222,6 +222,32 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
                                     </a>
                                   </div>
                                 <?php
+                                } else {
+                                ?>
+                                  <div class="btn-group">
+                                    <?php
+                                    if (roleCheckMinimum($sessionLevel, "superadmin")) {
+                                    ?>
+                                      <a class="btn btn-app bg-gray disabled m-0">
+                                        <i class="fas fa-eye"></i> Aktivitas
+                                      </a>
+                                    <?php
+                                    }
+                                    ?>
+
+                                    <a class="btn btn-app bg-gray disabled m-0">
+                                      <i class="fas fa-edit"></i> Ubah
+                                    </a>
+
+                                    <a class="btn btn-app bg-gray disabled m-0">
+                                      <i class="fas fa-lock"></i> Ubah Password
+                                    </a>
+
+                                    <a class="btn btn-app bg-gray disabled m-0">
+                                      <i class="fas fa-trash"></i> Hapus
+                                    </a>
+                                  </div>
+                                <?php
                                 };
                                 ?>
                               </td>
