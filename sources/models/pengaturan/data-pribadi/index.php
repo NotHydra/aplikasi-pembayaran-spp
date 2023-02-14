@@ -99,7 +99,7 @@ roleGuardMinimum($sessionLevel, "siswa", "/$originalPath/sources/models/authenti
                             ],
                           ];
                         } else if ($sessionType == "siswa") {
-                          $idRombelDisplay = mysqli_fetch_assoc(mysqli_query($connection, "SELECT rombel.rombel, kompetensi_keahlian.singkatan FROM rombel INNER JOIN kompetensi_keahlian ON rombel.id_kompetensi_keahlian=kompetensi_keahlian.id WHERE rombel.id='$sessionIdRombel' AND rombel.dihapus='0' AND kompetensi_keahlian.dihapus='0' ORDER BY rombel.dibuat DESC;"));
+                          $idRombelDisplay = mysqli_fetch_assoc(mysqli_query($connection, "SELECT rombel.rombel, kompetensi_keahlian.singkatan FROM rombel INNER JOIN kompetensi_keahlian ON rombel.id_kompetensi_keahlian=kompetensi_keahlian.id WHERE rombel.id='$sessionIdRombel' ORDER BY rombel.dibuat DESC;"));
                           $inputArray = [
                             [
                               "id" => 1,

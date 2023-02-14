@@ -15,7 +15,7 @@ activity("Mengunjungi halaman aktivitas petugas");
 roleGuardMinimum($sessionLevel, "superadmin", "/$originalPath/sources/models/utama");
 
 $id = $_GET["id"];
-$result = mysqli_query($connection, "SELECT level FROM petugas WHERE id='$id' AND dihapus='0';");
+$result = mysqli_query($connection, "SELECT level FROM petugas WHERE id='$id';");
 $data = mysqli_fetch_assoc($result);
 if (mysqli_num_rows($result) <= 0 or !roleCheckMinimum($sessionLevel, roleConvert($data["level"]) + 1)) {
   echo "<script>window.location='.';</script>";

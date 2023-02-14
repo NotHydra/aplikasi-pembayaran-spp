@@ -15,7 +15,7 @@ activity("Mengunjungi halaman hapus petugas");
 roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
 
 $id = $_GET["id"];
-$result = mysqli_query($connection, "SELECT level FROM petugas WHERE id='$id' AND dihapus='0';");
+$result = mysqli_query($connection, "SELECT level FROM petugas WHERE id='$id';");
 $data = mysqli_fetch_assoc($result);
 if (mysqli_num_rows($result) <= 0 or !roleCheckMinimum($sessionLevel, roleConvert($data["level"]) + 1)) {
   echo "<script>window.location='.';</script>";
@@ -58,7 +58,7 @@ if (mysqli_num_rows($result) <= 0 or !roleCheckMinimum($sessionLevel, roleConver
                     <div class="col-sm">
                       <form action="<?php $_SERVER["PHP_SELF"]; ?>" method="POST" onsubmit="return confirmModal('form', this);">
                         <?php
-                        $data = mysqli_fetch_assoc(mysqli_query($connection, "SELECT nama, username, telepon, level, status FROM petugas WHERE id='$id' AND dihapus='0';"));
+                        $data = mysqli_fetch_assoc(mysqli_query($connection, "SELECT nama, username, telepon, level, status FROM petugas WHERE id='$id';"));
                         $inputArray = [
                           [
                             "id" => 1,
@@ -134,7 +134,7 @@ if (mysqli_num_rows($result) <= 0 or !roleCheckMinimum($sessionLevel, roleConver
 
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
-      $result = mysqli_query($connection, "UPDATE petugas SET dihapus='1' WHERE id='$id' AND dihapus='0';");
+      $result = mysqli_query($connection, "DELETE FROM petugas WHERE id='$id';");
 
       if ($result) {
         activity("Menghapus petugas");

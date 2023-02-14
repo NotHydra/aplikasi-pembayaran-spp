@@ -118,7 +118,7 @@ roleGuardMinimum($sessionLevel, "siswa", "/$originalPath/sources/models/authenti
                               "value" => [
                                 array_map(function ($yearObject) {
                                   return [$yearObject[0], $yearObject[1] . " - " . $yearObject[2]];
-                                }, mysqli_fetch_all(mysqli_query($connection, "SELECT rombel.id, rombel.rombel, kompetensi_keahlian.singkatan FROM rombel INNER JOIN kompetensi_keahlian ON rombel.id_kompetensi_keahlian=kompetensi_keahlian.id WHERE rombel.dihapus='0' AND kompetensi_keahlian.dihapus='0' ORDER BY rombel.dibuat DESC;"))), isset($_POST["id_rombel"]) ? $_POST["id_rombel"] : $sessionIdRombel
+                                }, mysqli_fetch_all(mysqli_query($connection, "SELECT rombel.id, rombel.rombel, kompetensi_keahlian.singkatan FROM rombel INNER JOIN kompetensi_keahlian ON rombel.id_kompetensi_keahlian=kompetensi_keahlian.id ORDER BY rombel.dibuat DESC;"))), isset($_POST["id_rombel"]) ? $_POST["id_rombel"] : $sessionIdRombel
                               ],
                               "placeholder" => "Masukkan rombel disini",
                               "enable" => true
@@ -176,7 +176,7 @@ roleGuardMinimum($sessionLevel, "siswa", "/$originalPath/sources/models/authenti
       $telepon = $_POST["telepon"];
 
       try {
-        $result = mysqli_query($connection, "UPDATE petugas SET nama='$nama', username='$username', telepon='$telepon' WHERE id='$sessionId' AND dihapus='0';");
+        $result = mysqli_query($connection, "UPDATE petugas SET nama='$nama', username='$username', telepon='$telepon' WHERE id='$sessionId';");
 
         if ($result) {
           activity("Mengubah data pribadi");
@@ -205,7 +205,7 @@ roleGuardMinimum($sessionLevel, "siswa", "/$originalPath/sources/models/authenti
       $telepon = $_POST["telepon"];
 
       try {
-        $result = mysqli_query($connection, "UPDATE siswa SET nisn='$nisn', nis='$nis', nama='$nama', id_rombel='$idRombel', alamat='$alamat', telepon='$telepon' WHERE id='$sessionId' AND dihapus='0';");
+        $result = mysqli_query($connection, "UPDATE siswa SET nisn='$nisn', nis='$nis', nama='$nama', id_rombel='$idRombel', alamat='$alamat', telepon='$telepon' WHERE id='$sessionId';");
 
         if ($result) {
           echo "<script>successModal(null, null);</script>";

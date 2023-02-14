@@ -15,13 +15,13 @@ activity("Mengunjungi halaman buat pembayaran spp siswa");
 roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama");
 
 $id = $_GET["id"];
-$result = mysqli_query($connection, "SELECT id FROM siswa WHERE id='$id' AND dihapus='0';");
+$result = mysqli_query($connection, "SELECT id FROM siswa WHERE id='$id';");
 if (mysqli_num_rows($result) <= 0) {
   echo "<script>window.location='./..';</script>";
 };
 
 $idSPP = $_GET["idSPP"];
-$result = mysqli_query($connection, "SELECT id FROM spp WHERE id='$idSPP' AND dihapus='0';");
+$result = mysqli_query($connection, "SELECT id FROM spp WHERE id='$idSPP';");
 if (mysqli_num_rows($result) <= 0) {
   echo "<script>window.location='./..';</script>";
 };

@@ -15,7 +15,7 @@ activity("Mengunjungi halaman ubah password petugas");
 roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
 
 $id = $_GET["id"];
-$result = mysqli_query($connection, "SELECT level FROM petugas WHERE id='$id' AND dihapus='0';");
+$result = mysqli_query($connection, "SELECT level FROM petugas WHERE id='$id';");
 $data = mysqli_fetch_assoc($result);
 if (mysqli_num_rows($result) <= 0 or !roleCheckMinimum($sessionLevel, roleConvert($data["level"]) + 1)) {
   echo "<script>window.location='.';</script>";
@@ -110,7 +110,7 @@ if (mysqli_num_rows($result) <= 0 or !roleCheckMinimum($sessionLevel, roleConver
 
     if ($password == $konfirmasiPassword) {
       try {
-        $result = mysqli_query($connection, "UPDATE petugas SET password='$password' WHERE id='$id' AND dihapus='0';");
+        $result = mysqli_query($connection, "UPDATE petugas SET password='$password' WHERE id='$id';");
 
         if ($result) {
           activity("Mengubah password petugas");

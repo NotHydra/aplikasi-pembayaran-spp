@@ -16,13 +16,13 @@ activity("Mengunjungi halaman pembayaran spp siswa");
 roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama");
 
 $id = $_GET["id"];
-$result = mysqli_query($connection, "SELECT id FROM siswa WHERE id='$id' AND dihapus='0';");
+$result = mysqli_query($connection, "SELECT id FROM siswa WHERE id='$id';");
 if (mysqli_num_rows($result) <= 0) {
   echo "<script>window.location='./..';</script>";
 };
 
 $idSPP = $_GET["idSPP"];
-$result = mysqli_query($connection, "SELECT id FROM spp WHERE id='$idSPP' AND dihapus='0';");
+$result = mysqli_query($connection, "SELECT id FROM spp WHERE id='$idSPP';");
 if (mysqli_num_rows($result) <= 0) {
   echo "<script>window.location='./..';</script>";
 };
@@ -60,13 +60,13 @@ if (mysqli_num_rows($result) <= 0) {
                   "id" => 1,
                   "title" => "Total Pembayaran",
                   "icon" => "envelope",
-                  "value" => mysqli_fetch_assoc(mysqli_query($connection, "SELECT COUNT(id) AS `total` FROM pembayaran WHERE id_siswa='$id' AND id_spp='$idSPP' AND dihapus='0';"))["total"]
+                  "value" => mysqli_fetch_assoc(mysqli_query($connection, "SELECT COUNT(id) AS `total` FROM pembayaran WHERE id_siswa='$id' AND id_spp='$idSPP';"))["total"]
                 ],
                 [
                   "id" => 2,
                   "title" => "Total Jumlah Pembayaran",
                   "icon" => "wallet",
-                  "value" => numberToCurrency(mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(jumlah_pembayaran) AS `total` FROM pembayaran WHERE id_siswa='$id' AND id_spp='$idSPP' AND dihapus='0';"))["total"])
+                  "value" => numberToCurrency(mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(jumlah_pembayaran) AS `total` FROM pembayaran WHERE id_siswa='$id' AND id_spp='$idSPP';"))["total"])
                 ]
               ]
             ]
@@ -97,7 +97,7 @@ if (mysqli_num_rows($result) <= 0) {
                           "value" => [
                             array_merge([[0, "Semua"]], array_map(function ($yearObject) {
                               return [$yearObject[0], $yearObject[0]];
-                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT DISTINCT YEAR(dibuat) FROM pembayaran WHERE id_siswa='$id' AND id_spp='$idSPP' AND dihapus='0' ORDER BY dibuat DESC;")))), isset($_POST["tahun"]) ? $_POST["tahun"] : null
+                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT DISTINCT YEAR(dibuat) FROM pembayaran WHERE id_siswa='$id' AND id_spp='$idSPP' ORDER BY dibuat DESC;")))), isset($_POST["tahun"]) ? $_POST["tahun"] : null
                           ],
                           "placeholder" => "Pilih tahun disini",
                           "enable" => true
@@ -181,7 +181,7 @@ if (mysqli_num_rows($result) <= 0) {
                             };
                           };
 
-                          $result = mysqli_query($connection, "SELECT pembayaran.id, petugas.nama AS `petugas_nama`, pembayaran.bukti_pembayaran, pembayaran.tanggal_pembayaran, pembayaran.bulan_pembayaran, pembayaran.jumlah_pembayaran, pembayaran.dibuat FROM pembayaran INNER JOIN petugas ON pembayaran.id_petugas=petugas.id WHERE pembayaran.id_siswa='$id' AND pembayaran.id_spp='$idSPP' AND pembayaran.dihapus='0' $extraFilter ORDER BY pembayaran.dibuat DESC;");
+                          $result = mysqli_query($connection, "SELECT pembayaran.id, petugas.nama AS `petugas_nama`, pembayaran.bukti_pembayaran, pembayaran.tanggal_pembayaran, pembayaran.bulan_pembayaran, pembayaran.jumlah_pembayaran, pembayaran.dibuat FROM pembayaran INNER JOIN petugas ON pembayaran.id_petugas=petugas.id WHERE pembayaran.id_siswa='$id' AND pembayaran.id_spp='$idSPP' $extraFilter ORDER BY pembayaran.dibuat DESC;");
                           foreach ($result as $i => $data) {
                             $idPembayaran = $data["id"];
                           ?>
@@ -213,15 +213,6 @@ if (mysqli_num_rows($result) <= 0) {
                   </div>
 
                   <a class="btn btn-primary btn-block" href="./buat.php?id=<?php echo $id; ?>&idSPP=<?php echo $idSPP; ?>"><i class="fa fa-plus"></i> Buat</a>
-
-                  <?php
-                  if (roleCheckMinimum($sessionLevel, "superadmin")) {
-                  ?>
-                    <a class="btn btn-success btn-block mt-1" href="./pulih.php?id=<?php echo $id; ?>&idSPP=<?php echo $idSPP; ?>"><i class="fa fa-history"></i> Pulih</a>
-                  <?php
-                  }
-                  ?>
-
                   <a class="btn btn-danger btn-block mt-1" role="button" onclick="confirmModal('location', './../spp.php?id=<?php echo $id; ?>');"><i class="fa fa-undo"></i> Kembali</a>
                 </div>
               </div>

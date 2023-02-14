@@ -47,7 +47,7 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
                   "id" => 1,
                   "title" => "Total Rombel",
                   "icon" => "archway",
-                  "value" => mysqli_fetch_assoc(mysqli_query($connection, "SELECT COUNT(id) AS `total` FROM rombel WHERE dihapus='0';"))["total"]
+                  "value" => mysqli_fetch_assoc(mysqli_query($connection, "SELECT COUNT(id) AS `total` FROM rombel;"))["total"]
                 ]
               ]
             ]
@@ -78,7 +78,7 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
                           "value" => [
                             array_merge([[0, "Semua"]], array_map(function ($yearObject) {
                               return [$yearObject[0], $yearObject[0]];
-                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT DISTINCT YEAR(dibuat) FROM rombel WHERE dihapus='0' ORDER BY dibuat DESC;")))), isset($_POST["tahun"]) ? $_POST["tahun"] : null
+                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT DISTINCT YEAR(dibuat) FROM rombel ORDER BY dibuat DESC;")))), isset($_POST["tahun"]) ? $_POST["tahun"] : null
                           ],
                           "placeholder" => "Pilih tahun disini",
                           "enable" => true
@@ -162,7 +162,7 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
                             };
                           };
 
-                          $result = mysqli_query($connection, "SELECT rombel.id, rombel.rombel, rombel.dibuat, rombel.diubah, kompetensi_keahlian.kompetensi_keahlian, kompetensi_keahlian.singkatan AS `kompetensi_keahlian_singkatan`, jurusan.jurusan, jurusan.singkatan AS `jurusan_singkatan`, tingkat.tingkat FROM rombel INNER JOIN kompetensi_keahlian ON rombel.id_kompetensi_keahlian=kompetensi_keahlian.id INNER JOIN jurusan ON rombel.id_jurusan=jurusan.id INNER JOIN tingkat ON rombel.id_tingkat=tingkat.id WHERE rombel.dihapus='0' $extraFilter ORDER BY rombel.dibuat DESC;");
+                          $result = mysqli_query($connection, "SELECT rombel.id, rombel.rombel, rombel.dibuat, rombel.diubah, kompetensi_keahlian.kompetensi_keahlian, kompetensi_keahlian.singkatan AS `kompetensi_keahlian_singkatan`, jurusan.jurusan, jurusan.singkatan AS `jurusan_singkatan`, tingkat.tingkat FROM rombel INNER JOIN kompetensi_keahlian ON rombel.id_kompetensi_keahlian=kompetensi_keahlian.id INNER JOIN jurusan ON rombel.id_jurusan=jurusan.id INNER JOIN tingkat ON rombel.id_tingkat=tingkat.id WHERE '1'='1' $extraFilter ORDER BY rombel.dibuat DESC;");
                           foreach ($result as $i => $data) {
                           ?>
                             <tr>
@@ -195,14 +195,6 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
                   </div>
 
                   <a class="btn btn-primary btn-block mt-1" href="./buat.php"><i class="fa fa-plus"></i> Buat</a>
-
-                  <?php
-                  if (roleCheckMinimum($sessionLevel, "superadmin")) {
-                  ?>
-                    <a class="btn btn-success btn-block mt-1" href="./pulih.php"><i class="fa fa-history"></i> Pulih</a>
-                  <?php
-                  }
-                  ?>
                 </div>
               </div>
             </div>

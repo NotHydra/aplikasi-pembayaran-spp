@@ -14,7 +14,7 @@ include "$sourcePath/utilities/currency.php";
 roleGuardSingle($sessionLevel, "siswa", "/$originalPath/sources/models/utama");
 
 $id = $_GET["id"];
-$result = mysqli_query($connection, "SELECT id FROM spp WHERE id='$id' AND dihapus='0';");
+$result = mysqli_query($connection, "SELECT id FROM spp WHERE id='$id';");
 if (mysqli_num_rows($result) <= 0) {
   echo "<script>window.location='./..';</script>";
 };
@@ -52,13 +52,13 @@ if (mysqli_num_rows($result) <= 0) {
                   "id" => 1,
                   "title" => "Total Pembayaran",
                   "icon" => "envelope",
-                  "value" => mysqli_fetch_assoc(mysqli_query($connection, "SELECT COUNT(id) AS `total` FROM pembayaran WHERE id_siswa='$sessionId' AND id_spp='$id' AND dihapus='0';"))["total"]
+                  "value" => mysqli_fetch_assoc(mysqli_query($connection, "SELECT COUNT(id) AS `total` FROM pembayaran WHERE id_siswa='$sessionId' AND id_spp='$id';"))["total"]
                 ],
                 [
                   "id" => 2,
                   "title" => "Total Jumlah Pembayaran",
                   "icon" => "wallet",
-                  "value" => numberToCurrency(mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(jumlah_pembayaran) AS `total` FROM pembayaran WHERE id_siswa='$sessionId' AND id_spp='$id' AND dihapus='0';"))["total"])
+                  "value" => numberToCurrency(mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(jumlah_pembayaran) AS `total` FROM pembayaran WHERE id_siswa='$sessionId' AND id_spp='$id';"))["total"])
                 ]
               ]
             ]
@@ -89,7 +89,7 @@ if (mysqli_num_rows($result) <= 0) {
                           "value" => [
                             array_merge([[0, "Semua"]], array_map(function ($yearObject) {
                               return [$yearObject[0], $yearObject[0]];
-                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT DISTINCT YEAR(dibuat) FROM pembayaran WHERE id_siswa='$sessionId' AND id_spp='$id' AND dihapus='0' ORDER BY dibuat DESC;")))), isset($_POST["tahun"]) ? $_POST["tahun"] : null
+                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT DISTINCT YEAR(dibuat) FROM pembayaran WHERE id_siswa='$sessionId' AND id_spp='$id' ORDER BY dibuat DESC;")))), isset($_POST["tahun"]) ? $_POST["tahun"] : null
                           ],
                           "placeholder" => "Pilih    disini",
                           "enable" => true
@@ -172,7 +172,7 @@ if (mysqli_num_rows($result) <= 0) {
                             };
                           };
 
-                          $result = mysqli_query($connection, "SELECT pembayaran.id, petugas.nama AS `petugas_nama`, pembayaran.bukti_pembayaran, pembayaran.tanggal_pembayaran, pembayaran.bulan_pembayaran, pembayaran.jumlah_pembayaran, pembayaran.dibuat FROM pembayaran INNER JOIN petugas ON pembayaran.id_petugas=petugas.id WHERE pembayaran.id_siswa='$sessionId' AND pembayaran.id_spp='$id' AND pembayaran.dihapus='0' $extraFilter ORDER BY pembayaran.dibuat DESC;");
+                          $result = mysqli_query($connection, "SELECT pembayaran.id, petugas.nama AS `petugas_nama`, pembayaran.bukti_pembayaran, pembayaran.tanggal_pembayaran, pembayaran.bulan_pembayaran, pembayaran.jumlah_pembayaran, pembayaran.dibuat FROM pembayaran INNER JOIN petugas ON pembayaran.id_petugas=petugas.id WHERE pembayaran.id_siswa='$sessionId' AND pembayaran.id_spp='$id' $extraFilter ORDER BY pembayaran.dibuat DESC;");
                           foreach ($result as $i => $data) {
                             $idPembayaran = $data["id"];
                           ?>

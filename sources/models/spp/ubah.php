@@ -15,7 +15,7 @@ activity("Mengunjungi halaman ubah spp");
 roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
 
 $id = $_GET["id"];
-$result = mysqli_query($connection, "SELECT id FROM spp WHERE id='$id' AND dihapus='0';");
+$result = mysqli_query($connection, "SELECT id FROM spp WHERE id='$id';");
 if (mysqli_num_rows($result) <= 0) {
   echo "<script>window.location='.';</script>";
 };
@@ -57,7 +57,7 @@ if (mysqli_num_rows($result) <= 0) {
                     <div class="col-sm">
                       <form action="<?php $_SERVER["PHP_SELF"]; ?>" method="POST" onsubmit="return confirmModal('form', this);">
                         <?php
-                        $data = mysqli_fetch_assoc(mysqli_query($connection, "SELECT tahun, nominal FROM spp WHERE id='$id' AND dihapus='0';"));
+                        $data = mysqli_fetch_assoc(mysqli_query($connection, "SELECT tahun, nominal FROM spp WHERE id='$id';"));
                         $inputArray = [
                           [
                             "id" => 1,
@@ -109,7 +109,7 @@ if (mysqli_num_rows($result) <= 0) {
     $nominal = $_POST["nominal"];
 
     try {
-      $result = mysqli_query($connection, "UPDATE spp SET tahun='$tahun', nominal='$nominal' WHERE id='$id' AND dihapus='0';");
+      $result = mysqli_query($connection, "DELETE FROM spp WHERE id='$id';");
 
       if ($result) {
         activity("Mengubah spp");

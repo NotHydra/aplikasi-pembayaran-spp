@@ -87,7 +87,7 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
                             "value" => [
                               array_map(function ($itemObject) {
                                 return [$itemObject[0], $itemObject[1]];
-                              }, mysqli_fetch_all(mysqli_query($connection, "SELECT id, rombel FROM rombel WHERE dihapus='0' ORDER BY dibuat DESC;"))), isset($_POST["id_rombel"]) ? $_POST["id_rombel"] : null
+                              }, mysqli_fetch_all(mysqli_query($connection, "SELECT id, rombel FROM rombel ORDER BY dibuat DESC;"))), isset($_POST["id_rombel"]) ? $_POST["id_rombel"] : null
                             ],
                             "placeholder" => "Masukkan rombel disini",
                             "enable" => true

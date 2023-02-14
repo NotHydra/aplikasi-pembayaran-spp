@@ -16,7 +16,7 @@ activity("Mengunjungi halaman spp siswa");
 roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama");
 
 $id = $_GET["id"];
-$result = mysqli_query($connection, "SELECT id FROM siswa WHERE id='$id' AND dihapus='0';");
+$result = mysqli_query($connection, "SELECT id FROM siswa WHERE id='$id';");
 if (mysqli_num_rows($result) <= 0) {
   echo "<script>window.location='.';</script>";
 };
@@ -54,13 +54,13 @@ if (mysqli_num_rows($result) <= 0) {
                   "id" => 1,
                   "title" => "Total SPP",
                   "icon" => "book",
-                  "value" => mysqli_fetch_assoc(mysqli_query($connection, "SELECT COUNT(id) AS `total` FROM spp WHERE dihapus='0';"))["total"]
+                  "value" => mysqli_fetch_assoc(mysqli_query($connection, "SELECT COUNT(id) AS `total` FROM spp;"))["total"]
                 ],
                 [
                   "id" => 2,
                   "title" => "Total Nominal",
                   "icon" => "wallet",
-                  "value" => numberToCurrency(mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(nominal) AS `total` FROM spp WHERE dihapus='0';"))["total"])
+                  "value" => numberToCurrency(mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(nominal) AS `total` FROM spp;"))["total"])
                 ]
               ]
             ],
@@ -71,13 +71,13 @@ if (mysqli_num_rows($result) <= 0) {
                   "id" => 1,
                   "title" => "Total Sudah Dibayar",
                   "icon" => "check",
-                  "value" => numberToCurrency(mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(jumlah_pembayaran) AS `total` FROM pembayaran WHERE id_siswa='$id' AND dihapus='0';"))["total"])
+                  "value" => numberToCurrency(mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(jumlah_pembayaran) AS `total` FROM pembayaran WHERE id_siswa='$id';"))["total"])
                 ],
                 [
                   "id" => 2,
                   "title" => "Total Belum Dibayar",
                   "icon" => "times",
-                  "value" => numberToCurrency(mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(nominal) AS `total` FROM spp WHERE dihapus='0';"))["total"] - mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(jumlah_pembayaran) AS `total` FROM pembayaran WHERE id_siswa='$id' AND dihapus='0';"))["total"])
+                  "value" => numberToCurrency(mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(nominal) AS `total` FROM spp;"))["total"] - mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(jumlah_pembayaran) AS `total` FROM pembayaran WHERE id_siswa='$id';"))["total"])
                 ]
               ]
             ]
@@ -108,7 +108,7 @@ if (mysqli_num_rows($result) <= 0) {
                           "value" => [
                             array_merge([[0, "Semua"]], array_map(function ($yearObject) {
                               return [$yearObject[0], $yearObject[0]];
-                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT DISTINCT tahun FROM spp WHERE dihapus='0' ORDER BY dibuat DESC;")))), isset($_POST["tahun"]) ? $_POST["tahun"] : null
+                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT DISTINCT tahun FROM spp ORDER BY dibuat DESC;")))), isset($_POST["tahun"]) ? $_POST["tahun"] : null
                           ],
                           "placeholder" => "Pilih tahun disini",
                           "enable" => true
@@ -149,11 +149,11 @@ if (mysqli_num_rows($result) <= 0) {
                             };
                           };
 
-                          $result = mysqli_query($connection, "SELECT id, tahun, nominal FROM spp WHERE dihapus='0' $extraFilter ORDER BY dibuat DESC;");
+                          $result = mysqli_query($connection, "SELECT id, tahun, nominal FROM spp WHERE '1'='1' $extraFilter ORDER BY dibuat DESC;");
                           foreach ($result as $i => $data) {
                             $idSPP = $data["id"];
 
-                            $sudahDibayar = mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(jumlah_pembayaran) AS `total` FROM pembayaran WHERE id_siswa='$id' AND id_spp='$idSPP' AND dihapus='0';"))["total"];
+                            $sudahDibayar = mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(jumlah_pembayaran) AS `total` FROM pembayaran WHERE id_siswa='$id' AND id_spp='$idSPP';"))["total"];
                           ?>
                             <tr>
                               <td class="text-center align-middle"><?php echo $i + 1; ?>.</td>

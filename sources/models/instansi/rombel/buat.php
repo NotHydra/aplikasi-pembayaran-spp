@@ -59,7 +59,7 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
                             "type" => "select",
                             "value" => [array_map(function ($itemObject) {
                               return [$itemObject[0], $itemObject[1] . " - " . $itemObject[2]];
-                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT id, kompetensi_keahlian, singkatan FROM kompetensi_keahlian WHERE dihapus='0' ORDER BY dibuat DESC;"))), isset($_POST["id_kompetensi_keahlian"]) ? $_POST["id_kompetensi_keahlian"] : null],
+                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT id, kompetensi_keahlian, singkatan FROM kompetensi_keahlian ORDER BY dibuat DESC;"))), isset($_POST["id_kompetensi_keahlian"]) ? $_POST["id_kompetensi_keahlian"] : null],
                             "placeholder" => "Masukkan kompetensi keahlian disini",
                             "enable" => true
                           ],
@@ -70,7 +70,7 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
                             "type" => "select",
                             "value" => [array_map(function ($itemObject) {
                               return [$itemObject[0], $itemObject[1] . " - " . $itemObject[2]];
-                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT id, jurusan, singkatan FROM jurusan WHERE dihapus='0' ORDER BY dibuat DESC;"))), isset($_POST["id_jurusan"]) ? $_POST["id_jurusan"] : null],
+                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT id, jurusan, singkatan FROM jurusan ORDER BY dibuat DESC;"))), isset($_POST["id_jurusan"]) ? $_POST["id_jurusan"] : null],
                             "placeholder" => "Masukkan jurusan disini",
                             "enable" => true
                           ],
@@ -81,7 +81,7 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
                             "type" => "select",
                             "value" => [array_map(function ($itemObject) {
                               return [$itemObject[0], $itemObject[1]];
-                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT id, tingkat FROM tingkat WHERE dihapus='0' ORDER BY dibuat DESC;"))), isset($_POST["id_tingkat"]) ? $_POST["id_tingkat"] : null],
+                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT id, tingkat FROM tingkat ORDER BY dibuat DESC;"))), isset($_POST["id_tingkat"]) ? $_POST["id_tingkat"] : null],
                             "placeholder" => "Masukkan tingkat disini",
                             "enable" => true
                           ],

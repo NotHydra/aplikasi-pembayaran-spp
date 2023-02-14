@@ -15,7 +15,7 @@ activity("Mengunjungi halaman ubah siswa");
 roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
 
 $id = $_GET["id"];
-$result = mysqli_query($connection, "SELECT id FROM siswa WHERE id='$id' AND dihapus='0';");
+$result = mysqli_query($connection, "SELECT id FROM siswa WHERE id='$id';");
 if (mysqli_num_rows($result) <= 0) {
   echo "<script>window.location='.';</script>";
 };
@@ -57,7 +57,7 @@ if (mysqli_num_rows($result) <= 0) {
                     <div class="col-sm">
                       <form action="<?php $_SERVER["PHP_SELF"]; ?>" method="POST" onsubmit="return confirmModal('form', this);">
                         <?php
-                        $data = mysqli_fetch_assoc(mysqli_query($connection, "SELECT nisn, nis, nama, id_rombel, alamat, telepon FROM siswa WHERE id='$id' AND dihapus='0';"));
+                        $data = mysqli_fetch_assoc(mysqli_query($connection, "SELECT nisn, nis, nama, id_rombel, alamat, telepon FROM siswa WHERE id='$id';"));
                         $inputArray = [
                           [
                             "id" => 1,
@@ -94,7 +94,7 @@ if (mysqli_num_rows($result) <= 0) {
                             "value" => [
                               array_map(function ($itemObject) {
                                 return [$itemObject[0], $itemObject[1]];
-                              }, mysqli_fetch_all(mysqli_query($connection, "SELECT id, rombel FROM rombel WHERE dihapus='0' ORDER BY dibuat DESC;"))), isset($_POST["id_rombel"]) ? $_POST["id_rombel"] : $data["id_rombel"]
+                              }, mysqli_fetch_all(mysqli_query($connection, "SELECT id, rombel FROM rombel ORDER BY dibuat DESC;"))), isset($_POST["id_rombel"]) ? $_POST["id_rombel"] : $data["id_rombel"]
                             ],
                             "placeholder" => "Masukkan rombel disini",
                             "enable" => true
@@ -153,7 +153,7 @@ if (mysqli_num_rows($result) <= 0) {
     $telepon = $_POST["telepon"];
 
     try {
-      $result = mysqli_query($connection, "UPDATE siswa SET nisn='$nisn', nis='$nis', nama='$nama', id_rombel='$idRombel', alamat='$alamat', telepon='$telepon' WHERE id='$id' AND dihapus='0';");
+      $result = mysqli_query($connection, "UPDATE siswa SET nisn='$nisn', nis='$nis', nama='$nama', id_rombel='$idRombel', alamat='$alamat', telepon='$telepon' WHERE id='$id';");
 
       if ($result) {
         activity("Mengubah siswa");

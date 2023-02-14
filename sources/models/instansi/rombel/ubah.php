@@ -15,7 +15,7 @@ activity("Mengunjungi halaman ubah rombel");
 roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
 
 $id = $_GET["id"];
-$result = mysqli_query($connection, "SELECT id FROM rombel WHERE id='$id' AND dihapus='0';");
+$result = mysqli_query($connection, "SELECT id FROM rombel WHERE id='$id';");
 if (mysqli_num_rows($result) <= 0) {
   echo "<script>window.location='.';</script>";
 };
@@ -57,7 +57,7 @@ if (mysqli_num_rows($result) <= 0) {
                     <div class="col-sm">
                       <form action="<?php $_SERVER["PHP_SELF"]; ?>" method="POST" onsubmit="return confirmModal('form', this);">
                         <?php
-                        $data = mysqli_fetch_assoc(mysqli_query($connection, "SELECT id_kompetensi_keahlian, id_jurusan, id_tingkat, rombel FROM rombel WHERE id='$id' AND dihapus='0';"));
+                        $data = mysqli_fetch_assoc(mysqli_query($connection, "SELECT id_kompetensi_keahlian, id_jurusan, id_tingkat, rombel FROM rombel WHERE id='$id';"));
                         $inputArray = [
                           [
                             "id" => 1,
@@ -66,7 +66,7 @@ if (mysqli_num_rows($result) <= 0) {
                             "type" => "select",
                             "value" => [array_map(function ($itemObject) {
                               return [$itemObject[0], $itemObject[1] . " - " . $itemObject[2]];
-                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT id, kompetensi_keahlian, singkatan FROM kompetensi_keahlian WHERE dihapus='0' ORDER BY dibuat DESC;"))), isset($_POST["id_kompetensi_keahlian"]) ? $_POST["id_kompetensi_keahlian"] : $data["id_kompetensi_keahlian"]],
+                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT id, kompetensi_keahlian, singkatan FROM kompetensi_keahlian ORDER BY dibuat DESC;"))), isset($_POST["id_kompetensi_keahlian"]) ? $_POST["id_kompetensi_keahlian"] : $data["id_kompetensi_keahlian"]],
                             "placeholder" => "Masukkan kompetensi keahlian disini",
                             "enable" => true
                           ],
@@ -77,7 +77,7 @@ if (mysqli_num_rows($result) <= 0) {
                             "type" => "select",
                             "value" => [array_map(function ($itemObject) {
                               return [$itemObject[0], $itemObject[1] . " - " . $itemObject[2]];
-                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT id, jurusan, singkatan FROM jurusan WHERE dihapus='0' ORDER BY dibuat DESC;"))), isset($_POST["id_jurusan"]) ? $_POST["id_jurusan"] : $data["id_jurusan"]],
+                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT id, jurusan, singkatan FROM jurusan ORDER BY dibuat DESC;"))), isset($_POST["id_jurusan"]) ? $_POST["id_jurusan"] : $data["id_jurusan"]],
                             "placeholder" => "Masukkan jurusan disini",
                             "enable" => true
                           ],
@@ -88,7 +88,7 @@ if (mysqli_num_rows($result) <= 0) {
                             "type" => "select",
                             "value" => [array_map(function ($itemObject) {
                               return [$itemObject[0], $itemObject[1]];
-                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT id, tingkat FROM tingkat WHERE dihapus='0' ORDER BY dibuat DESC;"))), isset($_POST["id_tingkat"]) ? $_POST["id_tingkat"] : $data["id_tingkat"]],
+                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT id, tingkat FROM tingkat ORDER BY dibuat DESC;"))), isset($_POST["id_tingkat"]) ? $_POST["id_tingkat"] : $data["id_tingkat"]],
                             "placeholder" => "Masukkan tingkat disini",
                             "enable" => true
                           ],
@@ -135,7 +135,7 @@ if (mysqli_num_rows($result) <= 0) {
     $rombel = $_POST["rombel"];
 
     try {
-      $result = mysqli_query($connection, "UPDATE rombel SET id_kompetensi_keahlian='$idKompetensiKeahlian', id_jurusan='$idJurusan', id_tingkat='$idTingkat', rombel='$rombel' WHERE id='$id' AND dihapus='0';");
+      $result = mysqli_query($connection, "UPDATE rombel SET id_kompetensi_keahlian='$idKompetensiKeahlian', id_jurusan='$idJurusan', id_tingkat='$idTingkat', rombel='$rombel' WHERE id='$id';");
 
       if ($result) {
         activity("Mengubah rombel");

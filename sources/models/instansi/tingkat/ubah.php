@@ -15,7 +15,7 @@ activity("Mengunjungi halaman ubah tingkat");
 roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
 
 $id = $_GET["id"];
-$result = mysqli_query($connection, "SELECT id FROM tingkat WHERE id='$id' AND dihapus='0';");
+$result = mysqli_query($connection, "SELECT id FROM tingkat WHERE id='$id';");
 if (mysqli_num_rows($result) <= 0) {
   echo "<script>window.location='.';</script>";
 };
@@ -57,7 +57,7 @@ if (mysqli_num_rows($result) <= 0) {
                     <div class="col-sm">
                       <form action="<?php $_SERVER["PHP_SELF"]; ?>" method="POST" onsubmit="return confirmModal('form', this);">
                         <?php
-                        $data = mysqli_fetch_assoc(mysqli_query($connection, "SELECT tingkat FROM tingkat WHERE id='$id' AND dihapus='0';"));
+                        $data = mysqli_fetch_assoc(mysqli_query($connection, "SELECT tingkat FROM tingkat WHERE id='$id';"));
                         $inputArray = [
                           [
                             "id" => 1,
@@ -99,7 +99,7 @@ if (mysqli_num_rows($result) <= 0) {
     $tingkat = $_POST["tingkat"];
 
     try {
-      $result = mysqli_query($connection, "UPDATE tingkat SET tingkat='$tingkat' WHERE id='$id' AND dihapus='0';");
+      $result = mysqli_query($connection, "UPDATE tingkat SET tingkat='$tingkat' WHERE id='$id';");
 
       if ($result) {
         activity("Mengubah tingkat");

@@ -15,7 +15,7 @@ activity("Mengunjungi halaman ubah password siswa");
 roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
 
 $id = $_GET["id"];
-$result = mysqli_query($connection, "SELECT id FROM siswa WHERE id='$id' AND dihapus='0';");
+$result = mysqli_query($connection, "SELECT id FROM siswa WHERE id='$id';");
 if (mysqli_num_rows($result) <= 0) {
   echo "<script>window.location='.';</script>";
 };
@@ -109,7 +109,7 @@ if (mysqli_num_rows($result) <= 0) {
 
     if ($password == $konfirmasiPassword) {
       try {
-        $result = mysqli_query($connection, "UPDATE siswa SET password='$password' WHERE id='$id' AND dihapus='0';");
+        $result = mysqli_query($connection, "UPDATE siswa SET password='$password' WHERE id='$id';");
 
         if ($result) {
           activity("Mengubah password siswa");

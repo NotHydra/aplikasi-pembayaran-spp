@@ -16,19 +16,19 @@ activity("Mengunjungi halaman hapus pembayaran spp siswa");
 roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama");
 
 $id = $_GET["id"];
-$result = mysqli_query($connection, "SELECT id FROM siswa WHERE id='$id' AND dihapus='0';");
+$result = mysqli_query($connection, "SELECT id FROM siswa WHERE id='$id';");
 if (mysqli_num_rows($result) <= 0) {
   echo "<script>window.location='./..';</script>";
 };
 
 $idSPP = $_GET["idSPP"];
-$result = mysqli_query($connection, "SELECT id FROM spp WHERE id='$idSPP' AND dihapus='0';");
+$result = mysqli_query($connection, "SELECT id FROM spp WHERE id='$idSPP';");
 if (mysqli_num_rows($result) <= 0) {
   echo "<script>window.location='./..';</script>";
 };
 
 $idPembayaran = $_GET["idPembayaran"];
-$result = mysqli_query($connection, "SELECT id FROM pembayaran WHERE id='$idPembayaran' AND id_siswa='$id' AND id_spp='$idSPP' AND dihapus='0';");
+$result = mysqli_query($connection, "SELECT id FROM pembayaran WHERE id='$idPembayaran' AND id_siswa='$id' AND id_spp='$idSPP';");
 if (mysqli_num_rows($result) <= 0) {
   echo "<script>window.location='./..';</script>";
 };
@@ -70,7 +70,7 @@ if (mysqli_num_rows($result) <= 0) {
                     <div class="col-sm">
                       <form action="<?php $_SERVER["PHP_SELF"]; ?>" method="POST" onsubmit="return confirmModal('form', this);">
                         <?php
-                        $data = mysqli_fetch_assoc(mysqli_query($connection, "SELECT bukti_pembayaran, tanggal_pembayaran, bulan_pembayaran, jumlah_pembayaran FROM pembayaran WHERE id='$idPembayaran' AND id_siswa='$id' AND id_spp='$idSPP' AND dihapus='0';"));
+                        $data = mysqli_fetch_assoc(mysqli_query($connection, "SELECT bukti_pembayaran, tanggal_pembayaran, bulan_pembayaran, jumlah_pembayaran FROM pembayaran WHERE id='$idPembayaran' AND id_siswa='$id' AND id_spp='$idSPP';"));
                         $inputArray = [
                           [
                             "id" => 1,
@@ -137,7 +137,7 @@ if (mysqli_num_rows($result) <= 0) {
 
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
-      $result = mysqli_query($connection, "UPDATE pembayaran SET dihapus='1' WHERE id='$idPembayaran' AND dihapus='0';");
+      $result = mysqli_query($connection, "DELETE FROM pembayaran WHERE id='$idPembayaran';");
 
       if ($result) {
         activity("Menghapus pembayaran spp siswa");

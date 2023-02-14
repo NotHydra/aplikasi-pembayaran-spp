@@ -15,7 +15,7 @@ activity("Mengunjungi halaman ubah kompetensi keahlian");
 roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
 
 $id = $_GET["id"];
-$result = mysqli_query($connection, "SELECT id FROM kompetensi_keahlian WHERE id='$id' AND dihapus='0';");
+$result = mysqli_query($connection, "SELECT id FROM kompetensi_keahlian WHERE id='$id';");
 if (mysqli_num_rows($result) <= 0) {
   echo "<script>window.location='.';</script>";
 };
@@ -57,7 +57,7 @@ if (mysqli_num_rows($result) <= 0) {
                     <div class="col-sm">
                       <form action="<?php $_SERVER["PHP_SELF"]; ?>" method="POST" onsubmit="return confirmModal('form', this);">
                         <?php
-                        $data = mysqli_fetch_assoc(mysqli_query($connection, "SELECT kompetensi_keahlian, singkatan FROM kompetensi_keahlian WHERE id='$id' AND dihapus='0';"));
+                        $data = mysqli_fetch_assoc(mysqli_query($connection, "SELECT kompetensi_keahlian, singkatan FROM kompetensi_keahlian WHERE id='$id';"));
                         $inputArray = [
                           [
                             "id" => 1,
@@ -109,7 +109,7 @@ if (mysqli_num_rows($result) <= 0) {
     $singkatan = $_POST["singkatan"];
 
     try {
-      $result = mysqli_query($connection, "UPDATE kompetensi_keahlian SET kompetensi_keahlian='$kompetensiKeahlian', singkatan='$singkatan' WHERE id='$id' AND dihapus='0';");
+      $result = mysqli_query($connection, "UPDATE kompetensi_keahlian SET kompetensi_keahlian='$kompetensiKeahlian', singkatan='$singkatan' WHERE id='$id';");
 
       if ($result) {
         activity("Mengubah kompetensi keahlian");

@@ -72,7 +72,7 @@ include "$sourcePath/utilities/date.php";
     $nisn = $_POST["nisn"];
     $password = md5($_POST["password"]);
 
-    $result = mysqli_query($connection, "SELECT id FROM siswa WHERE nisn='$nisn' AND password='$password' AND dihapus='0';");
+    $result = mysqli_query($connection, "SELECT id FROM siswa WHERE nisn='$nisn' AND password='$password';");
 
     if (mysqli_num_rows($result) > 0) {
       $data = mysqli_fetch_assoc($result);
