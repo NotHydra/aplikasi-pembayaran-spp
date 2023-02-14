@@ -82,7 +82,7 @@ include "$sourcePath/utilities/date.php";
             <div class="count-box">
               <i class="bi bi-people"></i>
               <div>
-                <span data-purecounter-start="0" data-purecounter-end="<?php echo mysqli_fetch_assoc(mysqli_query($connection, "SELECT COUNT(id) AS 'total' FROM siswa WHERE dihapus='0';"))["total"]; ?>" data-purecounter-duration="1" class="purecounter"></span>
+                <span data-purecounter-start="0" data-purecounter-end="<?php echo mysqli_fetch_assoc(mysqli_query($connection, "SELECT COUNT(id) AS 'total' FROM siswa;"))["total"]; ?>" data-purecounter-duration="1" class="purecounter"></span>
                 <p>Siswa</p>
               </div>
             </div>
@@ -92,7 +92,7 @@ include "$sourcePath/utilities/date.php";
             <div class="count-box">
               <i class="bi bi-journal" style="color: #15be56;"></i>
               <div>
-                <span data-purecounter-start="0" data-purecounter-end="<?php echo mysqli_fetch_assoc(mysqli_query($connection, "SELECT COUNT(id) AS 'total' FROM spp WHERE dihapus='0';"))["total"]; ?>" data-purecounter-duration="1" class="purecounter"></span>
+                <span data-purecounter-start="0" data-purecounter-end="<?php echo mysqli_fetch_assoc(mysqli_query($connection, "SELECT COUNT(id) AS 'total' FROM spp;"))["total"]; ?>" data-purecounter-duration="1" class="purecounter"></span>
                 <p>SPP</p>
               </div>
             </div>
@@ -102,7 +102,7 @@ include "$sourcePath/utilities/date.php";
             <div class="count-box">
               <i class="bi bi-person" style="color: #ee6c20;"></i>
               <div>
-                <span data-purecounter-start="0" data-purecounter-end="<?php echo mysqli_fetch_assoc(mysqli_query($connection, "SELECT COUNT(id) AS 'total' FROM petugas WHERE dihapus='0';"))["total"]; ?>" data-purecounter-duration="1" class="purecounter"></span>
+                <span data-purecounter-start="0" data-purecounter-end="<?php echo mysqli_fetch_assoc(mysqli_query($connection, "SELECT COUNT(id) AS 'total' FROM petugas;"))["total"]; ?>" data-purecounter-duration="1" class="purecounter"></span>
                 <p>Petugas</p>
               </div>
             </div>
