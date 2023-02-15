@@ -55,7 +55,7 @@ if (mysqli_num_rows($result) <= 0) {
                 <div class="card-body">
                   <div class="row">
                     <div class="col-sm">
-                      <form action="<?php $_SERVER["PHP_SELF"]; ?>" method="POST" onsubmit="return confirmModal('form', this);">
+                      <form method="POST" onsubmit="return confirmModal('form', this);">
                         <?php
                         $data = mysqli_fetch_assoc(mysqli_query($connection, "SELECT rombel.id, rombel.rombel, rombel.dibuat, rombel.diubah, kompetensi_keahlian.kompetensi_keahlian, kompetensi_keahlian.singkatan AS `kompetensi_keahlian_singkatan`, jurusan.jurusan, jurusan.singkatan AS `jurusan_singkatan`, tingkat.tingkat FROM rombel INNER JOIN kompetensi_keahlian ON rombel.id_kompetensi_keahlian=kompetensi_keahlian.id INNER JOIN jurusan ON rombel.id_jurusan=jurusan.id INNER JOIN tingkat ON rombel.id_tingkat=tingkat.id WHERE rombel.id='$id';"));
                         $inputArray = [

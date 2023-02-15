@@ -55,7 +55,7 @@ if (mysqli_num_rows($result) <= 0) {
                 <div class="card-body">
                   <div class="row">
                     <div class="col-sm">
-                      <form action="<?php $_SERVER["PHP_SELF"]; ?>" method="POST" onsubmit="return confirmModal('form', this);">
+                      <form method="POST" onsubmit="return confirmModal('form', this);">
                         <?php
                         $inputArray = [
                           [

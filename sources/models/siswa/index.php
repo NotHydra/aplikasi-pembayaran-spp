@@ -180,7 +180,7 @@ roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama"
 
                               <td class="text-center align-middle">
                                 <div class="btn-group">
-                                  <a class="btn btn-app bg-primary m-0" href="./spp.php?id=<?php echo $data['id']; ?>">
+                                  <a class="btn btn-app bg-primary m-0" href="./spp?id=<?php echo $data['id']; ?>">
                                     <i class="fas fa-clipboard"></i> SPP
                                   </a>
 
