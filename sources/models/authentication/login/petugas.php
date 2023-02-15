@@ -5,6 +5,7 @@ include "$sourcePath/utilities/connection.php";
 include "$sourcePath/utilities/session/start.php";
 
 include "$sourcePath/middlewares/isAuthenticated.php";
+include "$sourcePath/middlewares/activity.php";
 
 include "$sourcePath/utilities/date.php";
 ?>
@@ -78,9 +79,11 @@ include "$sourcePath/utilities/date.php";
       $data = mysqli_fetch_assoc($result);
 
       if ($data["status"] == "aktif") {
-        $_SESSION["id"] = $data["id"];
+        $id = $data["id"];
+        $_SESSION["id"] = $id;
         $_SESSION["type"] = "petugas";
 
+        mysqli_query($connection, "INSERT INTO aktivitas (id_petugas, aktivitas) VALUES ('$id', 'Berhasil login');");
         echo "<script>successModal(null, '/$originalPath/sources/models/utama', 'login-container');</script>";
       } else {
         echo "<script>errorModal('Akun belum aktif', null, 'login-container');</script>";
