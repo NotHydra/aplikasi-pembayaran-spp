@@ -159,7 +159,14 @@ if (mysqli_num_rows($result) <= 0) {
         echo "<script>errorModal(null, null);</script>";
       };
     } catch (exception $e) {
-      echo "<script>errorModal(null, null);</script>";
+      $message = null;
+      $errorMessage = mysqli_error($connection);
+
+      if (str_contains($errorMessage, "Duplicate entry")) {
+        $message = "Bulan sudah dibayar";
+      };
+
+      echo "<script>errorModal('$message', null);</script>";
     };
   };
   ?>
