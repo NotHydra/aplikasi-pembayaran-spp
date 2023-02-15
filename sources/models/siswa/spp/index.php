@@ -152,7 +152,7 @@ if (mysqli_num_rows($result) <= 0) {
 
                           $result = mysqli_query($connection, "SELECT spp_detail.id, spp.tahun, spp.nominal, SUM(pembayaran.jumlah_pembayaran) AS `sudah_dibayar`, spp_detail.dibuat FROM spp_detail INNER JOIN spp ON spp_detail.id_spp=spp.id LEFT JOIN pembayaran ON spp_detail.id=pembayaran.id_spp_detail WHERE spp_detail.id_siswa='$id' $extraFilter GROUP BY spp_detail.id ORDER BY spp_detail.dibuat DESC;");
                           foreach ($result as $i => $data) {
-                            $idSPPDetail = $data["id"]
+                            $idSPPDetail = $data["id"];
                           ?>
                             <tr>
                               <td class="text-center align-middle"><?php echo $i + 1; ?>.</td>

@@ -46,13 +46,13 @@ roleGuardSingle($sessionLevel, "siswa", "/$originalPath/sources/models/utama");
                   "id" => 1,
                   "title" => "Total SPP",
                   "icon" => "book",
-                  "value" => mysqli_fetch_assoc(mysqli_query($connection, "SELECT COUNT(id) AS `total` FROM spp;"))["total"]
+                  "value" => mysqli_fetch_assoc(mysqli_query($connection, "SELECT COUNT(id) AS `total` FROM spp_detail WHERE id_siswa='$sessionId';"))["total"]
                 ],
                 [
                   "id" => 2,
                   "title" => "Total Nominal",
                   "icon" => "wallet",
-                  "value" => numberToCurrency(mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(nominal) AS `total` FROM spp;"))["total"])
+                  "value" => numberToCurrency(mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(spp.nominal) AS `total` FROM spp_detail INNER JOIN spp ON spp_detail.id_spp=spp.id WHERE spp_detail.id_siswa='$sessionId';"))["total"])
                 ]
               ]
             ],
@@ -63,13 +63,13 @@ roleGuardSingle($sessionLevel, "siswa", "/$originalPath/sources/models/utama");
                   "id" => 1,
                   "title" => "Total Sudah Dibayar",
                   "icon" => "check",
-                  "value" => numberToCurrency(mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(jumlah_pembayaran) AS `total` FROM pembayaran WHERE id_siswa='$sessionId';"))["total"])
+                  "value" => numberToCurrency(mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(pembayaran.jumlah_pembayaran) AS `total` FROM pembayaran INNER JOIN spp_detail ON pembayaran.id_spp_detail=spp_detail.id WHERE spp_detail.id_siswa='$sessionId';"))["total"])
                 ],
                 [
                   "id" => 2,
                   "title" => "Total Belum Dibayar",
                   "icon" => "times",
-                  "value" => numberToCurrency(mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(nominal) AS `total` FROM spp;"))["total"] - mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(jumlah_pembayaran) AS `total` FROM pembayaran WHERE id_siswa='$sessionId';"))["total"])
+                  "value" => numberToCurrency(mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(spp.nominal) AS `total` FROM spp_detail INNER JOIN spp ON spp_detail.id_spp=spp.id WHERE spp_detail.id_siswa='$sessionId';"))["total"] - mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(pembayaran.jumlah_pembayaran) AS `total` FROM pembayaran INNER JOIN spp_detail ON pembayaran.id_spp_detail=spp_detail.id WHERE spp_detail.id_siswa='$sessionId';"))["total"])
                 ]
               ]
             ]
@@ -100,7 +100,7 @@ roleGuardSingle($sessionLevel, "siswa", "/$originalPath/sources/models/utama");
                           "value" => [
                             array_merge([[0, "Semua"]], array_map(function ($yearObject) {
                               return [$yearObject[0], $yearObject[0]];
-                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT DISTINCT tahun FROM spp ORDER BY dibuat DESC;")))), isset($_POST["tahun"]) ? $_POST["tahun"] : null
+                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT DISTINCT spp.tahun FROM spp_detail INNER JOIN spp ON spp_detail.id_spp=spp.id ORDER BY spp_detail.dibuat DESC;")))), isset($_POST["tahun"]) ? $_POST["tahun"] : null
                           ],
                           "placeholder" => "Pilih tahun disini",
                           "enable" => true
@@ -141,22 +141,20 @@ roleGuardSingle($sessionLevel, "siswa", "/$originalPath/sources/models/utama");
                             };
                           };
 
-                          $result = mysqli_query($connection, "SELECT id, tahun, nominal FROM spp WHERE '1'='1' $extraFilter ORDER BY dibuat DESC;");
+                          $result = mysqli_query($connection, "SELECT spp_detail.id, spp.tahun, spp.nominal, SUM(pembayaran.jumlah_pembayaran) AS `sudah_dibayar`, spp_detail.dibuat FROM spp_detail INNER JOIN spp ON spp_detail.id_spp=spp.id LEFT JOIN pembayaran ON spp_detail.id=pembayaran.id_spp_detail WHERE spp_detail.id_siswa='$sessionId' $extraFilter GROUP BY spp_detail.id ORDER BY spp_detail.dibuat DESC;");
                           foreach ($result as $i => $data) {
-                            $id = $data["id"];
-
-                            $sudahDibayar = mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(jumlah_pembayaran) AS `total` FROM pembayaran WHERE id_siswa='$sessionId' AND id_spp='$id';"))["total"];
+                            $idSPPDetail = $data["id"];
                           ?>
                             <tr>
                               <td class="text-center align-middle"><?php echo $i + 1; ?>.</td>
                               <td class="text-center align-middle"><?php echo $data["tahun"]; ?></td>
                               <td class="text-center align-middle"><?php echo numberToCurrency($data["nominal"]); ?></td>
-                              <td class="text-center align-middle"><?php echo numberToCurrency($sudahDibayar); ?></td>
-                              <td class="text-center align-middle"><?php echo numberToCurrency($data["nominal"] - $sudahDibayar); ?></td>
+                              <td class="text-center align-middle"><?php echo numberToCurrency($data["sudah_dibayar"]); ?></td>
+                              <td class="text-center align-middle"><?php echo numberToCurrency($data["nominal"] - $data["sudah_dibayar"]); ?></td>
 
                               <td class="text-center align-middle">
                                 <div class="btn-group">
-                                  <a class="btn btn-app bg-primary m-0" href="./pembayaran?id=<?php echo $id; ?>">
+                                  <a class="btn btn-app bg-primary m-0" href="./pembayaran?id=<?php echo $idSPPDetail; ?>">
                                     <i class="fas fa-envelope"></i> Pembayaran
                                   </a>
                                 </div>
