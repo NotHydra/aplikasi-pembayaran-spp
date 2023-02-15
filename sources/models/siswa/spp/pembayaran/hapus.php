@@ -1,5 +1,5 @@
 <?php
-$sourcePath = "../../..";
+$sourcePath = "../../../..";
 include "$sourcePath/utilities/environment.php";
 include "$sourcePath/utilities/connection.php";
 include "$sourcePath/utilities/session/start.php";
@@ -10,20 +10,27 @@ include "$sourcePath/middlewares/activity.php";
 include "$sourcePath/utilities/session/data.php";
 include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
+include "$sourcePath/utilities/currency.php";
 
-activity("Mengunjungi halaman buat pembayaran spp siswa");
+activity("Mengunjungi halaman hapus pembayaran spp siswa");
 roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama");
 
 $id = $_GET["id"];
 $result = mysqli_query($connection, "SELECT id FROM siswa WHERE id='$id';");
 if (mysqli_num_rows($result) <= 0) {
-  echo "<script>window.location='./..';</script>";
+  echo "<script>window.location='./../..';</script>";
 };
 
-$idSPP = $_GET["idSPP"];
-$result = mysqli_query($connection, "SELECT id FROM spp WHERE id='$idSPP';");
+$idSPPDetail = $_GET["idSPPDetail"];
+$result = mysqli_query($connection, "SELECT id FROM spp_detail WHERE id_siswa='$id' AND id='$idSPPDetail';");
 if (mysqli_num_rows($result) <= 0) {
-  echo "<script>window.location='./..';</script>";
+  echo "<script>window.location='./..?id=$id';</script>";
+};
+
+$idPembayaran = $_GET["idPembayaran"];
+$result = mysqli_query($connection, "SELECT id FROM pembayaran WHERE id='$idPembayaran' AND id_spp_detail='$idSPPDetail';");
+if (mysqli_num_rows($result) <= 0) {
+  echo "<script>window.location='.?id=$id&idSPPDetail=$idSPPDetail';</script>";
 };
 ?>
 
@@ -54,74 +61,69 @@ if (mysqli_num_rows($result) <= 0) {
               <div class="card">
                 <?php
                 $pageItemObject = $pageArray[$navActive[0]];
-                $extraTitle = "Buat Pembayaran";
+                $extraTitle = "Hapus Pembayaran SPP";
                 include "$sourcePath/components/content/head.php";
                 ?>
 
                 <div class="card-body">
                   <div class="row">
                     <div class="col-sm">
-                      <form action="<?php $_SERVER["PHP_SELF"]; ?>" method="POST" onsubmit="return confirmModal('form', this);" enctype="multipart/form-data">
+                      <form method="POST" onsubmit="return confirmModal('form', this);">
                         <?php
+                        $data = mysqli_fetch_assoc(mysqli_query($connection, "SELECT petugas.nama, pembayaran.bukti_pembayaran, pembayaran.tanggal_pembayaran, pembayaran.bulan_pembayaran, pembayaran.jumlah_pembayaran FROM pembayaran INNER JOIN petugas ON pembayaran.id_petugas=petugas.id WHERE pembayaran.id='$idPembayaran' AND pembayaran.id_spp_detail='$idSPPDetail';"));
                         $inputArray = [
                           [
                             "id" => 1,
-                            "display" => "Bukti Pembayaran",
-                            "name" => "bukti_pembayaran",
-                            "type" => "image",
-                            "value" => null,
-                            "placeholder" => "Masukkan bukti pembayaran disini",
-                            "enable" => true
+                            "display" => "Petugas",
+                            "name" => "id_petugas",
+                            "type" => "text",
+                            "value" => $data["nama"],
+                            "placeholder" => "Masukkan petugas disini",
+                            "enable" => false
                           ],
                           [
                             "id" => 2,
-                            "display" => "Tanggal Pembayaran",
-                            "name" => "tanggal_pembayaran",
-                            "type" => "date",
-                            "value" => isset($_POST["tanggal_pembayaran"]) ? $_POST["tanggal_pembayaran"] : null,
-                            "placeholder" => "Masukkan tanggal pembayaran disini",
-                            "enable" => true
+                            "display" => "Bukti Pembayaran",
+                            "name" => "bukti_pembayaran",
+                            "type" => "image",
+                            "value" => $data["bukti_pembayaran"],
+                            "placeholder" => "Masukkan bukti pembayaran disini",
+                            "enable" => false
                           ],
                           [
                             "id" => 3,
-                            "display" => "Bulan Pembayaran",
-                            "name" => "bulan_pembayaran",
-                            "type" => "select",
-                            "value" => [
-                              [
-                                [1, "Januari"],
-                                [2, "Februari"],
-                                [3, "Maret"],
-                                [4, "April"],
-                                [5, "Mei"],
-                                [6, "Juni"],
-                                [7, "Juli"],
-                                [8, "Agustus"],
-                                [9, "September"],
-                                [10, "Oktober"],
-                                [11, "November"],
-                                [12, "Desember"]
-                              ], isset($_POST["bulan_pembayaran"]) ? $_POST["bulan_pembayaran"] : null
-                            ],
-                            "placeholder" => "Masukkan bulan pembayaran disini",
-                            "enable" => true
+                            "display" => "Tanggal Pembayaran",
+                            "name" => "tanggal_pembayaran",
+                            "type" => "date",
+                            "value" => $data["tanggal_pembayaran"],
+                            "placeholder" => "Masukkan tanggal pembayaran disini",
+                            "enable" => false
                           ],
                           [
                             "id" => 4,
+                            "display" => "Bulan Pembayaran",
+                            "name" => "bulan_pembayaran",
+                            "type" => "text",
+                            "value" => numberToMonth($data["bulan_pembayaran"]),
+                            "placeholder" => "Masukkan bulan pembayaran disini",
+                            "enable" => false
+                          ],
+                          [
+                            "id" => 5,
                             "display" => "Jumlah Pembayaran",
                             "name" => "jumlah_pembayaran",
-                            "type" => "number",
-                            "value" => isset($_POST["jumlah_pembayaran"]) ? $_POST["jumlah_pembayaran"] : null,
+                            "type" => "text",
+                            "value" => numberToCurrency($data["jumlah_pembayaran"]),
                             "placeholder" => "Masukkan jumlah pembayaran disini",
-                            "enable" => true
+                            "enable" => false
                           ]
                         ];
 
                         include "$sourcePath/components/input/detail.php";
                         ?>
 
-                        <button class="btn btn-primary btn-block" type="submit"><i class="fa fa-plus"></i> Buat</button>
-                        <a class="btn btn-danger btn-block" role="button" onclick="confirmModal('location', '.?id=<?php echo $id; ?>&idSPP=<?php echo $idSPP; ?>');"><i class="fa fa-undo"></i> Kembali</a>
+                        <button class="btn btn-danger btn-block" type="submit"><i class="fa fa-trash"></i> Hapus</button>
+                        <a class="btn btn-danger btn-block" role="button" onclick="confirmModal('location', '.?id=<?php echo $id; ?>&idSPPDetail=<?php echo $idSPPDetail; ?>');"><i class="fa fa-undo"></i> Kembali</a>
                       </form>
                     </div>
                   </div>
@@ -143,18 +145,12 @@ if (mysqli_num_rows($result) <= 0) {
   include "$sourcePath/components/select/script.php";
 
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $buktiPembayaran = date("Ymdhis") . "-" . $_FILES["bukti_pembayaran"]["name"];
-    $tanggalPembayaran = $_POST["tanggal_pembayaran"];
-    $bulanPembayaran = $_POST["bulan_pembayaran"];
-    $jumlahPembayaran = $_POST["jumlah_pembayaran"];
-
     try {
-      move_uploaded_file($_FILES['bukti_pembayaran']['tmp_name'], $sourcePath . '/public/dist/img/storage/' . $buktiPembayaran);
-      $result = mysqli_query($connection, "INSERT INTO pembayaran (id_petugas, id_siswa, id_spp, bukti_pembayaran, tanggal_pembayaran, bulan_pembayaran, jumlah_pembayaran) VALUES ('$sessionId', '$id', '$idSPP', '$buktiPembayaran', '$tanggalPembayaran','$bulanPembayaran', '$jumlahPembayaran');");
+      $result = mysqli_query($connection, "DELETE FROM pembayaran WHERE id='$idPembayaran' AND id_spp_detail='$idSPPDetail';");
 
       if ($result) {
-        activity("Membuat pembayaran spp siswa");
-        echo "<script>successModal(null, null);</script>";
+        activity("Menghapus pembayaran spp siswa");
+        echo "<script>successModal(null, '.?id=$id&idSPPDetail=$idSPPDetail');</script>";
       } else {
         echo "<script>errorModal(null, null);</script>";
       };

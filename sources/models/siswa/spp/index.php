@@ -1,5 +1,5 @@
 <?php
-$sourcePath = "../..";
+$sourcePath = "../../..";
 include "$sourcePath/utilities/environment.php";
 include "$sourcePath/utilities/connection.php";
 include "$sourcePath/utilities/session/start.php";
@@ -18,7 +18,7 @@ roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama"
 $id = $_GET["id"];
 $result = mysqli_query($connection, "SELECT id FROM siswa WHERE id='$id';");
 if (mysqli_num_rows($result) <= 0) {
-  echo "<script>window.location='.';</script>";
+  echo "<script>window.location='./..';</script>";
 };
 ?>
 
@@ -54,13 +54,13 @@ if (mysqli_num_rows($result) <= 0) {
                   "id" => 1,
                   "title" => "Total SPP",
                   "icon" => "book",
-                  "value" => mysqli_fetch_assoc(mysqli_query($connection, "SELECT COUNT(id) AS `total` FROM spp;"))["total"]
+                  "value" => mysqli_fetch_assoc(mysqli_query($connection, "SELECT COUNT(id) AS `total` FROM spp_detail WHERE id_siswa='$id';"))["total"]
                 ],
                 [
                   "id" => 2,
                   "title" => "Total Nominal",
                   "icon" => "wallet",
-                  "value" => numberToCurrency(mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(nominal) AS `total` FROM spp;"))["total"])
+                  "value" => numberToCurrency(mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(spp.nominal) AS `total` FROM spp_detail INNER JOIN spp ON spp_detail.id_spp=spp.id WHERE spp_detail.id_siswa='$id';"))["total"])
                 ]
               ]
             ],
@@ -71,13 +71,13 @@ if (mysqli_num_rows($result) <= 0) {
                   "id" => 1,
                   "title" => "Total Sudah Dibayar",
                   "icon" => "check",
-                  "value" => numberToCurrency(mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(jumlah_pembayaran) AS `total` FROM pembayaran WHERE id_siswa='$id';"))["total"])
+                  "value" => numberToCurrency(mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(pembayaran.jumlah_pembayaran) AS `total` FROM pembayaran INNER JOIN spp_detail ON pembayaran.id_spp_detail=spp_detail.id WHERE spp_detail.id_siswa='$id';"))["total"])
                 ],
                 [
                   "id" => 2,
                   "title" => "Total Belum Dibayar",
                   "icon" => "times",
-                  "value" => numberToCurrency(mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(nominal) AS `total` FROM spp;"))["total"] - mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(jumlah_pembayaran) AS `total` FROM pembayaran WHERE id_siswa='$id';"))["total"])
+                  "value" => numberToCurrency(mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(spp.nominal) AS `total` FROM spp_detail INNER JOIN spp ON spp_detail.id_spp=spp.id WHERE spp_detail.id_siswa='$id';"))["total"] - mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(pembayaran.jumlah_pembayaran) AS `total` FROM pembayaran INNER JOIN spp_detail ON pembayaran.id_spp_detail=spp_detail.id WHERE spp_detail.id_siswa='$id';"))["total"])
                 ]
               ]
             ]
@@ -108,7 +108,7 @@ if (mysqli_num_rows($result) <= 0) {
                           "value" => [
                             array_merge([[0, "Semua"]], array_map(function ($yearObject) {
                               return [$yearObject[0], $yearObject[0]];
-                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT DISTINCT tahun FROM spp ORDER BY dibuat DESC;")))), isset($_POST["tahun"]) ? $_POST["tahun"] : null
+                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT DISTINCT spp.tahun FROM spp_detail INNER JOIN spp ON spp_detail.id_spp=spp.id WHERE spp_detail.id_siswa='$id' ORDER BY spp.tahun DESC;")))), isset($_POST["tahun"]) ? $_POST["tahun"] : null
                           ],
                           "placeholder" => "Pilih tahun disini",
                           "enable" => true
@@ -134,6 +134,7 @@ if (mysqli_num_rows($result) <= 0) {
                             <th class="text-center align-middle export">Nominal</th>
                             <th class="text-center align-middle export">Sudah Dibayar</th>
                             <th class="text-center align-middle export">Belum Dibayar</th>
+                            <th class="text-center align-middle export">Dibuat</th>
                             <th class="text-center align-middle">Aksi</th>
                           </tr>
                         </thead>
@@ -149,23 +150,26 @@ if (mysqli_num_rows($result) <= 0) {
                             };
                           };
 
-                          $result = mysqli_query($connection, "SELECT id, tahun, nominal FROM spp WHERE '1'='1' $extraFilter ORDER BY dibuat DESC;");
+                          $result = mysqli_query($connection, "SELECT spp_detail.id, spp.tahun, spp.nominal, SUM(pembayaran.jumlah_pembayaran) AS `sudah_dibayar`, spp_detail.dibuat FROM spp_detail INNER JOIN spp ON spp_detail.id_spp=spp.id LEFT JOIN pembayaran ON spp_detail.id=pembayaran.id_spp_detail WHERE spp_detail.id_siswa='$id' $extraFilter GROUP BY spp_detail.id ORDER BY spp_detail.dibuat DESC;");
                           foreach ($result as $i => $data) {
-                            $idSPP = $data["id"];
-
-                            $sudahDibayar = mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(jumlah_pembayaran) AS `total` FROM pembayaran WHERE id_siswa='$id' AND id_spp='$idSPP';"))["total"];
+                            $idSPPDetail = $data["id"]
                           ?>
                             <tr>
                               <td class="text-center align-middle"><?php echo $i + 1; ?>.</td>
                               <td class="text-center align-middle"><?php echo $data["tahun"]; ?></td>
                               <td class="text-center align-middle"><?php echo numberToCurrency($data["nominal"]); ?></td>
-                              <td class="text-center align-middle"><?php echo numberToCurrency($sudahDibayar); ?></td>
-                              <td class="text-center align-middle"><?php echo numberToCurrency($data["nominal"] - $sudahDibayar); ?></td>
+                              <td class="text-center align-middle"><?php echo numberToCurrency($data["sudah_dibayar"]); ?></td>
+                              <td class="text-center align-middle"><?php echo numberToCurrency($data["nominal"] - $data["sudah_dibayar"]); ?></td>
+                              <td class="text-center align-middle"><?php echo $data["dibuat"]; ?></td>
 
                               <td class="text-center align-middle">
                                 <div class="btn-group">
-                                  <a class="btn btn-app bg-primary m-0" href="./pembayaran?id=<?php echo $id; ?>&idSPP=<?php echo $idSPP; ?>">
+                                  <a class="btn btn-app bg-primary m-0" href="./pembayaran?id=<?php echo $id; ?>&idSPPDetail=<?php echo $idSPPDetail; ?>">
                                     <i class="fas fa-envelope"></i> Pembayaran
+                                  </a>
+
+                                  <a class="btn btn-app bg-danger m-0" href="./hapus.php?id=<?php echo $id; ?>&idSPPDetail=<?php echo $idSPPDetail; ?>">
+                                    <i class="fas fa-trash"></i> Hapus
                                   </a>
                                 </div>
                               </td>
@@ -178,7 +182,8 @@ if (mysqli_num_rows($result) <= 0) {
                     </div>
                   </div>
 
-                  <a class="btn btn-danger btn-block mt-1" role="button" onclick="confirmModal('location', '.');"><i class="fa fa-undo"></i> Kembali</a>
+                  <a class="btn btn-primary btn-block mt-1" role="button" href="./buat.php?id=<?php echo $id; ?>"><i class="fa fa-plus"></i> Buat</a>
+                  <a class="btn btn-danger btn-block mt-1" role="button" onclick="confirmModal('location', './..');"><i class="fa fa-undo"></i> Kembali</a>
                 </div>
               </div>
             </div>

@@ -1,5 +1,5 @@
 <?php
-$sourcePath = "../../..";
+$sourcePath = "../../../..";
 include "$sourcePath/utilities/environment.php";
 include "$sourcePath/utilities/connection.php";
 include "$sourcePath/utilities/session/start.php";
@@ -18,13 +18,13 @@ roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama"
 $id = $_GET["id"];
 $result = mysqli_query($connection, "SELECT id FROM siswa WHERE id='$id';");
 if (mysqli_num_rows($result) <= 0) {
-  echo "<script>window.location='./..';</script>";
+  echo "<script>window.location='./../..';</script>";
 };
 
-$idSPP = $_GET["idSPP"];
-$result = mysqli_query($connection, "SELECT id FROM spp WHERE id='$idSPP';");
+$idSPPDetail = $_GET["idSPPDetail"];
+$result = mysqli_query($connection, "SELECT id FROM spp_detail WHERE id_siswa='$id' AND id='$idSPPDetail';");
 if (mysqli_num_rows($result) <= 0) {
-  echo "<script>window.location='./..';</script>";
+  echo "<script>window.location='./..?id=$id';</script>";
 };
 ?>
 
@@ -60,13 +60,13 @@ if (mysqli_num_rows($result) <= 0) {
                   "id" => 1,
                   "title" => "Total Pembayaran",
                   "icon" => "envelope",
-                  "value" => mysqli_fetch_assoc(mysqli_query($connection, "SELECT COUNT(id) AS `total` FROM pembayaran WHERE id_siswa='$id' AND id_spp='$idSPP';"))["total"]
+                  "value" => mysqli_fetch_assoc(mysqli_query($connection, "SELECT COUNT(id) AS `total` FROM pembayaran WHERE id_spp_detail='$idSPPDetail';"))["total"]
                 ],
                 [
                   "id" => 2,
                   "title" => "Total Jumlah Pembayaran",
                   "icon" => "wallet",
-                  "value" => numberToCurrency(mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(jumlah_pembayaran) AS `total` FROM pembayaran WHERE id_siswa='$id' AND id_spp='$idSPP';"))["total"])
+                  "value" => numberToCurrency(mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(jumlah_pembayaran) AS `total` FROM pembayaran WHERE id_spp_detail='$idSPPDetail';"))["total"])
                 ]
               ]
             ]
@@ -80,7 +80,7 @@ if (mysqli_num_rows($result) <= 0) {
               <div class="card">
                 <?php
                 $pageItemObject = $pageArray[$navActive[0]];
-                $extraTitle = "Pembayaran";
+                $extraTitle = "Pembayaran SPP";
                 include "$sourcePath/components/content/head.php";
                 ?>
 
@@ -97,7 +97,7 @@ if (mysqli_num_rows($result) <= 0) {
                           "value" => [
                             array_merge([[0, "Semua"]], array_map(function ($yearObject) {
                               return [$yearObject[0], $yearObject[0]];
-                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT DISTINCT YEAR(dibuat) FROM pembayaran WHERE id_siswa='$id' AND id_spp='$idSPP' ORDER BY dibuat DESC;")))), isset($_POST["tahun"]) ? $_POST["tahun"] : null
+                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT DISTINCT YEAR(dibuat) FROM pembayaran WHERE id_spp_detail='$idSPPDetail' ORDER BY dibuat DESC;")))), isset($_POST["tahun"]) ? $_POST["tahun"] : null
                           ],
                           "placeholder" => "Pilih tahun disini",
                           "enable" => true
@@ -181,7 +181,7 @@ if (mysqli_num_rows($result) <= 0) {
                             };
                           };
 
-                          $result = mysqli_query($connection, "SELECT pembayaran.id, petugas.nama AS `petugas_nama`, pembayaran.bukti_pembayaran, pembayaran.tanggal_pembayaran, pembayaran.bulan_pembayaran, pembayaran.jumlah_pembayaran, pembayaran.dibuat FROM pembayaran INNER JOIN petugas ON pembayaran.id_petugas=petugas.id WHERE pembayaran.id_siswa='$id' AND pembayaran.id_spp='$idSPP' $extraFilter ORDER BY pembayaran.dibuat DESC;");
+                          $result = mysqli_query($connection, "SELECT pembayaran.id, petugas.nama AS `petugas_nama`, pembayaran.bukti_pembayaran, pembayaran.tanggal_pembayaran, pembayaran.bulan_pembayaran, pembayaran.jumlah_pembayaran, pembayaran.dibuat FROM pembayaran INNER JOIN petugas ON pembayaran.id_petugas=petugas.id WHERE pembayaran.id_spp_detail='$idSPPDetail' $extraFilter ORDER BY pembayaran.dibuat DESC;");
                           foreach ($result as $i => $data) {
                             $idPembayaran = $data["id"];
                           ?>
@@ -198,7 +198,7 @@ if (mysqli_num_rows($result) <= 0) {
 
                               <td class="text-center align-middle">
                                 <div class="btn-group">
-                                  <a class="btn btn-app bg-danger m-0" href="./hapus.php?id=<?php echo $id; ?>&idSPP=<?php echo $idSPP; ?>&idPembayaran=<?php echo $idPembayaran; ?>">
+                                  <a class="btn btn-app bg-danger m-0" href="./hapus.php?id=<?php echo $id; ?>&idSPPDetail=<?php echo $idSPPDetail; ?>&idPembayaran=<?php echo $idPembayaran; ?>">
                                     <i class="fas fa-trash"></i> Hapus
                                   </a>
                                 </div>
@@ -212,8 +212,8 @@ if (mysqli_num_rows($result) <= 0) {
                     </div>
                   </div>
 
-                  <a class="btn btn-primary btn-block" href="./buat.php?id=<?php echo $id; ?>&idSPP=<?php echo $idSPP; ?>"><i class="fa fa-plus"></i> Buat</a>
-                  <a class="btn btn-danger btn-block mt-1" role="button" onclick="confirmModal('location', './../spp.php?id=<?php echo $id; ?>');"><i class="fa fa-undo"></i> Kembali</a>
+                  <a class="btn btn-primary btn-block" href="./buat.php?id=<?php echo $id; ?>&idSPPDetail=<?php echo $idSPPDetail; ?>"><i class="fa fa-plus"></i> Buat</a>
+                  <a class="btn btn-danger btn-block mt-1" role="button" onclick="confirmModal('location', './..?id=<?php echo $id; ?>');"><i class="fa fa-undo"></i> Kembali</a>
                 </div>
               </div>
             </div>
