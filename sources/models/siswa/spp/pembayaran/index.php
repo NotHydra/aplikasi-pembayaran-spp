@@ -52,6 +52,7 @@ if (mysqli_num_rows($result) <= 0) {
       <div class="content-header">
         <div class="container-fluid">
           <?php
+          $totalJumlahPembayaran = mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(jumlah_pembayaran) AS `total` FROM pembayaran WHERE id_spp_detail='$idSPPDetail';"))["total"];
           $cardArray = [
             [
               "id" => 1,
@@ -66,7 +67,7 @@ if (mysqli_num_rows($result) <= 0) {
                   "id" => 2,
                   "title" => "Total Jumlah Pembayaran",
                   "icon" => "wallet",
-                  "value" => numberToCurrency(mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(jumlah_pembayaran) AS `total` FROM pembayaran WHERE id_spp_detail='$idSPPDetail';"))["total"])
+                  "value" => numberToCurrency($totalJumlahPembayaran)
                 ]
               ]
             ]
@@ -212,7 +213,19 @@ if (mysqli_num_rows($result) <= 0) {
                     </div>
                   </div>
 
-                  <a class="btn btn-primary btn-block" href="./buat.php?id=<?php echo $id; ?>&idSPPDetail=<?php echo $idSPPDetail; ?>"><i class="fa fa-plus"></i> Buat</a>
+                  <?php
+                  $nominal = mysqli_fetch_assoc(mysqli_query($connection, "SELECT nominal FROM spp INNER JOIN spp_detail ON spp.id=spp_detail.id_spp WHERE spp_detail.id_siswa='$id' AND spp_detail.id='$idSPPDetail';"))["nominal"];
+                  if ($nominal != $totalJumlahPembayaran) {
+                  ?>
+                    <a class="btn btn-primary btn-block mt-1" href="./buat.php?id=<?php echo $id; ?>&idSPPDetail=<?php echo $idSPPDetail; ?>"><i class="fa fa-plus"></i> Buat</a>
+                  <?php
+                  } else {
+                  ?>
+                    <a class="btn btn-primary btn-block mt-1 disabled" href="./buat.php?id=<?php echo $id; ?>&idSPPDetail=<?php echo $idSPPDetail; ?>"><i class="fa fa-plus"></i> Buat</a>
+                  <?php
+                  }
+                  ?>
+
                   <a class="btn btn-danger btn-block mt-1" role="button" onclick="confirmModal('location', './..?id=<?php echo $id; ?>');"><i class="fa fa-undo"></i> Kembali</a>
                 </div>
               </div>
