@@ -12,7 +12,7 @@ foreach ($inputArray as $inputObject) {
 
         <?php
         if ($inputObject["enable"]) {
-            if (!in_array($inputObject["type"], ["select", "textarea", "image"])) {
+            if (!in_array($inputObject["type"], ["select", "textarea", "image", "display"])) {
         ?>
                 <input class="form-control" id="<?php echo $inputObject["name"]; ?>" style="width: 100%;" type="<?php echo $inputObject["type"]; ?>" name="<?php echo $inputObject["name"]; ?>" value="<?php echo $inputObject["value"]; ?>" placeholder="<?php echo $inputObject["placeholder"]; ?>" oninvalid="this.setCustomValidity('Silakan Isi Terlebih Dahulu');" onchange="this.setCustomValidity('');" required />
             <?php
@@ -52,6 +52,10 @@ foreach ($inputArray as $inputObject) {
                 <div class="mt-2" style="border: 1px solid #cfd5db; border-radius: 8px; overflow: auto;">
                     <img class="m-auto d-block" id="<?php echo $inputObject["name"]; ?>-image" src="<?php echo $inputObject["value"] == null ? '' : $sourcePath . '/public/dist/img/storage/' . $inputObject["value"]; ?>" height="300px">
                 </div>
+            <?php
+            } else if ($inputObject["type"] == "display") {
+            ?>
+                <input class="form-control" style="width: 100%;" type="<?php echo $inputObject["type"]; ?>" value="<?php echo $inputObject["value"]; ?>" readonly />
             <?php
             }
         } else {
