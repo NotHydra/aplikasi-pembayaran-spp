@@ -1,5 +1,5 @@
 <?php
 function numberToCurrency($number)
 {
-    return "Rp" . number_format($number, 2, ',', '.');
+    return "Rp" . number_format($number, 0, ',', '.');
 };
