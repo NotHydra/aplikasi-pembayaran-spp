@@ -38,6 +38,8 @@ roleGuardSingle($sessionLevel, "siswa", "/$originalPath/sources/models/utama");
       <div class="content-header">
         <div class="container-fluid">
           <?php
+          $totalNominal = mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(spp.nominal) AS `total` FROM spp_detail INNER JOIN spp ON spp_detail.id_spp=spp.id WHERE spp_detail.id_siswa='$sessionId';"))["total"];
+          $totalSudahDibayar = mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(pembayaran.jumlah_pembayaran) AS `total` FROM pembayaran INNER JOIN spp_detail ON pembayaran.id_spp_detail=spp_detail.id WHERE spp_detail.id_siswa='$sessionId';"))["total"];
           $cardArray = [
             [
               "id" => 1,
@@ -52,7 +54,7 @@ roleGuardSingle($sessionLevel, "siswa", "/$originalPath/sources/models/utama");
                   "id" => 2,
                   "title" => "Total Nominal",
                   "icon" => "wallet",
-                  "value" => numberToCurrency(mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(spp.nominal) AS `total` FROM spp_detail INNER JOIN spp ON spp_detail.id_spp=spp.id WHERE spp_detail.id_siswa='$sessionId';"))["total"])
+                  "value" => numberToCurrency($totalNominal)
                 ]
               ]
             ],
@@ -63,13 +65,24 @@ roleGuardSingle($sessionLevel, "siswa", "/$originalPath/sources/models/utama");
                   "id" => 1,
                   "title" => "Total Sudah Dibayar",
                   "icon" => "check",
-                  "value" => numberToCurrency(mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(pembayaran.jumlah_pembayaran) AS `total` FROM pembayaran INNER JOIN spp_detail ON pembayaran.id_spp_detail=spp_detail.id WHERE spp_detail.id_siswa='$sessionId';"))["total"])
+                  "value" => numberToCurrency($totalSudahDibayar)
                 ],
                 [
                   "id" => 2,
                   "title" => "Total Belum Dibayar",
                   "icon" => "times",
-                  "value" => numberToCurrency(mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(spp.nominal) AS `total` FROM spp_detail INNER JOIN spp ON spp_detail.id_spp=spp.id WHERE spp_detail.id_siswa='$sessionId';"))["total"] - mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(pembayaran.jumlah_pembayaran) AS `total` FROM pembayaran INNER JOIN spp_detail ON pembayaran.id_spp_detail=spp_detail.id WHERE spp_detail.id_siswa='$sessionId';"))["total"])
+                  "value" => numberToCurrency($totalNominal - $totalSudahDibayar)
+                ]
+              ]
+            ],
+            [
+              "id" => 3,
+              "child" => [
+                [
+                  "id" => 1,
+                  "title" => "Status",
+                  "icon" => "clipboard",
+                  "value" => $totalNominal == $totalSudahDibayar ? "Sudah Lunas" : "Belum Lunas"
                 ]
               ]
             ]
@@ -126,6 +139,8 @@ roleGuardSingle($sessionLevel, "siswa", "/$originalPath/sources/models/utama");
                             <th class="text-center align-middle export">Nominal</th>
                             <th class="text-center align-middle export">Sudah Dibayar</th>
                             <th class="text-center align-middle export">Belum Dibayar</th>
+                            <th class="text-center align-middle export">Status</th>
+                            <th class="text-center align-middle export">Dibuat</th>
                             <th class="text-center align-middle">Aksi</th>
                           </tr>
                         </thead>
@@ -151,6 +166,20 @@ roleGuardSingle($sessionLevel, "siswa", "/$originalPath/sources/models/utama");
                               <td class="text-center align-middle"><?php echo numberToCurrency($data["nominal"]); ?></td>
                               <td class="text-center align-middle"><?php echo numberToCurrency($data["sudah_dibayar"]); ?></td>
                               <td class="text-center align-middle"><?php echo numberToCurrency($data["nominal"] - $data["sudah_dibayar"]); ?></td>
+
+                              <?php
+                              if ($data["nominal"] == $data["sudah_dibayar"]) {
+                              ?>
+                                <td class="text-center align-middle">Sudah Lunas</td>
+                              <?php
+                              } else {
+                              ?>
+                                <td class="text-center align-middle">Belum Lunas</td>
+                              <?php
+                              }
+                              ?>
+
+                              <td class="text-center align-middle"><?php echo $data["dibuat"]; ?></td>
 
                               <td class="text-center align-middle">
                                 <div class="btn-group">
