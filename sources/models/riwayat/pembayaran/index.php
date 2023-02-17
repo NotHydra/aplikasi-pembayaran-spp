@@ -77,6 +77,23 @@ if (mysqli_num_rows($result) <= 0) {
                 ?>
 
                 <div class="card-body">
+                  <?php
+                  $data = mysqli_fetch_assoc(mysqli_query($connection, "SELECT spp.tahun, spp.nominal, SUM(pembayaran.jumlah_pembayaran) AS `sudah_dibayar` FROM spp_detail INNER JOIN spp ON spp_detail.id_spp=spp.id LEFT JOIN pembayaran ON spp_detail.id=pembayaran.id_spp_detail WHERE spp_detail.id_siswa='$sessionId' AND spp_detail.id='$id';"));
+                  $inputArray = [
+                    [
+                      "id" => 1,
+                      "display" => null,
+                      "name" => null,
+                      "type" => "display",
+                      "value" => $data["tahun"] . " - Nominal " . numberToCurrency($data["nominal"]) . " - Sudah Dibayar " . numberToCurrency($data["sudah_dibayar"]) . " - Belum Dibayar " . numberToCurrency($data["nominal"] - $data["sudah_dibayar"]) . " - " . ($data["nominal"] == $data["sudah_dibayar"] ? "Sudah Lunas" : "Belum Lunas"),
+                      "placeholder" => null,
+                      "enable" => true
+                    ]
+                  ];
+
+                  include "$sourcePath/components/input/detail.php";
+                  ?>
+
                   <form class="row mb-2" action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
                     <div class="col-sm">
                       <?php

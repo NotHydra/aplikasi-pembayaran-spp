@@ -10,6 +10,7 @@ include "$sourcePath/middlewares/activity.php";
 include "$sourcePath/utilities/session/data.php";
 include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
+include "$sourcePath/utilities/currency.php";
 
 activity("Mengunjungi halaman buat pembayaran spp siswa");
 roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama");
@@ -61,6 +62,33 @@ if (mysqli_num_rows($result) <= 0) {
                 <div class="card-body">
                   <div class="row">
                     <div class="col-sm">
+                      <?php
+                      $dataSiswa = mysqli_fetch_assoc(mysqli_query($connection, "SELECT siswa.nisn, siswa.nis, siswa.nama, rombel.rombel, siswa.alamat, siswa.telepon FROM siswa INNER JOIN rombel ON siswa.id_rombel=rombel.id WHERE siswa.id='$id';"));
+                      $dataSPPDetail = mysqli_fetch_assoc(mysqli_query($connection, "SELECT spp.tahun, spp.nominal, SUM(pembayaran.jumlah_pembayaran) AS `sudah_dibayar` FROM spp_detail INNER JOIN spp ON spp_detail.id_spp=spp.id LEFT JOIN pembayaran ON spp_detail.id=pembayaran.id_spp_detail WHERE spp_detail.id_siswa='$id' AND spp_detail.id='$idSPPDetail';"));
+                      $inputArray = [
+                        [
+                          "id" => 1,
+                          "display" => null,
+                          "name" => null,
+                          "type" => "display",
+                          "value" => $dataSiswa["nisn"] . " - " . $dataSiswa["nis"] . " - " . $dataSiswa["nama"] . " - " . $dataSiswa["rombel"] . " - " . $dataSiswa["alamat"] . " - " . $dataSiswa["telepon"],
+                          "placeholder" => null,
+                          "enable" => true
+                        ],
+                        [
+                          "id" => 2,
+                          "display" => null,
+                          "name" => null,
+                          "type" => "display",
+                          "value" => $dataSPPDetail["tahun"] . " - Nominal " . numberToCurrency($dataSPPDetail["nominal"]) . " - Sudah Dibayar " . numberToCurrency($dataSPPDetail["sudah_dibayar"]) . " - Belum Dibayar " . numberToCurrency($dataSPPDetail["nominal"] - $dataSPPDetail["sudah_dibayar"]) . " - " . ($dataSPPDetail["nominal"] == $dataSPPDetail["sudah_dibayar"] ? "Sudah Lunas" : "Belum Lunas"),
+                          "placeholder" => null,
+                          "enable" => true
+                        ]
+                      ];
+
+                      include "$sourcePath/components/input/detail.php";
+                      ?>
+
                       <form method="POST" onsubmit="return confirmModal('form', this);" enctype="multipart/form-data">
                         <?php
                         $inputArray = [

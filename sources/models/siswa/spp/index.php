@@ -109,6 +109,23 @@ if (mysqli_num_rows($result) <= 0) {
                 ?>
 
                 <div class="card-body">
+                  <?php
+                  $data = mysqli_fetch_assoc(mysqli_query($connection, "SELECT siswa.nisn, siswa.nis, siswa.nama, rombel.rombel, siswa.alamat, siswa.telepon FROM siswa INNER JOIN rombel ON siswa.id_rombel=rombel.id WHERE siswa.id='$id';"));
+                  $inputArray = [
+                    [
+                      "id" => 1,
+                      "display" => null,
+                      "name" => null,
+                      "type" => "display",
+                      "value" => $data["nisn"] . " - " . $data["nis"] . " - " . $data["nama"] . " - " . $data["rombel"] . " - " . $data["alamat"] . " - " . $data["telepon"],
+                      "placeholder" => null,
+                      "enable" => true
+                    ]
+                  ];
+
+                  include "$sourcePath/components/input/detail.php";
+                  ?>
+
                   <form class="row mb-2" action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
                     <div class="col-sm">
                       <?php
