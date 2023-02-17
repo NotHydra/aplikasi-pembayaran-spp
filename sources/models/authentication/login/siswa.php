@@ -63,7 +63,7 @@ include "$sourcePath/utilities/date.php";
     </div>
   </div>
 
-  <div class="title is-6 m-1 p-0"><b>Copyright © <?php echo currentYear(); ?> Rizky Irswanda Ramadhana</b></div>
+  <div class="title is-6 m-1 p-0"><b>Copyright © <?php echo currentYear(); ?> Irswanda</b></div>
 
   <?php
   include "$sourcePath/components/script.php";

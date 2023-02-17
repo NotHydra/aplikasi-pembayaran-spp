@@ -122,7 +122,7 @@ include "$sourcePath/utilities/date.php";
 
               <div class="text-center text-lg-start">
                 <a href="#login-siswa" class="btn-read-more d-inline-flex align-items-center justify-content-center align-self-center">
-                  <span>Baca Lebih Lanjut</span>
+                  <span>Berikutnya</span>
                   <i class="bi bi-arrow-right"></i>
                 </a>
               </div>
@@ -215,7 +215,7 @@ include "$sourcePath/utilities/date.php";
   <footer id="footer" class="footer">
     <div class="container">
       <div class="copyright">
-        <b>Copyright © <?php echo currentYear(); ?> Rizky Irswanda Ramadhana</b>
+        <b>Copyright © <?php echo currentYear(); ?> Irswanda</b>
       </div>
     </div>
   </footer>
