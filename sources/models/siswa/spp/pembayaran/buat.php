@@ -22,10 +22,15 @@ if (mysqli_num_rows($result) <= 0) {
 };
 
 $idSPPDetail = $_GET["idSPPDetail"];
-$result = mysqli_query($connection, "SELECT id FROM spp_detail WHERE id_siswa='$id' AND id='$idSPPDetail';");
+$result = mysqli_query($connection, "SELECT spp.nominal, SUM(pembayaran.jumlah_pembayaran) AS `sudah_dibayar` FROM spp_detail INNER JOIN spp ON spp_detail.id_spp=spp.id LEFT JOIN pembayaran ON spp_detail.id=pembayaran.id_spp_detail WHERE spp_detail.id_siswa='$id' AND spp_detail.id='$idSPPDetail';");
 if (mysqli_num_rows($result) <= 0) {
   echo "<script>window.location='./..?id=$id';</script>";
 };
+
+$data = mysqli_fetch_assoc($result);
+if ($data["nominal"] == $data["sudah_dibayar"]) {
+  echo "<script>window.location='.?id=$id&idSPPDetail=$idSPPDetail';</script>";
+}
 ?>
 
 <!DOCTYPE html>
