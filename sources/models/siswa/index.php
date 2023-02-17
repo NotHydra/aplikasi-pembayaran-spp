@@ -10,6 +10,7 @@ include "$sourcePath/middlewares/activity.php";
 include "$sourcePath/utilities/session/data.php";
 include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
+include "$sourcePath/utilities/currency.php";
 
 activity("Mengunjungi halaman siswa");
 roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama");
@@ -39,6 +40,18 @@ roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama"
       <div class="content-header">
         <div class="container-fluid">
           <?php
+          $result = mysqli_query($connection, "SELECT siswa.id FROM siswa;");
+          $totalSudahLunas = 0;
+          foreach ($result as $data) {
+            $id = $data["id"];
+            $totalNominal = mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(spp.nominal) AS `total` FROM spp_detail INNER JOIN spp ON spp_detail.id_spp=spp.id WHERE spp_detail.id_siswa='$id';"))["total"];
+            $totalSudahDibayar = mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(pembayaran.jumlah_pembayaran) AS `total` FROM pembayaran INNER JOIN spp_detail ON pembayaran.id_spp_detail=spp_detail.id WHERE spp_detail.id_siswa='$id';"))["total"];
+
+            if ($totalNominal == $totalSudahDibayar) {
+              $totalSudahLunas += 1;
+            }
+          }
+
           $cardArray = [
             [
               "id" => 1,
@@ -48,6 +61,18 @@ roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama"
                   "title" => "Total Siswa",
                   "icon" => "users",
                   "value" => mysqli_fetch_assoc(mysqli_query($connection, "SELECT COUNT(id) AS `total` FROM siswa;"))["total"]
+                ],
+                [
+                  "id" => 2,
+                  "title" => "Total Sudah Lunas",
+                  "icon" => "check",
+                  "value" => $totalSudahLunas
+                ],
+                [
+                  "id" => 3,
+                  "title" => "Total Belum Lunas",
+                  "icon" => "times",
+                  "value" => mysqli_num_rows($result) - $totalSudahLunas
                 ]
               ]
             ]
@@ -146,6 +171,10 @@ roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama"
                             <th class="text-center align-middle export">Rombel</th>
                             <th class="text-center align-middle export">Alamat</th>
                             <th class="text-center align-middle export">Telepon</th>
+                            <th class="text-center align-middle export">Nominal</th>
+                            <th class="text-center align-middle export">Sudah Dibayar</th>
+                            <th class="text-center align-middle export">Belum Dibayar</th>
+                            <th class="text-center align-middle export">Status</th>
                             <th class="text-center align-middle export">Dibuat</th>
                             <th class="text-center align-middle export">Diubah</th>
                             <th class="text-center align-middle">Aksi</th>
@@ -172,6 +201,9 @@ roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama"
 
                           $result = mysqli_query($connection, "SELECT siswa.id, siswa.nisn, siswa.nis, siswa.nama, rombel.rombel, siswa.alamat, siswa.telepon, siswa.dibuat, siswa.diubah FROM siswa INNER JOIN rombel ON siswa.id_rombel=rombel.id WHERE '1'='1' $extraFilter ORDER BY siswa.dibuat DESC;");
                           foreach ($result as $i => $data) {
+                            $id = $data["id"];
+                            $totalNominal = mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(spp.nominal) AS `total` FROM spp_detail INNER JOIN spp ON spp_detail.id_spp=spp.id WHERE spp_detail.id_siswa='$id';"))["total"];
+                            $totalSudahDibayar = mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(pembayaran.jumlah_pembayaran) AS `total` FROM pembayaran INNER JOIN spp_detail ON pembayaran.id_spp_detail=spp_detail.id WHERE spp_detail.id_siswa='$id';"))["total"];
                           ?>
                             <tr>
                               <td class="text-center align-middle"><?php echo $i + 1; ?>.</td>
@@ -181,6 +213,21 @@ roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama"
                               <td class="text-center align-middle"><?php echo $data["rombel"]; ?></td>
                               <td class="text-center align-middle"><?php echo $data["alamat"]; ?></td>
                               <td class="text-center align-middle"><?php echo $data["telepon"]; ?></td>
+                              <td class="text-center align-middle"><?php echo numberToCurrency($totalNominal); ?></td>
+                              <td class="text-center align-middle"><?php echo numberToCurrency($totalSudahDibayar); ?></td>
+                              <td class="text-center align-middle"><?php echo numberToCurrency($totalNominal - $totalSudahDibayar); ?></td>
+                              <?php
+                              if ($totalNominal == $totalSudahDibayar) {
+                              ?>
+                                <td class="text-center align-middle">Sudah Lunas</td>
+                              <?php
+                              } else {
+                              ?>
+                                <td class="text-center align-middle">Belum Lunas</td>
+                              <?php
+                              }
+                              ?>
+
                               <td class="text-center align-middle"><?php echo $data["dibuat"]; ?></td>
                               <td class="text-center align-middle"><?php echo dateInterval($data["diubah"], $currentDate); ?></td>
 
