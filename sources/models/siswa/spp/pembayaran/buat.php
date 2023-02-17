@@ -198,15 +198,26 @@ if ($data["nominal"] == $data["sudah_dibayar"]) {
     $jumlahPembayaran = $_POST["jumlah_pembayaran"];
 
     try {
-      move_uploaded_file($_FILES['bukti_pembayaran']['tmp_name'], $sourcePath . '/public/dist/img/storage/' . $buktiPembayaran);
-      $result = mysqli_query($connection, "INSERT INTO pembayaran (id_petugas, id_spp_detail, bukti_pembayaran, tanggal_pembayaran, bulan_pembayaran, jumlah_pembayaran) VALUES ('$sessionId', '$idSPPDetail', '$buktiPembayaran', '$tanggalPembayaran','$bulanPembayaran', '$jumlahPembayaran');");
+      $data = mysqli_fetch_assoc(mysqli_query($connection, "SELECT spp.nominal, SUM(pembayaran.jumlah_pembayaran) AS `sudah_dibayar` FROM spp_detail INNER JOIN spp ON spp_detail.id_spp=spp.id LEFT JOIN pembayaran ON spp_detail.id=pembayaran.id_spp_detail WHERE spp_detail.id_siswa='$id' AND spp_detail.id='$idSPPDetail';"));
 
-      if ($result) {
-        activity("Membuat pembayaran spp siswa");
-        echo "<script>successModal(null, null);</script>";
+      if ($data["nominal"] >= ($data["sudah_dibayar"] + $jumlahPembayaran)) {
+        move_uploaded_file($_FILES['bukti_pembayaran']['tmp_name'], $sourcePath . '/public/dist/img/storage/' . $buktiPembayaran);
+        $result = mysqli_query($connection, "INSERT INTO pembayaran (id_petugas, id_spp_detail, bukti_pembayaran, tanggal_pembayaran, bulan_pembayaran, jumlah_pembayaran) VALUES ('$sessionId', '$idSPPDetail', '$buktiPembayaran', '$tanggalPembayaran','$bulanPembayaran', '$jumlahPembayaran');");
+
+        if ($result) {
+          activity("Membuat pembayaran spp siswa");
+
+          if ($data["nominal"] == ($data["sudah_dibayar"] + $jumlahPembayaran)) {
+            echo "<script>successModal('SPP sudah lunas', '.?id=$id&idSPPDetail=$idSPPDetail');</script>";
+          } else {
+            echo "<script>successModal(null, '?id=$id&idSPPDetail=$idSPPDetail');</script>";
+          }
+        } else {
+          echo "<script>errorModal(null, null);</script>";
+        };
       } else {
-        echo "<script>errorModal(null, null);</script>";
-      };
+        echo "<script>errorModal('Jumlah pembayaran kelebihan', null);</script>";
+      }
     } catch (exception $e) {
       $message = null;
       $errorMessage = mysqli_error($connection);
