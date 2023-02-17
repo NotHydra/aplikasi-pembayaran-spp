@@ -39,6 +39,8 @@ if (mysqli_num_rows($result) <= 0) {
   include "$sourcePath/components/select/head.php";
   include "$sourcePath/utilities/modal.php";
   ?>
+
+  <link rel="stylesheet" href="<?php echo $sourcePath; ?>/public/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
 </head>
 
 <body class="hold-transition layout-navbar-fixed layout-fixed" id="body-theme">
@@ -128,6 +130,62 @@ if (mysqli_num_rows($result) <= 0) {
 
                   include "$sourcePath/components/input/detail.php";
                   ?>
+
+                  <div class="row">
+                    <?php
+                    for ($i = 1; $i <= 6; $i++) {
+                    ?>
+                      <div class="col-sm">
+                        <div class="form-group clearfix">
+                          <div class="icheck-primary d-inline">
+                            <?php
+                            if (mysqli_num_rows(mysqli_query($connection, "SELECT pembayaran.id FROM pembayaran WHERE id_spp_detail='$idSPPDetail' AND bulan_pembayaran='$i';")) == 1) {
+                            ?>
+                              <input type="checkbox" checked>
+                            <?php
+                            } else {
+                            ?>
+                              <input type="checkbox">
+                            <?php
+                            };
+                            ?>
+
+                            <label style="cursor: text;"><?php echo numberToMonth($i); ?></label>
+                          </div>
+                        </div>
+                      </div>
+                    <?php
+                    }
+                    ?>
+                  </div>
+
+                  <div class="row">
+                    <?php
+                    for ($i = 7; $i <= 12; $i++) {
+                    ?>
+                      <div class="col-sm">
+                        <div class="form-group clearfix">
+                          <div class="icheck-primary d-inline">
+                            <?php
+                            if (mysqli_num_rows(mysqli_query($connection, "SELECT pembayaran.id FROM pembayaran WHERE id_spp_detail='$idSPPDetail' AND bulan_pembayaran='$i';")) == 1) {
+                            ?>
+                              <input type="checkbox" checked>
+                            <?php
+                            } else {
+                            ?>
+                              <input type="checkbox">
+                            <?php
+                            };
+                            ?>
+
+                            <label style="cursor: text;"><?php echo numberToMonth($i); ?></label>
+                          </div>
+                        </div>
+                      </div>
+                    <?php
+                    }
+                    ?>
+                  </div>
 
                   <form class="row mb-2" action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
                     <div class="col-sm">
