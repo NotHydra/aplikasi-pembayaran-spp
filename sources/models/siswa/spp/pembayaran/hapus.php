@@ -61,7 +61,23 @@ if (mysqli_num_rows($result) <= 0) {
               <div class="card">
                 <?php
                 $pageItemObject = $pageArray[$navActive[0]];
-                $extraTitle = "Hapus Pembayaran SPP";
+                $extraTitle = [
+                  [
+                    "id" => 1,
+                    "title" => "SPP",
+                    "link" => "sources/models/siswa/spp?id=$id"
+                  ],
+                  [
+                    "id" => 2,
+                    "title" => "Pembayaran",
+                    "link" => "sources/models/siswa/spp/pembayaran?id=$id&idSPPDetail=$idSPPDetail"
+                  ],
+                  [
+                    "id" => 3,
+                    "title" => "Hapus",
+                    "link" => null
+                  ]
+                ];
                 include "$sourcePath/components/content/head.php";
                 ?>
 

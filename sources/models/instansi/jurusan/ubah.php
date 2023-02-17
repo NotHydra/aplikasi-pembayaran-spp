@@ -48,7 +48,13 @@ if (mysqli_num_rows($result) <= 0) {
               <div class="card">
                 <?php
                 $pageItemObject = $pageArray[$navActive[0]]["child"][$navActive[1]];
-                $extraTitle = "Ubah";
+                $extraTitle = [
+                  [
+                    "id" => 1,
+                    "title" => "Ubah",
+                    "link" => null
+                  ]
+                ];
                 include "$sourcePath/components/content/head.php";
                 ?>
 

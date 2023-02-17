@@ -41,7 +41,13 @@ roleGuardMinimum($sessionLevel, "siswa", "/$originalPath/sources/models/authenti
               <div class="card">
                 <?php
                 $pageItemObject = $pageArray[$navActive[0]]["child"][$navActive[1]];
-                $extraTitle = "Utama";
+                $extraTitle = [
+                  [
+                    "id" => 1,
+                    "title" => "Utama",
+                    "link" => null
+                  ]
+                ];
                 include "$sourcePath/components/content/head.php";
                 ?>
 

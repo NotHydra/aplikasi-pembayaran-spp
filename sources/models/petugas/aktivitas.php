@@ -68,7 +68,18 @@ if (mysqli_num_rows($result) <= 0 or !roleCheckMinimum($sessionLevel, roleConver
               <div class="card">
                 <?php
                 $pageItemObject = $pageArray[$navActive[0]];
-                $extraTitle = "Aktivitas";
+                $extraTitle = [
+                  [
+                    "id" => 1,
+                    "title" => "Aktivitas",
+                    "link" => "sources/models/petugas/aktivitas.php?id=$id"
+                  ],
+                  [
+                    "id" => 2,
+                    "title" => "Utama",
+                    "link" => null
+                  ]
+                ];
                 include "$sourcePath/components/content/head.php";
                 ?>
 
