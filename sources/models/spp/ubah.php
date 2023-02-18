@@ -115,7 +115,7 @@ if (mysqli_num_rows($result) <= 0) {
     $nominal = $_POST["nominal"];
 
     try {
-      $result = mysqli_query($connection, "DELETE FROM spp WHERE id='$id';");
+      $result = mysqli_query($connection, "UPDATE spp SET tahun='$tahun', nominal='$nominal' WHERE id='$id';");
 
       if ($result) {
         activity("Mengubah spp");
