@@ -30,7 +30,7 @@ roleGuardMinimum($sessionLevel, "siswa", "/$originalPath/sources/models/authenti
 <body class="hold-transition layout-navbar-fixed layout-fixed" id="body-theme">
   <div class="wrapper">
     <?php
-    $navActive = [7, 1];
+    $navActive = [8, 1];
     include "$sourcePath/components/nav.php";
     ?>
 
