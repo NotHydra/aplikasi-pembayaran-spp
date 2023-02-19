@@ -159,8 +159,8 @@ if ($data["nominal"] == $data["sudah_dibayar"]) {
                             "id" => 4,
                             "display" => "Jumlah Pembayaran",
                             "name" => "jumlah_pembayaran",
-                            "type" => "number",
-                            "value" => isset($_POST["jumlah_pembayaran"]) ? $_POST["jumlah_pembayaran"] : null,
+                            "type" => "display",
+                            "value" => $dataSPPDetail["nominal"] / 12,
                             "placeholder" => "Masukkan jumlah pembayaran disini",
                             "enable" => true
                           ]
@@ -198,26 +198,21 @@ if ($data["nominal"] == $data["sudah_dibayar"]) {
     $jumlahPembayaran = $_POST["jumlah_pembayaran"];
 
     try {
-      $data = mysqli_fetch_assoc(mysqli_query($connection, "SELECT spp.nominal, SUM(pembayaran.jumlah_pembayaran) AS `sudah_dibayar` FROM spp_detail INNER JOIN spp ON spp_detail.id_spp=spp.id LEFT JOIN pembayaran ON spp_detail.id=pembayaran.id_spp_detail WHERE spp_detail.id_siswa='$id' AND spp_detail.id='$idSPPDetail';"));
+      move_uploaded_file($_FILES['bukti_pembayaran']['tmp_name'], $sourcePath . '/public/dist/img/storage/' . $buktiPembayaran);
+      $result = mysqli_query($connection, "INSERT INTO pembayaran (id_petugas, id_spp_detail, bukti_pembayaran, tanggal_pembayaran, bulan_pembayaran, jumlah_pembayaran) VALUES ('$sessionId', '$idSPPDetail', '$buktiPembayaran', '$tanggalPembayaran','$bulanPembayaran', '$jumlahPembayaran');");
 
-      if ($data["nominal"] >= ($data["sudah_dibayar"] + $jumlahPembayaran)) {
-        move_uploaded_file($_FILES['bukti_pembayaran']['tmp_name'], $sourcePath . '/public/dist/img/storage/' . $buktiPembayaran);
-        $result = mysqli_query($connection, "INSERT INTO pembayaran (id_petugas, id_spp_detail, bukti_pembayaran, tanggal_pembayaran, bulan_pembayaran, jumlah_pembayaran) VALUES ('$sessionId', '$idSPPDetail', '$buktiPembayaran', '$tanggalPembayaran','$bulanPembayaran', '$jumlahPembayaran');");
+      if ($result) {
+        activity("Membuat pembayaran spp siswa");
 
-        if ($result) {
-          activity("Membuat pembayaran spp siswa");
-
-          if ($data["nominal"] == ($data["sudah_dibayar"] + $jumlahPembayaran)) {
-            echo "<script>successModal('SPP sudah lunas', '.?id=$id&idSPPDetail=$idSPPDetail');</script>";
-          } else {
-            echo "<script>successModal(null, '?id=$id&idSPPDetail=$idSPPDetail');</script>";
-          }
+        $data = mysqli_fetch_assoc(mysqli_query($connection, "SELECT spp.nominal, SUM(pembayaran.jumlah_pembayaran) AS `sudah_dibayar` FROM spp_detail INNER JOIN spp ON spp_detail.id_spp=spp.id LEFT JOIN pembayaran ON spp_detail.id=pembayaran.id_spp_detail WHERE spp_detail.id_siswa='$id' AND spp_detail.id='$idSPPDetail';"));
+        if ($data["nominal"] == ($data["sudah_dibayar"])) {
+          echo "<script>successModal('SPP sudah lunas', '.?id=$id&idSPPDetail=$idSPPDetail');</script>";
         } else {
-          echo "<script>errorModal(null, null);</script>";
-        };
+          echo "<script>successModal(null, '?id=$id&idSPPDetail=$idSPPDetail');</script>";
+        }
       } else {
-        echo "<script>errorModal('Jumlah pembayaran kelebihan', null);</script>";
-      }
+        echo "<script>errorModal(null, null);</script>";
+      };
     } catch (exception $e) {
       $message = null;
       $errorMessage = mysqli_error($connection);

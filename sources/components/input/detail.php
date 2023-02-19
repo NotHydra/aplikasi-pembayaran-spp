@@ -55,7 +55,7 @@ foreach ($inputArray as $inputObject) {
             <?php
             } else if ($inputObject["type"] == "display") {
             ?>
-                <input class="form-control" style="width: 100%;" type="<?php echo $inputObject["type"]; ?>" value="<?php echo $inputObject["value"]; ?>" readonly />
+                <input class="form-control" id="<?php echo $inputObject["name"]; ?>" style="width: 100%;" type="<?php echo $inputObject["type"]; ?>" name="<?php echo $inputObject["name"]; ?>" value="<?php echo $inputObject["value"]; ?>" placeholder="<?php echo $inputObject["placeholder"]; ?>" readonly />
             <?php
             }
         } else {
