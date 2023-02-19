@@ -60,7 +60,7 @@ roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama"
                   "id" => 1,
                   "title" => "Total Siswa",
                   "icon" => "users",
-                  "value" => mysqli_fetch_assoc(mysqli_query($connection, "SELECT COUNT(id) AS `total` FROM siswa;"))["total"]
+                  "value" => mysqli_num_rows($result)
                 ],
                 [
                   "id" => 2,

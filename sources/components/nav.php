@@ -139,8 +139,18 @@
                     ];
                 };
 
-                $pageArray[7] = [
-                    "id" => 7,
+                if (roleCheckMinimum($sessionLevel, "admin")) {
+                    $pageArray[7] = [
+                        "id" => 7,
+                        "title" => "Laporan",
+                        "icon" => "fas fa-list",
+                        "link" => "sources/models/laporan",
+                        "child" => null
+                    ];
+                };
+
+                $pageArray[8] = [
+                    "id" => 8,
                     "title" => "Pengaturan",
                     "icon" => "fas fa-cog",
                     "link" => null,
