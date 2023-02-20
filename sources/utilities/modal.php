@@ -1,4 +1,4 @@
-<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="<?php echo $sourcePath; ?>/public/sweetalert2/sweetalert2.all.min.js"></script>
 <script>
     function confirmModal(type, value, hidden = null) {
         if (hidden != null) {
