@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 15, 2023 at 03:41 PM
+-- Generation Time: Feb 20, 2023 at 04:31 AM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -21,6 +21,79 @@ SET time_zone = "+00:00";
 -- Database: `pwpb_aplikasi_pembayaran_spp`
 --
 
+DELIMITER $$
+--
+-- Procedures
+--
+CREATE DEFINER=`root`@`localhost` PROCEDURE `reset` ()   BEGIN
+	DELETE FROM pembayaran;
+	ALTER TABLE pembayaran AUTO_INCREMENT = 1;
+    
+    DELETE FROM aktivitas;
+	ALTER TABLE aktivitas AUTO_INCREMENT = 1;
+    
+    DELETE FROM petugas;
+	ALTER TABLE petugas AUTO_INCREMENT = 1;
+    
+    DELETE FROM spp_detail;
+	ALTER TABLE spp_detail AUTO_INCREMENT = 1;
+    
+    DELETE FROM spp;
+	ALTER TABLE spp AUTO_INCREMENT = 1;
+    
+    DELETE FROM siswa;
+	ALTER TABLE siswa AUTO_INCREMENT = 1;
+    
+    DELETE FROM rombel;
+	ALTER TABLE rombel AUTO_INCREMENT = 1;
+    
+    DELETE FROM kompetensi_keahlian;
+	ALTER TABLE kompetensi_keahlian AUTO_INCREMENT = 1;
+    
+    DELETE FROM jurusan;
+	ALTER TABLE jurusan AUTO_INCREMENT = 1;
+    
+    DELETE FROM tingkat;
+	ALTER TABLE tingkat AUTO_INCREMENT = 1;
+END$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `siswa` ()   SELECT 
+	siswa.id, siswa.nisn, siswa.nis, siswa.nama, rombel.rombel, kompetensi_keahlian.kompetensi_keahlian, jurusan.jurusan, tingkat.tingkat, siswa.alamat, siswa.telepon, siswa.password, siswa.dibuat, siswa.diubah, spp.nominal AS `total_nominal`, SUM(pembayaran.jumlah_pembayaran) AS `total_jumlah_pembayaran`, siswaStatus(spp.nominal, SUM(pembayaran.jumlah_pembayaran))
+
+FROM siswa
+	INNER JOIN rombel ON siswa.id_rombel=rombel.id
+    INNER JOIN kompetensi_keahlian ON rombel.id_kompetensi_keahlian=kompetensi_keahlian.id
+    INNER JOIN jurusan ON rombel.id_jurusan=jurusan.id
+    INNER JOIN tingkat ON rombel.id_tingkat=tingkat.id
+    INNER JOIN spp_detail ON siswa.id=spp_detail.id_siswa
+    INNER JOIN spp ON spp_detail.id_spp=spp.id
+    LEFT JOIN pembayaran ON spp_detail.id=pembayaran.id_spp_detail
+    
+GROUP BY siswa.id, spp.nominal, siswa.id$$
+
+CREATE DEFINER=`root`@`localhost` PROCEDURE `siswaById` (IN `P_id` INT(11))   SELECT 
+	siswa.id, siswa.nisn, siswa.nis, siswa.nama, rombel.rombel, kompetensi_keahlian.kompetensi_keahlian, jurusan.jurusan, tingkat.tingkat, siswa.alamat, siswa.telepon, siswa.password, siswa.dibuat, siswa.diubah, spp.nominal AS `total_nominal`, SUM(pembayaran.jumlah_pembayaran) AS `total_jumlah_pembayaran`, siswaStatus(spp.nominal, SUM(pembayaran.jumlah_pembayaran))
+
+FROM siswa
+	INNER JOIN rombel ON siswa.id_rombel=rombel.id
+    INNER JOIN kompetensi_keahlian ON rombel.id_kompetensi_keahlian=kompetensi_keahlian.id
+    INNER JOIN jurusan ON rombel.id_jurusan=jurusan.id
+    INNER JOIN tingkat ON rombel.id_tingkat=tingkat.id
+    INNER JOIN spp_detail ON siswa.id=spp_detail.id_siswa
+    INNER JOIN spp ON spp_detail.id_spp=spp.id
+    LEFT JOIN pembayaran ON spp_detail.id=pembayaran.id_spp_detail
+ 
+WHERE siswa.id=P_id
+ 
+GROUP BY siswa.id, spp.nominal, siswa.id$$
+
+--
+-- Functions
+--
+CREATE DEFINER=`root`@`localhost` FUNCTION `siswaStatus` (`P_nominal` INT(11), `P_jumlah_pembayaran` INT(11)) RETURNS VARCHAR(255) CHARSET utf8mb4  RETURN IF(P_nominal=P_jumlah_pembayaran, "Sudah Lunas", "Belum Lunas")$$
+
+DELIMITER ;
+
 -- --------------------------------------------------------
 
 --
@@ -33,13 +106,6 @@ CREATE TABLE `aktivitas` (
   `aktivitas` varchar(255) NOT NULL,
   `dibuat` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `aktivitas`
---
-
-INSERT INTO `aktivitas` (`id`, `id_petugas`, `aktivitas`, `dibuat`) VALUES
-(1, 3, 'Mengunjungi halaman petugas', '2023-02-15 14:41:05');
 
 -- --------------------------------------------------------
 
@@ -109,9 +175,9 @@ CREATE TABLE `petugas` (
 --
 
 INSERT INTO `petugas` (`id`, `nama`, `username`, `telepon`, `level`, `status`, `password`, `dibuat`, `diubah`) VALUES
-(1, 'Petugas 1', 'petugas1', '1', 'petugas', 'aktif', 'b53fe7751b37e40ff34d012c7774d65f', '2023-02-09 05:47:29', '2023-02-12 03:06:12'),
-(2, 'Admin 1', 'admin1', '1', 'admin', 'aktif', 'e00cf25ad42683b3df678c61f42c6bda', '2023-02-09 05:47:54', '2023-02-12 03:06:10'),
-(3, 'Superadmin 1', 'superadmin1', '1', 'superadmin', 'aktif', '2c7b0576873ffcbb4ca61c5a225b94e7', '2023-02-09 10:18:09', '2023-02-09 10:18:09');
+(1, 'Superadmin 1', 'superadmin1', '1', 'superadmin', 'aktif', '2c7b0576873ffcbb4ca61c5a225b94e7', '2023-02-20 03:18:59', '2023-02-20 03:25:04'),
+(2, 'Admin 1', 'admin1', '1', 'admin', 'aktif', 'e00cf25ad42683b3df678c61f42c6bda', '2023-02-20 03:24:50', '2023-02-20 03:24:50'),
+(3, 'Petugas 1', 'petugas1', '1', 'petugas', 'aktif', 'b53fe7751b37e40ff34d012c7774d65f', '2023-02-20 03:26:26', '2023-02-20 03:26:26');
 
 -- --------------------------------------------------------
 
@@ -161,6 +227,26 @@ CREATE TABLE `spp` (
   `dibuat` timestamp NOT NULL DEFAULT current_timestamp(),
   `diubah` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Triggers `spp`
+--
+DELIMITER $$
+CREATE TRIGGER `createSPPNominal` BEFORE INSERT ON `spp` FOR EACH ROW BEGIN
+    	IF (NEW.nominal < 0) THEN
+        	SET NEW.nominal = 0;
+        END IF;
+    END
+$$
+DELIMITER ;
+DELIMITER $$
+CREATE TRIGGER `updateSPPNominal` BEFORE UPDATE ON `spp` FOR EACH ROW BEGIN
+	IF (NEW.nominal < 0) THEN
+    	SET NEW.nominal = 0;
+    END IF;
+END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -216,6 +302,7 @@ ALTER TABLE `kompetensi_keahlian`
 --
 ALTER TABLE `pembayaran`
   ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `id_spp_detail` (`id_spp_detail`,`bulan_pembayaran`),
   ADD KEY `FK_id_petugas` (`id_petugas`),
   ADD KEY `FK_id_spp_detail` (`id_spp_detail`);
 
@@ -272,7 +359,7 @@ ALTER TABLE `tingkat`
 -- AUTO_INCREMENT for table `aktivitas`
 --
 ALTER TABLE `aktivitas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `jurusan`
@@ -308,7 +395,7 @@ ALTER TABLE `rombel`
 -- AUTO_INCREMENT for table `siswa`
 --
 ALTER TABLE `siswa`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `spp`
@@ -336,7 +423,7 @@ ALTER TABLE `tingkat`
 -- Constraints for table `aktivitas`
 --
 ALTER TABLE `aktivitas`
-  ADD CONSTRAINT `FK_id_petugas_aktivitas` FOREIGN KEY (`id_petugas`) REFERENCES `petugas` (`id`);
+  ADD CONSTRAINT `FK_id_petugas_aktivitas` FOREIGN KEY (`id_petugas`) REFERENCES `petugas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Constraints for table `pembayaran`
