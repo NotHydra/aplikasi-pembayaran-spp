@@ -187,7 +187,7 @@ roleGuardMinimum($sessionLevel, "siswa", "/$originalPath");
 
         if ($result) {
           activity("Mengubah Data Pribadi");
-          echo "<script>successModal(null, null);</script>";
+          echo "<script>successModal(null, './ubah.php');</script>";
         } else {
           echo "<script>errorModal(null, null);</script>";
         };
@@ -215,7 +215,7 @@ roleGuardMinimum($sessionLevel, "siswa", "/$originalPath");
         $result = mysqli_query($connection, "UPDATE siswa SET nisn='$nisn', nis='$nis', nama='$nama', id_rombel='$idRombel', alamat='$alamat', telepon='$telepon' WHERE id='$sessionId';");
 
         if ($result) {
-          echo "<script>successModal(null, null);</script>";
+          echo "<script>successModal(null, './ubah.php');</script>";
         } else {
           echo "<script>errorModal(null, null);</script>";
         };
