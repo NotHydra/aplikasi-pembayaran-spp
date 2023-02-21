@@ -11,7 +11,7 @@ include "$sourcePath/utilities/session/data.php";
 include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 
-activity("Mengunjungi halaman ubah siswa");
+activity("Mengunjungi Halaman Ubah Siswa");
 roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
 
 $id = $_GET["id"];
@@ -55,6 +55,7 @@ if (mysqli_num_rows($result) <= 0) {
                     "link" => null
                   ]
                 ];
+
                 include "$sourcePath/components/content/head.php";
                 ?>
 
@@ -162,7 +163,7 @@ if (mysqli_num_rows($result) <= 0) {
       $result = mysqli_query($connection, "UPDATE siswa SET nisn='$nisn', nis='$nis', nama='$nama', id_rombel='$idRombel', alamat='$alamat', telepon='$telepon' WHERE id='$id';");
 
       if ($result) {
-        activity("Mengubah siswa");
+        activity("Mengubah Siswa");
         echo "<script>successModal(null, null);</script>";
       } else {
         echo "<script>errorModal(null, null);</script>";

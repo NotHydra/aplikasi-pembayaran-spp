@@ -11,7 +11,7 @@ include "$sourcePath/utilities/session/data.php";
 include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 
-activity("Mengunjungi halaman buat tingkat");
+activity("Mengunjungi Halaman Buat Tingkat");
 roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
 ?>
 
@@ -49,6 +49,7 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
                     "link" => null
                   ]
                 ];
+
                 include "$sourcePath/components/content/head.php";
                 ?>
 
@@ -95,22 +96,19 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
   include "$sourcePath/components/select/script.php";
 
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
-
     $tingkat = $_POST["tingkat"];
 
     try {
       $result = mysqli_query($connection, "INSERT INTO tingkat (tingkat) VALUES ('$tingkat');");
 
       if ($result) {
-        activity("Membuat tingkat");
+        activity("Membuat Tingkat");
         echo "<script>successModal(null, null);</script>";
       } else {
         echo "<script>errorModal(null, null);</script>";
       };
     } catch (exception $e) {
-      $message = null;
-
-      echo "<script>errorModal('$message', null);</script>";
+      echo "<script>errorModal(null, null);</script>";
     };
   };
   ?>

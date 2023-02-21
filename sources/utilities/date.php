@@ -37,7 +37,7 @@ function dateInterval($startDate, $endDate)
     } else if (intval($time_interval->format('%s')) != 0) {
         return $time_interval->format('%s Detik Yang Lalu');
     } else {
-        return "Baru saja";
+        return "Baru Saja";
     };
 };
 

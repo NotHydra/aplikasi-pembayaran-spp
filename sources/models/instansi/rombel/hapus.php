@@ -11,7 +11,7 @@ include "$sourcePath/utilities/session/data.php";
 include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 
-activity("Mengunjungi halaman hapus rombel");
+activity("Mengunjungi Ralaman Hapus Rombel");
 roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
 
 $id = $_GET["id"];
@@ -133,7 +133,7 @@ if (mysqli_num_rows($result) <= 0) {
       $result = mysqli_query($connection, "DELETE FROM rombel WHERE id='$id';");
 
       if ($result) {
-        activity("Menghapus rombel");
+        activity("Menghapus Rombel");
         echo "<script>successModal(null, '.');</script>";
       } else {
         echo "<script>errorModal(null, null);</script>";

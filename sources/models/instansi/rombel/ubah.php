@@ -11,7 +11,7 @@ include "$sourcePath/utilities/session/data.php";
 include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 
-activity("Mengunjungi halaman ubah rombel");
+activity("Mengunjungi Halaman Ubah Rombel");
 roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
 
 $id = $_GET["id"];
@@ -55,6 +55,7 @@ if (mysqli_num_rows($result) <= 0) {
                     "link" => null
                   ]
                 ];
+
                 include "$sourcePath/components/content/head.php";
                 ?>
 
@@ -144,15 +145,13 @@ if (mysqli_num_rows($result) <= 0) {
       $result = mysqli_query($connection, "UPDATE rombel SET id_kompetensi_keahlian='$idKompetensiKeahlian', id_jurusan='$idJurusan', id_tingkat='$idTingkat', rombel='$rombel' WHERE id='$id';");
 
       if ($result) {
-        activity("Mengubah rombel");
+        activity("Mengubah Rombel");
         echo "<script>successModal(null, null);</script>";
       } else {
         echo "<script>errorModal(null, null);</script>";
       };
     } catch (exception $e) {
-      $message = null;
-
-      echo "<script>errorModal('$message', null);</script>";
+      echo "<script>errorModal(null, null);</script>";
     };
   };
   ?>

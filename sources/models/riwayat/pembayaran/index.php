@@ -131,7 +131,7 @@ if (mysqli_num_rows($result) <= 0) {
                         </div>
                       </div>
                     <?php
-                    }
+                    };
                     ?>
                   </div>
 
@@ -159,11 +159,11 @@ if (mysqli_num_rows($result) <= 0) {
                         </div>
                       </div>
                     <?php
-                    }
+                    };
                     ?>
                   </div>
 
-                  <form class="row mb-2" action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
+                  <form class="row mb-2" method="POST">
                     <div class="col-sm">
                       <?php
                       $inputArray = [
@@ -179,7 +179,7 @@ if (mysqli_num_rows($result) <= 0) {
                           ],
                           "placeholder" => "Pilih tahun disini",
                           "enable" => true
-                        ],
+                        ]
                       ];
 
                       include "$sourcePath/components/input/detail.php";
@@ -213,7 +213,7 @@ if (mysqli_num_rows($result) <= 0) {
                           ],
                           "placeholder" => "Pilih bulan disini",
                           "enable" => true
-                        ],
+                        ]
                       ];
 
                       include "$sourcePath/components/input/detail.php";
@@ -260,7 +260,6 @@ if (mysqli_num_rows($result) <= 0) {
 
                           $result = mysqli_query($connection, "SELECT pembayaran.id, petugas.nama AS `petugas_nama`, pembayaran.bukti_pembayaran, pembayaran.tanggal_pembayaran, pembayaran.bulan_pembayaran, pembayaran.jumlah_pembayaran, pembayaran.dibuat FROM pembayaran INNER JOIN petugas ON pembayaran.id_petugas=petugas.id WHERE pembayaran.id_spp_detail='$id' $extraFilter ORDER BY pembayaran.dibuat DESC;");
                           foreach ($result as $i => $data) {
-                            $idPembayaran = $data["id"];
                           ?>
                             <tr>
                               <td class="text-center align-middle"><?php echo $i + 1; ?>.</td>

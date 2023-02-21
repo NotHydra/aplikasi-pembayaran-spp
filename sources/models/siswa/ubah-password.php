@@ -11,7 +11,7 @@ include "$sourcePath/utilities/session/data.php";
 include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 
-activity("Mengunjungi halaman ubah password siswa");
+activity("Mengunjungi Halaman Ubah Password Siswa");
 roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
 
 $id = $_GET["id"];
@@ -55,6 +55,7 @@ if (mysqli_num_rows($result) <= 0) {
                     "link" => null
                   ]
                 ];
+
                 include "$sourcePath/components/content/head.php";
                 ?>
 
@@ -118,7 +119,7 @@ if (mysqli_num_rows($result) <= 0) {
         $result = mysqli_query($connection, "UPDATE siswa SET password='$password' WHERE id='$id';");
 
         if ($result) {
-          activity("Mengubah password siswa");
+          activity("Mengubah Password Siswa");
           echo "<script>successModal(null, null);</script>";
         } else {
           echo "<script>errorModal(null, null);</script>";

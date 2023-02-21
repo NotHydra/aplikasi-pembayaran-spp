@@ -12,7 +12,7 @@ include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 include "$sourcePath/utilities/currency.php";
 
-activity("Mengunjungi halaman buat spp siswa");
+activity("Mengunjungi Halaman Buat SPP Siswa");
 roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama");
 
 $id = $_GET["id"];
@@ -61,6 +61,7 @@ if (mysqli_num_rows($result) <= 0) {
                     "link" => null
                   ]
                 ];
+
                 include "$sourcePath/components/content/head.php";
                 ?>
 
@@ -135,7 +136,7 @@ if (mysqli_num_rows($result) <= 0) {
       $result = mysqli_query($connection, "INSERT INTO spp_detail (id_siswa, id_spp) VALUES ('$idSiswa', '$idSPP');");
 
       if ($result) {
-        activity("Membuat spp siswa");
+        activity("Membuat SPP Siswa");
         echo "<script>successModal(null, null);</script>";
       } else {
         echo "<script>errorModal(null, null);</script>";

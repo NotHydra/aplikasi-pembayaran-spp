@@ -11,7 +11,7 @@ include "$sourcePath/utilities/session/data.php";
 include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 
-activity("Mengunjungi halaman petugas");
+activity("Mengunjungi Halaman Petugas");
 roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
 ?>
 
@@ -86,11 +86,12 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
                     "link" => null
                   ]
                 ];
+
                 include "$sourcePath/components/content/head.php";
                 ?>
 
                 <div class="card-body">
-                  <form class="row mb-2" action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
+                  <form class="row mb-2" method="POST">
                     <div class="col-sm">
                       <?php
                       $inputArray = [
@@ -106,7 +107,7 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
                           ],
                           "placeholder" => "Pilih tahun disini",
                           "enable" => true
-                        ],
+                        ]
                       ];
 
                       include "$sourcePath/components/input/detail.php";
@@ -140,7 +141,7 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
                           ],
                           "placeholder" => "Pilih bulan disini",
                           "enable" => true
-                        ],
+                        ]
                       ];
 
                       include "$sourcePath/components/input/detail.php";
@@ -212,7 +213,7 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
                                         <i class="fas fa-eye"></i> Aktivitas
                                       </a>
                                     <?php
-                                    }
+                                    };
                                     ?>
 
                                     <a class="btn btn-app bg-warning m-0" href="./ubah.php?id=<?php echo $data['id']; ?>">
@@ -238,7 +239,7 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
                                         <i class="fas fa-eye"></i> Aktivitas
                                       </a>
                                     <?php
-                                    }
+                                    };
                                     ?>
 
                                     <a class="btn btn-app bg-gray disabled m-0">

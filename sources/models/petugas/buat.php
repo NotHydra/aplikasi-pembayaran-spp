@@ -11,7 +11,7 @@ include "$sourcePath/utilities/session/data.php";
 include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 
-activity("Mengunjungi halaman buat petugas");
+activity("Mengunjungi Halaman Buat Petugas");
 roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
 ?>
 
@@ -49,6 +49,7 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
                     "link" => null
                   ]
                 ];
+
                 include "$sourcePath/components/content/head.php";
                 ?>
 
@@ -170,7 +171,7 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
         $result = mysqli_query($connection, "INSERT INTO petugas (nama, username, password, telepon, level, status) VALUES ('$nama', '$username', '$password', '$telepon', '$level', '$status');");
 
         if ($result) {
-          activity("Membuat petugas");
+          activity("Membuat Petugas");
           echo "<script>successModal(null, null);</script>";
         } else {
           echo "<script>errorModal(null, null);</script>";

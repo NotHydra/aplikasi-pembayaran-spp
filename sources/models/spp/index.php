@@ -12,7 +12,7 @@ include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 include "$sourcePath/utilities/currency.php";
 
-activity("Mengunjungi halaman spp");
+activity("Mengunjungi Halaman SPP");
 roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
 ?>
 
@@ -69,11 +69,12 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
                     "link" => null
                   ]
                 ];
+
                 include "$sourcePath/components/content/head.php";
                 ?>
 
                 <div class="card-body">
-                  <form class="row mb-2" action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
+                  <form class="row mb-2" method="POST">
                     <div class="col-sm">
                       <?php
                       $inputArray = [

@@ -11,7 +11,7 @@ include "$sourcePath/utilities/session/data.php";
 include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 
-activity("Mengunjungi halaman hapus tingkat");
+activity("Mengunjungi Halaman Hapus Tingkat");
 roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
 
 $id = $_GET["id"];
@@ -55,6 +55,7 @@ if (mysqli_num_rows($result) <= 0) {
                     "link" => null
                   ]
                 ];
+
                 include "$sourcePath/components/content/head.php";
                 ?>
 
@@ -106,7 +107,7 @@ if (mysqli_num_rows($result) <= 0) {
       $result = mysqli_query($connection, "DELETE FROM tingkat WHERE id='$id';");
 
       if ($result) {
-        activity("Menghapus tingkat");
+        activity("Menghapus Tingkat");
         echo "<script>successModal(null, '.');</script>";
       } else {
         echo "<script>errorModal(null, null);</script>";

@@ -11,7 +11,7 @@ include "$sourcePath/utilities/session/data.php";
 include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 
-activity("Mengunjungi halaman aktivitas petugas");
+activity("Mengunjungi Halaman Aktivitas Petugas");
 roleGuardMinimum($sessionLevel, "superadmin", "/$originalPath/sources/models/utama");
 
 $id = $_GET["id"];
@@ -80,6 +80,7 @@ if (mysqli_num_rows($result) <= 0 or !roleCheckMinimum($sessionLevel, roleConver
                     "link" => null
                   ]
                 ];
+
                 include "$sourcePath/components/content/head.php";
                 ?>
 
@@ -101,7 +102,7 @@ if (mysqli_num_rows($result) <= 0 or !roleCheckMinimum($sessionLevel, roleConver
                   include "$sourcePath/components/input/detail.php";
                   ?>
 
-                  <form class="row mb-2" action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
+                  <form class="row mb-2" method="POST">
                     <div class="col-sm">
                       <?php
                       $inputArray = [
@@ -117,7 +118,7 @@ if (mysqli_num_rows($result) <= 0 or !roleCheckMinimum($sessionLevel, roleConver
                           ],
                           "placeholder" => "Pilih tahun disini",
                           "enable" => true
-                        ],
+                        ]
                       ];
 
                       include "$sourcePath/components/input/detail.php";
@@ -151,7 +152,7 @@ if (mysqli_num_rows($result) <= 0 or !roleCheckMinimum($sessionLevel, roleConver
                           ],
                           "placeholder" => "Pilih bulan disini",
                           "enable" => true
-                        ],
+                        ]
                       ];
 
                       include "$sourcePath/components/input/detail.php";

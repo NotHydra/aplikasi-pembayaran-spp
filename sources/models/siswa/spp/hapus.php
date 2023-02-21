@@ -12,7 +12,7 @@ include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 include "$sourcePath/utilities/currency.php";
 
-activity("Mengunjungi halaman hapus spp siswa");
+activity("Mengunjungi Halaman Hapus SPP Siswa");
 roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama");
 
 $id = $_GET["id"];
@@ -67,6 +67,7 @@ if (mysqli_num_rows($result) <= 0) {
                     "link" => null
                   ]
                 ];
+
                 include "$sourcePath/components/content/head.php";
                 ?>
 
@@ -135,7 +136,7 @@ if (mysqli_num_rows($result) <= 0) {
       $result = mysqli_query($connection, "DELETE FROM spp_detail WHERE id_siswa='$id' AND id='$idSPPDetail';");
 
       if ($result) {
-        activity("Menghapus spp siswa");
+        activity("Menghapus SPP Siswa");
         echo "<script>successModal(null, '.?id=$id');</script>";
       } else {
         echo "<script>errorModal(null, null);</script>";

@@ -22,11 +22,11 @@
                             <?php
                             } else {
                                 echo $extraTitleObject["title"];
-                            }
+                            };
                             ?>
                         </li>
                 <?php
-                    }
+                    };
                 };
                 ?>
             </ol>

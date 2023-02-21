@@ -11,8 +11,8 @@ include "$sourcePath/utilities/session/data.php";
 include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 
-activity("Mengunjungi halaman utama");
-roleGuardMinimum($sessionLevel, "siswa", "/$originalPath/sources/models/authentication/logout.php");
+activity("Mengunjungi Halaman Utama");
+roleGuardMinimum($sessionLevel, "siswa", "/$originalPath");
 ?>
 
 <!DOCTYPE html>

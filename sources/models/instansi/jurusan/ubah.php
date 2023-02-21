@@ -11,7 +11,7 @@ include "$sourcePath/utilities/session/data.php";
 include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 
-activity("Mengunjungi halaman ubah jurusan");
+activity("Mengunjungi Halaman Ubah Jurusan");
 roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
 
 $id = $_GET["id"];
@@ -55,6 +55,7 @@ if (mysqli_num_rows($result) <= 0) {
                     "link" => null
                   ]
                 ];
+
                 include "$sourcePath/components/content/head.php";
                 ?>
 
@@ -118,15 +119,13 @@ if (mysqli_num_rows($result) <= 0) {
       $result = mysqli_query($connection, "UPDATE jurusan SET jurusan='$jurusan', singkatan='$singkatan' WHERE id='$id';");
 
       if ($result) {
-        activity("Mengubah jurusan");
+        activity("Mengubah Jurusan");
         echo "<script>successModal(null, null);</script>";
       } else {
         echo "<script>errorModal(null, null);</script>";
       };
     } catch (exception $e) {
-      $message = null;
-
-      echo "<script>errorModal('$message', null);</script>";
+      echo "<script>errorModal(null, null);</script>";
     };
   };
   ?>

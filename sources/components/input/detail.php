@@ -31,8 +31,8 @@ foreach ($inputArray as $inputObject) {
                         ?>
                             <option value="<?php echo $optionObject[0]; ?>"><?php echo $optionObject[1]; ?></option>
                     <?php
-                        }
-                    }
+                        };
+                    };
                     ?>
                 </select>
             <?php
@@ -57,7 +57,7 @@ foreach ($inputArray as $inputObject) {
             ?>
                 <input class="form-control" id="<?php echo $inputObject["name"]; ?>" style="width: 100%;" type="<?php echo $inputObject["type"]; ?>" name="<?php echo $inputObject["name"]; ?>" value="<?php echo $inputObject["value"]; ?>" placeholder="<?php echo $inputObject["placeholder"]; ?>" readonly />
             <?php
-            }
+            };
         } else {
             if (!in_array($inputObject["type"], ["textarea", "image"])) {
             ?>
@@ -80,12 +80,12 @@ foreach ($inputArray as $inputObject) {
 
     <script src="<?php echo $sourcePath; ?>/public/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
     <script>
-        bsCustomFileInput.init()
+        bsCustomFileInput.init();
 
         function loadImage(elementId, event) {
             document.getElementById(`${elementId}-image`).src = URL.createObjectURL(event.target.files[0]);
         };
     </script>
 <?php
-}
+};
 ?>

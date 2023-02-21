@@ -11,7 +11,7 @@ include "$sourcePath/utilities/session/data.php";
 include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 
-activity("Mengunjungi halaman hapus petugas");
+activity("Mengunjungi Halaman Hapus Petugas");
 roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
 
 $id = $_GET["id"];
@@ -56,6 +56,7 @@ if (mysqli_num_rows($result) <= 0 or !roleCheckMinimum($sessionLevel, roleConver
                     "link" => null
                   ]
                 ];
+
                 include "$sourcePath/components/content/head.php";
                 ?>
 
@@ -110,7 +111,7 @@ if (mysqli_num_rows($result) <= 0 or !roleCheckMinimum($sessionLevel, roleConver
                             "value" => ucwords($data["status"]),
                             "placeholder" => "Masukkan status disini",
                             "enable" => false
-                          ],
+                          ]
                         ];
 
                         include "$sourcePath/components/input/detail.php";
@@ -143,7 +144,7 @@ if (mysqli_num_rows($result) <= 0 or !roleCheckMinimum($sessionLevel, roleConver
       $result = mysqli_query($connection, "DELETE FROM petugas WHERE id='$id';");
 
       if ($result) {
-        activity("Menghapus petugas");
+        activity("Menghapus Petugas");
         echo "<script>successModal(null, '.');</script>";
       } else {
         echo "<script>errorModal(null, null);</script>";

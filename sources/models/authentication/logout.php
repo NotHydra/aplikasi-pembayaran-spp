@@ -8,7 +8,7 @@ include "$sourcePath/middlewares/activity.php";
 
 include "$sourcePath/utilities/session/data.php";
 
-activity("Berhasil logout");
+activity("Berhasil Logout");
 
 session_destroy();
 echo "<script>window.location='/$originalPath'</script>";

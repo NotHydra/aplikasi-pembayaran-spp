@@ -83,7 +83,7 @@ include "$sourcePath/utilities/date.php";
       echo "<script>successModal(null, '/$originalPath/sources/models/utama', 'login-container');</script>";
     } else {
       echo "<script>errorModal('NISN atau password salah', null, 'login-container');</script>";
-    }
+    };
   };
   ?>
 </body>

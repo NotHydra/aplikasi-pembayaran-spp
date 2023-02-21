@@ -12,7 +12,7 @@ include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 include "$sourcePath/utilities/currency.php";
 
-activity("Mengunjungi halaman buat pembayaran spp siswa");
+activity("Mengunjungi Halaman Buat Pembayaran SPP Siswa");
 roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama");
 
 $id = $_GET["id"];
@@ -30,7 +30,7 @@ if (mysqli_num_rows($result) <= 0) {
 $data = mysqli_fetch_assoc($result);
 if ($data["nominal"] == $data["sudah_dibayar"]) {
   echo "<script>window.location='.?id=$id&idSPPDetail=$idSPPDetail';</script>";
-}
+};
 ?>
 
 <!DOCTYPE html>
@@ -77,6 +77,7 @@ if ($data["nominal"] == $data["sudah_dibayar"]) {
                     "link" => null
                   ]
                 ];
+
                 include "$sourcePath/components/content/head.php";
                 ?>
 
@@ -202,7 +203,7 @@ if ($data["nominal"] == $data["sudah_dibayar"]) {
       $result = mysqli_query($connection, "INSERT INTO pembayaran (id_petugas, id_spp_detail, bukti_pembayaran, tanggal_pembayaran, bulan_pembayaran, jumlah_pembayaran) VALUES ('$sessionId', '$idSPPDetail', '$buktiPembayaran', '$tanggalPembayaran','$bulanPembayaran', '$jumlahPembayaran');");
 
       if ($result) {
-        activity("Membuat pembayaran spp siswa");
+        activity("Membuat Pembayaran SPP Siswa");
 
         $data = mysqli_fetch_assoc(mysqli_query($connection, "SELECT spp.nominal, SUM(pembayaran.jumlah_pembayaran) AS `sudah_dibayar` FROM spp_detail INNER JOIN spp ON spp_detail.id_spp=spp.id LEFT JOIN pembayaran ON spp_detail.id=pembayaran.id_spp_detail WHERE spp_detail.id_siswa='$id' AND spp_detail.id='$idSPPDetail';"));
         if ($data["nominal"] == ($data["sudah_dibayar"])) {

@@ -30,7 +30,7 @@ if (roleCheckMinimum($sessionLevel, "admin")) {
             "columns" => [".export"]
         ]
     ]);
-}
+};
 ?>
 
 <script>

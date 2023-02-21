@@ -12,7 +12,7 @@ include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 include "$sourcePath/utilities/currency.php";
 
-activity("Mengunjungi halaman laporan");
+activity("Mengunjungi Halaman Laporan");
 roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
 ?>
 
@@ -51,11 +51,12 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
                     "link" => null
                   ]
                 ];
+
                 include "$sourcePath/components/content/head.php";
                 ?>
 
                 <div class="card-body">
-                  <form class="row mb-2" action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
+                  <form class="row mb-2" method="POST">
                     <div class="col-sm">
                       <?php
                       $inputArray = [
@@ -67,7 +68,7 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
                           "value" => isset($_POST["tahun"]) ? $_POST["tahun"] : "Semua",
                           "placeholder" => "Masukkan tahun disini",
                           "enable" => true
-                        ],
+                        ]
                       ];
 
                       include "$sourcePath/components/input/detail.php";
@@ -101,7 +102,7 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
                           ],
                           "placeholder" => "Pilih bulan disini",
                           "enable" => true
-                        ],
+                        ]
                       ];
 
                       include "$sourcePath/components/input/detail.php";
@@ -140,8 +141,8 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
 
                         if ($totalNominal == $totalSudahDibayar) {
                           $totalSudahLunas += 1;
-                        }
-                      }
+                        };
+                      };
 
                       $tableArray = [
                         [
@@ -208,6 +209,7 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
                         ]
                       ];
                       ?>
+
                       <table id="main-table" class="table table-bordered table-striped table-sm">
                         <thead>
                           <tr>
@@ -216,7 +218,7 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
                             ?>
                               <th class="text-center align-middle export"><?php echo $tableObject["title"]; ?></th>
                             <?php
-                            }
+                            };
                             ?>
                           </tr>
                         </thead>
@@ -228,7 +230,7 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
                             ?>
                               <td class="text-center align-middle"><?php echo $tableObject["value"]; ?></td>
                             <?php
-                            }
+                            };
                             ?>
                           </tr>
                         </tbody>

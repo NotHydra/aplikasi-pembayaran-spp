@@ -12,7 +12,7 @@ include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 include "$sourcePath/utilities/currency.php";
 
-activity("Mengunjungi halaman siswa");
+activity("Mengunjungi Halaman Siswa");
 roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama");
 ?>
 
@@ -49,8 +49,8 @@ roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama"
 
             if ($totalNominal == $totalSudahDibayar) {
               $totalSudahLunas += 1;
-            }
-          }
+            };
+          };
 
           $cardArray = [
             [
@@ -93,11 +93,12 @@ roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama"
                     "link" => null
                   ]
                 ];
+
                 include "$sourcePath/components/content/head.php";
                 ?>
 
                 <div class="card-body">
-                  <form class="row mb-2" action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
+                  <form class="row mb-2" method="POST">
                     <div class="col-sm">
                       <?php
                       $inputArray = [
@@ -113,7 +114,7 @@ roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama"
                           ],
                           "placeholder" => "Pilih tahun disini",
                           "enable" => true
-                        ],
+                        ]
                       ];
 
                       include "$sourcePath/components/input/detail.php";
@@ -147,7 +148,7 @@ roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama"
                           ],
                           "placeholder" => "Pilih bulan disini",
                           "enable" => true
-                        ],
+                        ]
                       ];
 
                       include "$sourcePath/components/input/detail.php";
@@ -225,7 +226,7 @@ roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama"
                               ?>
                                 <td class="text-center align-middle">Belum Lunas</td>
                               <?php
-                              }
+                              };
                               ?>
 
                               <td class="text-center align-middle"><?php echo $data["dibuat"]; ?></td>

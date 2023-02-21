@@ -11,7 +11,7 @@
 
     <ul class="navbar-nav ml-auto">
         <li class="nav-item d-none d-sm-inline-block">
-            <a class="nav-link" href="/<?php echo $originalPath; ?>/sources/models/pengaturan/data-pribadi"><?php echo $sessionType == "petugas" ? ucwords($sessionUsername) : ucwords($sessionNama);; ?> Sebagai <?php echo ucwords($sessionLevel); ?></a>
+            <a class="nav-link" href="/<?php echo $originalPath; ?>/sources/models/pengaturan/data-pribadi"><?php echo $sessionType == "petugas" ? ucwords($sessionUsername) : ucwords($sessionNama); ?> Sebagai <?php echo ucwords($sessionLevel); ?></a>
         </li>
 
         <li class="nav-item">
@@ -24,7 +24,7 @@
 
 <aside class="main-sidebar elevation-4" id="aside-theme" style="height: 100vh;">
     <a href="/<?php echo $originalPath; ?>" class="brand-link">
-        <img src="<?php echo $sourcePath; ?>/public/dist/img/app-logo.png" alt="App Logo" class="brand-image img-circle elevation-3" style="opacity: .8">
+        <img src="<?php echo $sourcePath; ?>/public/dist/img/app-logo.png" alt="App Logo" class="brand-image img-circle elevation-3" style="opacity: 0.8">
         <span class="brand-text font-weight-light">Pembayaran SPP</span>
     </a>
 
@@ -216,7 +216,7 @@
                                         </a>
                                     </li>
                                 <?php
-                                }
+                                };
                                 ?>
                             </ul>
                         <?php

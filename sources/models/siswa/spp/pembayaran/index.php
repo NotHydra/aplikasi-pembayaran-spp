@@ -12,7 +12,7 @@ include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 include "$sourcePath/utilities/currency.php";
 
-activity("Mengunjungi halaman pembayaran spp siswa");
+activity("Mengunjungi Halaman Pembayaran SPP Siswa");
 roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama");
 
 $id = $_GET["id"];
@@ -100,6 +100,7 @@ if (mysqli_num_rows($result) <= 0) {
                     "link" => null
                   ]
                 ];
+
                 include "$sourcePath/components/content/head.php";
                 ?>
 
@@ -155,7 +156,7 @@ if (mysqli_num_rows($result) <= 0) {
                         </div>
                       </div>
                     <?php
-                    }
+                    };
                     ?>
                   </div>
 
@@ -183,11 +184,11 @@ if (mysqli_num_rows($result) <= 0) {
                         </div>
                       </div>
                     <?php
-                    }
+                    };
                     ?>
                   </div>
 
-                  <form class="row mb-2" action="<?php $_SERVER['PHP_SELF']; ?>" method="POST">
+                  <form class="row mb-2" method="POST">
                     <div class="col-sm">
                       <?php
                       $inputArray = [
@@ -203,7 +204,7 @@ if (mysqli_num_rows($result) <= 0) {
                           ],
                           "placeholder" => "Pilih tahun disini",
                           "enable" => true
-                        ],
+                        ]
                       ];
 
                       include "$sourcePath/components/input/detail.php";
@@ -237,7 +238,7 @@ if (mysqli_num_rows($result) <= 0) {
                           ],
                           "placeholder" => "Pilih bulan disini",
                           "enable" => true
-                        ],
+                        ]
                       ];
 
                       include "$sourcePath/components/input/detail.php";
@@ -324,7 +325,7 @@ if (mysqli_num_rows($result) <= 0) {
                   ?>
                     <a class="btn btn-primary btn-block mt-1 disabled" href="./buat.php?id=<?php echo $id; ?>&idSPPDetail=<?php echo $idSPPDetail; ?>"><i class="fa fa-plus"></i> Buat</a>
                   <?php
-                  }
+                  };
                   ?>
 
                   <a class="btn btn-danger btn-block mt-1" role="button" onclick="confirmModal('location', './..?id=<?php echo $id; ?>');"><i class="fa fa-undo"></i> Kembali</a>

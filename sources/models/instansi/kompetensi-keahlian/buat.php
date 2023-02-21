@@ -11,7 +11,7 @@ include "$sourcePath/utilities/session/data.php";
 include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 
-activity("Mengunjungi halaman buat kompetensi keahlian");
+activity("Mengunjungi Halaman Buat Kompetensi Keahlian");
 roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
 ?>
 
@@ -49,6 +49,7 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
                     "link" => null
                   ]
                 ];
+
                 include "$sourcePath/components/content/head.php";
                 ?>
 
@@ -111,15 +112,13 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
       $result = mysqli_query($connection, "INSERT INTO kompetensi_keahlian (kompetensi_keahlian, singkatan) VALUES ('$kompetensiKeahlian', '$singkatan');");
 
       if ($result) {
-        activity("Membuat kompetensi keahlian");
+        activity("Membuat Kompetensi Keahlian");
         echo "<script>successModal(null, null);</script>";
       } else {
         echo "<script>errorModal(null, null);</script>";
       };
     } catch (exception $e) {
-      $message = null;
-
-      echo "<script>errorModal('$message', null);</script>";
+      echo "<script>errorModal(null, null);</script>";
     };
   };
   ?>

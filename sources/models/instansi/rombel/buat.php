@@ -11,7 +11,7 @@ include "$sourcePath/utilities/session/data.php";
 include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 
-activity("Mengunjungi halaman buat rombel");
+activity("Mengunjungi Halaman Buat Rombel");
 roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
 ?>
 
@@ -49,6 +49,7 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
                     "link" => null
                   ]
                 ];
+
                 include "$sourcePath/components/content/head.php";
                 ?>
 
@@ -137,15 +138,13 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
       $result = mysqli_query($connection, "INSERT INTO rombel (id_kompetensi_keahlian, id_jurusan, id_tingkat, rombel) VALUES ('$idKompetensiKeahlian', '$idJurusan', '$idTingkat', '$rombel');");
 
       if ($result) {
-        activity("Membuat rombel");
+        activity("Membuat Rombel");
         echo "<script>successModal(null, null);</script>";
       } else {
         echo "<script>errorModal(null, null);</script>";
       };
     } catch (exception $e) {
-      $message = null;
-
-      echo "<script>errorModal('$message', null);</script>";
+      echo "<script>errorModal(null, null);</script>";
     };
   };
   ?>

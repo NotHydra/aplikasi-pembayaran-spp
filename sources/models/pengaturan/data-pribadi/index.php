@@ -11,8 +11,8 @@ include "$sourcePath/utilities/session/data.php";
 include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 
-activity("Mengunjungi halaman data pribadi");
-roleGuardMinimum($sessionLevel, "siswa", "/$originalPath/sources/models/authentication/logout.php");
+activity("Mengunjungi Halaman Data Pribadi");
+roleGuardMinimum($sessionLevel, "siswa", "/$originalPath");
 ?>
 
 <!DOCTYPE html>
@@ -48,6 +48,7 @@ roleGuardMinimum($sessionLevel, "siswa", "/$originalPath/sources/models/authenti
                     "link" => null
                   ]
                 ];
+
                 include "$sourcePath/components/content/head.php";
                 ?>
 
@@ -102,7 +103,7 @@ roleGuardMinimum($sessionLevel, "siswa", "/$originalPath/sources/models/authenti
                               "value" => ucwords($sessionStatus),
                               "placeholder" => "Masukkan status disini",
                               "enable" => false
-                            ],
+                            ]
                           ];
                         } else if ($sessionType == "siswa") {
                           $idRombelDisplay = mysqli_fetch_assoc(mysqli_query($connection, "SELECT rombel.rombel, kompetensi_keahlian.singkatan FROM rombel INNER JOIN kompetensi_keahlian ON rombel.id_kompetensi_keahlian=kompetensi_keahlian.id WHERE rombel.id='$sessionIdRombel' ORDER BY rombel.dibuat DESC;"));

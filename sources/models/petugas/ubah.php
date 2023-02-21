@@ -11,7 +11,7 @@ include "$sourcePath/utilities/session/data.php";
 include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 
-activity("Mengunjungi halaman ubah petugas");
+activity("Mengunjungi Halaman Ubah Petugas");
 roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
 
 $id = $_GET["id"];
@@ -56,6 +56,7 @@ if (mysqli_num_rows($result) <= 0 or !roleCheckMinimum($sessionLevel, roleConver
                     "link" => null
                   ]
                 ];
+
                 include "$sourcePath/components/content/head.php";
                 ?>
 
@@ -117,7 +118,7 @@ if (mysqli_num_rows($result) <= 0 or !roleCheckMinimum($sessionLevel, roleConver
                             ], isset($_POST["status"]) ? $_POST["status"] : $data["status"]],
                             "placeholder" => "Masukkan status disini",
                             "enable" => true
-                          ],
+                          ]
                         ];
 
                         include "$sourcePath/components/input/detail.php";
@@ -156,7 +157,7 @@ if (mysqli_num_rows($result) <= 0 or !roleCheckMinimum($sessionLevel, roleConver
       $result = mysqli_query($connection, "UPDATE petugas SET nama='$nama', username='$username', telepon='$telepon', level='$level', status='$status' WHERE id='$id';");
 
       if ($result) {
-        activity("Mengubah petugas");
+        activity("Mengubah Petugas");
         echo "<script>successModal(null, null);</script>";
       } else {
         echo "<script>errorModal(null, null);</script>";

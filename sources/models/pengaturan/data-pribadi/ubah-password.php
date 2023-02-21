@@ -11,8 +11,8 @@ include "$sourcePath/utilities/session/data.php";
 include "$sourcePath/utilities/role.php";
 include "$sourcePath/utilities/date.php";
 
-activity("Mengunjungi halaman ubah password data pribadi");
-roleGuardMinimum($sessionLevel, "siswa", "/$originalPath/sources/models/authentication/logout.php");
+activity("Mengunjungi Halaman Ubah Password Data Pribadi");
+roleGuardMinimum($sessionLevel, "siswa", "/$originalPath");
 ?>
 
 <!DOCTYPE html>
@@ -49,6 +49,7 @@ roleGuardMinimum($sessionLevel, "siswa", "/$originalPath/sources/models/authenti
                     "link" => null
                   ]
                 ];
+
                 include "$sourcePath/components/content/head.php";
                 ?>
 
@@ -117,7 +118,7 @@ roleGuardMinimum($sessionLevel, "siswa", "/$originalPath/sources/models/authenti
 
         if ($result) {
           if ($sessionType == "petugas") {
-            activity("Mengubah password data pribadi");
+            activity("Mengubah Password Data Pribadi");
           };
 
           echo "<script>successModal(null, null);</script>";
