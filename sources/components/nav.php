@@ -208,13 +208,6 @@
                                             <p id="text-theme"></p>
                                         </a>
                                     </li>
-
-                                    <li class="nav-item">
-                                        <a class="nav-link" role="button" onclick="confirmModal('location', '/<?php echo $originalPath; ?>/sources/models/authentication/logout.php')">
-                                            <i class="nav-icon fas fa-sign-out-alt"></i>
-                                            <p>Logout</p>
-                                        </a>
-                                    </li>
                                 <?php
                                 };
                                 ?>
@@ -226,6 +219,13 @@
                 <?php
                 };
                 ?>
+
+                <li class="nav-item">
+                    <a class="nav-link" role="button" onclick="confirmModal('location', '/<?php echo $originalPath; ?>/sources/models/authentication/logout.php')">
+                        <i class="nav-icon fas fa-sign-out-alt"></i>
+                        <p>Logout</p>
+                    </a>
+                </li>
             </ul>
         </nav>
     </div>
