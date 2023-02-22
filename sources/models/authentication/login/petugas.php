@@ -83,7 +83,7 @@ include "$sourcePath/utilities/date.php";
         $_SESSION["id"] = $id;
         $_SESSION["type"] = "petugas";
 
-        mysqli_query($connection, "INSERT INTO aktivitas (id_petugas, aktivitas) VALUES ('$id', 'Berhasil login');");
+        mysqli_query($connection, "INSERT INTO aktivitas (id_petugas, aktivitas) VALUES ('$id', 'Berhasil Login');");
         echo "<script>successModal(null, '/$originalPath/sources/models/utama', 'login-container');</script>";
       } else {
         echo "<script>errorModal('Akun belum aktif', null, 'login-container');</script>";
