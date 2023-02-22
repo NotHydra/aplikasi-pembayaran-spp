@@ -91,4 +91,30 @@
     };
 
     defaultColorTheme();
+
+    function idle() {
+        let idleTime;
+        window.onload = idleReset;
+        window.onmousemove = idleReset;
+        window.onmousedown = idleReset;
+        window.ontouchstart = idleReset;
+        window.ontouchmove = idleReset;
+        window.onclick = idleReset;
+        window.onkeydown = idleReset;
+        window.addEventListener('scroll', idleReset, true);
+
+        function idleAction() {
+            errorModal("Anda terlalu lama idle", "/<?php echo $originalPath ?>/sources/models/authentication/logout.php");
+        };
+
+        function idleReset() {
+            clearTimeout(idleTime);
+            idleTime = setTimeout(idleAction, 60 * 1000);
+        };
+    };
+
+    const isAuthenticated = <?php echo isset($_SESSION["id"]) ? 1 : 0; ?>;
+    if (isAuthenticated) {
+        idle();
+    };
 </script>
