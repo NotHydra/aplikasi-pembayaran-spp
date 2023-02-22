@@ -100,8 +100,8 @@ if (mysqli_num_rows($result) <= 0) {
                             "type" => "select",
                             "value" => [
                               array_map(function ($itemObject) {
-                                return [$itemObject[0], $itemObject[1]];
-                              }, mysqli_fetch_all(mysqli_query($connection, "SELECT id, rombel FROM rombel ORDER BY dibuat DESC;"))), isset($_POST["id_rombel"]) ? $_POST["id_rombel"] : $data["id_rombel"]
+                                return [$itemObject[0], $itemObject[1] . " - " . $itemObject[2] . " - " . $itemObject[3] . " - " . $itemObject[4]];
+                              }, mysqli_fetch_all(mysqli_query($connection, "SELECT rombel.id, rombel.rombel, kompetensi_keahlian.singkatan, jurusan.singkatan, tingkat.tingkat FROM rombel INNER JOIN kompetensi_keahlian ON rombel.id_kompetensi_keahlian=kompetensi_keahlian.id INNER JOIN jurusan ON rombel.id_jurusan=jurusan.id INNER JOIN tingkat ON rombel.id_tingkat=tingkat.id ORDER BY rombel.dibuat DESC;"))), isset($_POST["id_rombel"]) ? $_POST["id_rombel"] : $data["id_rombel"]
                             ],
                             "placeholder" => "Masukkan rombel disini",
                             "enable" => true

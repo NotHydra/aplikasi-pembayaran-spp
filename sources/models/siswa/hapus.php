@@ -64,7 +64,15 @@ if (mysqli_num_rows($result) <= 0) {
                     <div class="col-sm">
                       <form method="POST" onsubmit="return confirmModal('form', this);">
                         <?php
-                        $data = mysqli_fetch_assoc(mysqli_query($connection, "SELECT siswa.nisn, siswa.nis, siswa.nama, rombel.rombel, siswa.alamat, siswa.telepon FROM siswa INNER JOIN rombel ON siswa.id_rombel=rombel.id WHERE siswa.id='$id';"));
+                        $data = mysqli_fetch_assoc(mysqli_query($connection, "SELECT siswa.id, siswa.nisn, siswa.nis, siswa.nama, rombel.rombel, kompetensi_keahlian.singkatan AS `kompetensi_keahlian`, jurusan.singkatan AS `jurusan`, tingkat.tingkat, siswa.alamat, siswa.telepon
+                          FROM siswa 
+                          INNER JOIN rombel ON siswa.id_rombel=rombel.id 
+                          INNER JOIN kompetensi_keahlian ON rombel.id_kompetensi_keahlian=kompetensi_keahlian.id
+                          INNER JOIN jurusan ON rombel.id_jurusan=jurusan.id
+                          INNER JOIN tingkat ON rombel.id_tingkat=tingkat.id
+                          WHERE siswa.id='$id';
+                        "));
+
                         $inputArray = [
                           [
                             "id" => 1,
@@ -98,7 +106,7 @@ if (mysqli_num_rows($result) <= 0) {
                             "display" => "Rombel",
                             "name" => "id_rombel",
                             "type" => "text",
-                            "value" => $data["rombel"],
+                            "value" => $data["rombel"] . " - " . $data["kompetensi_keahlian"] . " - " . $data["jurusan"] . " - " . $data["tingkat"],
                             "placeholder" => "Masukkan rombel disini",
                             "enable" => false
                           ],

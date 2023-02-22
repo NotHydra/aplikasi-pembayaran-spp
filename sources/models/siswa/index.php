@@ -170,6 +170,9 @@ roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama"
                             <th class="text-center align-middle export">NIS</th>
                             <th class="text-center align-middle export">Nama</th>
                             <th class="text-center align-middle export">Rombel</th>
+                            <th class="text-center align-middle export">Kompetensi Keahlian</th>
+                            <th class="text-center align-middle export">Jurusan</th>
+                            <th class="text-center align-middle export">Tingkat</th>
                             <th class="text-center align-middle export">Alamat</th>
                             <th class="text-center align-middle export">Telepon</th>
                             <th class="text-center align-middle export">Nominal</th>
@@ -200,7 +203,16 @@ roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama"
                             };
                           };
 
-                          $result = mysqli_query($connection, "SELECT siswa.id, siswa.nisn, siswa.nis, siswa.nama, rombel.rombel, siswa.alamat, siswa.telepon, siswa.dibuat, siswa.diubah FROM siswa INNER JOIN rombel ON siswa.id_rombel=rombel.id WHERE '1'='1' $extraFilter ORDER BY siswa.dibuat DESC;");
+                          $result = mysqli_query($connection, "SELECT siswa.id, siswa.nisn, siswa.nis, siswa.nama, rombel.rombel, kompetensi_keahlian.singkatan AS `kompetensi_keahlian`, jurusan.singkatan AS `jurusan`, tingkat.tingkat, siswa.alamat, siswa.telepon, siswa.dibuat, siswa.diubah 
+                            FROM siswa
+                            INNER JOIN rombel ON siswa.id_rombel=rombel.id 
+                            INNER JOIN kompetensi_keahlian ON rombel.id_kompetensi_keahlian=kompetensi_keahlian.id
+                            INNER JOIN jurusan ON rombel.id_jurusan=jurusan.id
+                            INNER JOIN tingkat ON rombel.id_tingkat=tingkat.id
+                            WHERE '1'='1' $extraFilter 
+                            ORDER BY siswa.dibuat DESC;
+                          ");
+
                           foreach ($result as $i => $data) {
                             $id = $data["id"];
                             $totalNominal = mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(spp.nominal) AS `total` FROM spp_detail INNER JOIN spp ON spp_detail.id_spp=spp.id WHERE spp_detail.id_siswa='$id';"))["total"];
@@ -212,6 +224,9 @@ roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama"
                               <td class="text-center align-middle"><?php echo $data["nis"]; ?></td>
                               <td class="text-center align-middle"><?php echo $data["nama"]; ?></td>
                               <td class="text-center align-middle"><?php echo $data["rombel"]; ?></td>
+                              <td class="text-center align-middle"><?php echo $data["kompetensi_keahlian"]; ?></td>
+                              <td class="text-center align-middle"><?php echo $data["jurusan"]; ?></td>
+                              <td class="text-center align-middle"><?php echo $data["tingkat"]; ?></td>
                               <td class="text-center align-middle"><?php echo $data["alamat"]; ?></td>
                               <td class="text-center align-middle"><?php echo $data["telepon"]; ?></td>
                               <td class="text-center align-middle"><?php echo numberToCurrency($totalNominal); ?></td>

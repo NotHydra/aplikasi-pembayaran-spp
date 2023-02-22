@@ -114,52 +114,34 @@ if (mysqli_num_rows($result) <= 0) {
 
                       <form method="POST" onsubmit="return confirmModal('form', this);">
                         <?php
-                        $data = mysqli_fetch_assoc(mysqli_query($connection, "SELECT petugas.nama, pembayaran.bukti_pembayaran, pembayaran.tanggal_pembayaran, pembayaran.bulan_pembayaran, pembayaran.jumlah_pembayaran FROM pembayaran INNER JOIN petugas ON pembayaran.id_petugas=petugas.id WHERE pembayaran.id='$idPembayaran' AND pembayaran.id_spp_detail='$idSPPDetail';"));
+                        $dataSiswa = mysqli_fetch_assoc(mysqli_query($connection, "SELECT siswa.id, siswa.nisn, siswa.nis, siswa.nama, rombel.rombel, kompetensi_keahlian.singkatan AS `kompetensi_keahlian`, jurusan.singkatan AS `jurusan`, tingkat.tingkat, siswa.alamat, siswa.telepon
+                          FROM siswa 
+                          INNER JOIN rombel ON siswa.id_rombel=rombel.id 
+                          INNER JOIN kompetensi_keahlian ON rombel.id_kompetensi_keahlian=kompetensi_keahlian.id
+                          INNER JOIN jurusan ON rombel.id_jurusan=jurusan.id
+                          INNER JOIN tingkat ON rombel.id_tingkat=tingkat.id
+                          WHERE siswa.id='$id';
+                        "));
+
+                        $dataSPPDetail = mysqli_fetch_assoc(mysqli_query($connection, "SELECT spp.tahun, spp.nominal, SUM(pembayaran.jumlah_pembayaran) AS `sudah_dibayar` FROM spp_detail INNER JOIN spp ON spp_detail.id_spp=spp.id LEFT JOIN pembayaran ON spp_detail.id=pembayaran.id_spp_detail WHERE spp_detail.id_siswa='$id' AND spp_detail.id='$idSPPDetail';"));
                         $inputArray = [
                           [
                             "id" => 1,
-                            "display" => "Petugas",
-                            "name" => "id_petugas",
-                            "type" => "text",
-                            "value" => $data["nama"],
-                            "placeholder" => "Masukkan petugas disini",
-                            "enable" => false
+                            "display" => null,
+                            "name" => null,
+                            "type" => "display",
+                            "value" => $dataSiswa["nisn"] . " - " . $dataSiswa["nis"] . " - " . $dataSiswa["nama"] . " - " . $dataSiswa["rombel"] . " - " . $dataSiswa["kompetensi_keahlian"] . " - " . $dataSiswa["jurusan"] . " - " . $dataSiswa["tingkat"] . " - " . $dataSiswa["alamat"] . " - " . $dataSiswa["telepon"],
+                            "placeholder" => null,
+                            "enable" => true
                           ],
                           [
                             "id" => 2,
-                            "display" => "Bukti Pembayaran",
-                            "name" => "bukti_pembayaran",
-                            "type" => "image",
-                            "value" => $data["bukti_pembayaran"],
-                            "placeholder" => "Masukkan bukti pembayaran disini",
-                            "enable" => false
-                          ],
-                          [
-                            "id" => 3,
-                            "display" => "Tanggal Pembayaran",
-                            "name" => "tanggal_pembayaran",
-                            "type" => "date",
-                            "value" => $data["tanggal_pembayaran"],
-                            "placeholder" => "Masukkan tanggal pembayaran disini",
-                            "enable" => false
-                          ],
-                          [
-                            "id" => 4,
-                            "display" => "Bulan Pembayaran",
-                            "name" => "bulan_pembayaran",
-                            "type" => "text",
-                            "value" => numberToMonth($data["bulan_pembayaran"]),
-                            "placeholder" => "Masukkan bulan pembayaran disini",
-                            "enable" => false
-                          ],
-                          [
-                            "id" => 5,
-                            "display" => "Jumlah Pembayaran",
-                            "name" => "jumlah_pembayaran",
-                            "type" => "text",
-                            "value" => numberToCurrency($data["jumlah_pembayaran"]),
-                            "placeholder" => "Masukkan jumlah pembayaran disini",
-                            "enable" => false
+                            "display" => null,
+                            "name" => null,
+                            "type" => "display",
+                            "value" => $dataSPPDetail["tahun"] . " - Nominal " . numberToCurrency($dataSPPDetail["nominal"]) . " - Sudah Dibayar " . numberToCurrency($dataSPPDetail["sudah_dibayar"]) . " - Belum Dibayar " . numberToCurrency($dataSPPDetail["nominal"] - $dataSPPDetail["sudah_dibayar"]) . " - " . ($dataSPPDetail["nominal"] == $dataSPPDetail["sudah_dibayar"] ? "Sudah Lunas" : "Belum Lunas"),
+                            "placeholder" => null,
+                            "enable" => true
                           ]
                         ];
 

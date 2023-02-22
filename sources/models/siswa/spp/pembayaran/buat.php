@@ -85,7 +85,15 @@ if ($data["nominal"] == $data["sudah_dibayar"]) {
                   <div class="row">
                     <div class="col-sm">
                       <?php
-                      $dataSiswa = mysqli_fetch_assoc(mysqli_query($connection, "SELECT siswa.nisn, siswa.nis, siswa.nama, rombel.rombel, siswa.alamat, siswa.telepon FROM siswa INNER JOIN rombel ON siswa.id_rombel=rombel.id WHERE siswa.id='$id';"));
+                      $dataSiswa = mysqli_fetch_assoc(mysqli_query($connection, "SELECT siswa.id, siswa.nisn, siswa.nis, siswa.nama, rombel.rombel, kompetensi_keahlian.singkatan AS `kompetensi_keahlian`, jurusan.singkatan AS `jurusan`, tingkat.tingkat, siswa.alamat, siswa.telepon
+                        FROM siswa 
+                        INNER JOIN rombel ON siswa.id_rombel=rombel.id 
+                        INNER JOIN kompetensi_keahlian ON rombel.id_kompetensi_keahlian=kompetensi_keahlian.id
+                        INNER JOIN jurusan ON rombel.id_jurusan=jurusan.id
+                        INNER JOIN tingkat ON rombel.id_tingkat=tingkat.id
+                        WHERE siswa.id='$id';
+                      "));
+
                       $dataSPPDetail = mysqli_fetch_assoc(mysqli_query($connection, "SELECT spp.tahun, spp.nominal, SUM(pembayaran.jumlah_pembayaran) AS `sudah_dibayar` FROM spp_detail INNER JOIN spp ON spp_detail.id_spp=spp.id LEFT JOIN pembayaran ON spp_detail.id=pembayaran.id_spp_detail WHERE spp_detail.id_siswa='$id' AND spp_detail.id='$idSPPDetail';"));
                       $inputArray = [
                         [
@@ -93,7 +101,7 @@ if ($data["nominal"] == $data["sudah_dibayar"]) {
                           "display" => null,
                           "name" => null,
                           "type" => "display",
-                          "value" => $dataSiswa["nisn"] . " - " . $dataSiswa["nis"] . " - " . $dataSiswa["nama"] . " - " . $dataSiswa["rombel"] . " - " . $dataSiswa["alamat"] . " - " . $dataSiswa["telepon"],
+                          "value" => $dataSiswa["nisn"] . " - " . $dataSiswa["nis"] . " - " . $dataSiswa["nama"] . " - " . $dataSiswa["rombel"] . " - " . $dataSiswa["kompetensi_keahlian"] . " - " . $dataSiswa["jurusan"] . " - " . $dataSiswa["tingkat"] . " - " . $dataSiswa["alamat"] . " - " . $dataSiswa["telepon"],
                           "placeholder" => null,
                           "enable" => true
                         ],

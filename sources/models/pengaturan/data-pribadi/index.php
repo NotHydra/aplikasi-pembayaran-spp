@@ -106,7 +106,7 @@ roleGuardMinimum($sessionLevel, "siswa", "/$originalPath");
                             ]
                           ];
                         } else if ($sessionType == "siswa") {
-                          $idRombelDisplay = mysqli_fetch_assoc(mysqli_query($connection, "SELECT rombel.rombel, kompetensi_keahlian.singkatan FROM rombel INNER JOIN kompetensi_keahlian ON rombel.id_kompetensi_keahlian=kompetensi_keahlian.id WHERE rombel.id='$sessionIdRombel' ORDER BY rombel.dibuat DESC;"));
+                          $idRombelDisplay = mysqli_fetch_assoc(mysqli_query($connection, "SELECT rombel.rombel, kompetensi_keahlian.singkatan AS `kompetensi_keahlian`, jurusan.singkatan AS `jurusan`, tingkat.tingkat  FROM rombel INNER JOIN kompetensi_keahlian ON rombel.id_kompetensi_keahlian=kompetensi_keahlian.id INNER JOIN jurusan ON rombel.id_jurusan=jurusan.id INNER JOIN tingkat ON rombel.id_tingkat=tingkat.id WHERE rombel.id='$sessionIdRombel' ORDER BY rombel.dibuat DESC;"));
                           $inputArray = [
                             [
                               "id" => 1,
@@ -140,7 +140,7 @@ roleGuardMinimum($sessionLevel, "siswa", "/$originalPath");
                               "display" => "Rombel",
                               "name" => "id_rombel",
                               "type" => "text",
-                              "value" => $idRombelDisplay["rombel"] . " - " . $idRombelDisplay["singkatan"],
+                              "value" => $idRombelDisplay["rombel"] . " - " . $idRombelDisplay["kompetensi_keahlian"] . " - " . $idRombelDisplay["jurusan"] . " - " . $idRombelDisplay["tingkat"],
                               "placeholder" => "Masukkan rombel disini",
                               "enable" => false
                             ],
