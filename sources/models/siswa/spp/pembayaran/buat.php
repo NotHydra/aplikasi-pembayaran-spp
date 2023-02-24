@@ -121,6 +121,10 @@ if ($data["nominal"] == $data["sudah_dibayar"]) {
 
                       <form method="POST" onsubmit="return confirmModal('form', this);" enctype="multipart/form-data">
                         <?php
+                        $monthArray = array_map(function ($monthObject) {
+                          return $monthObject[0];
+                        }, mysqli_fetch_all(mysqli_query($connection, "SELECT DISTINCT bulan_pembayaran FROM pembayaran WHERE id_spp_detail='$idSPPDetail';")));
+
                         $inputArray = [
                           [
                             "id" => 1,
@@ -146,20 +150,11 @@ if ($data["nominal"] == $data["sudah_dibayar"]) {
                             "name" => "bulan_pembayaran",
                             "type" => "select",
                             "value" => [
-                              [
-                                [1, "Januari"],
-                                [2, "Februari"],
-                                [3, "Maret"],
-                                [4, "April"],
-                                [5, "Mei"],
-                                [6, "Juni"],
-                                [7, "Juli"],
-                                [8, "Agustus"],
-                                [9, "September"],
-                                [10, "Oktober"],
-                                [11, "November"],
-                                [12, "Desember"]
-                              ], isset($_POST["bulan_pembayaran"]) ? $_POST["bulan_pembayaran"] : null
+                              array_map(function ($monthOption) {
+                                global $monthArray;
+
+                                return [$monthOption, numberToMonth($monthOption) . (in_array($monthOption, $monthArray) ? " (Sudah Dibayar)" : "")];
+                              }, range(1, 12)), isset($_POST["bulan_pembayaran"]) ? $_POST["bulan_pembayaran"] : null
                             ],
                             "placeholder" => "Masukkan bulan pembayaran disini",
                             "enable" => true
