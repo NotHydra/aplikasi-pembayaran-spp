@@ -120,7 +120,7 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
                               [10, "Oktober"],
                               [11, "November"],
                               [12, "Desember"]
-                            ], isset($_POST["bulan"]) ? $_POST["bulan"] : null
+                            ], isset($_POST["bulan"]) ? $_POST["bulan"] : 0
                           ],
                           "placeholder" => "Pilih bulan disini",
                           "enable" => true
