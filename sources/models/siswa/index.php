@@ -105,12 +105,36 @@ roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama"
                         [
                           "id" => 1,
                           "display" => null,
+                          "name" => "status",
+                          "type" => "select",
+                          "value" => [
+                            [
+                              [0, "Semua"],
+                              [1, "Belum Lunas"],
+                              [2, "Sudah Lunas"]
+                            ], isset($_POST["status"]) ? $_POST["status"] : 0
+                          ],
+                          "placeholder" => "Pilih status disini",
+                          "enable" => true
+                        ]
+                      ];
+
+                      include "$sourcePath/components/input/detail.php";
+                      ?>
+                    </div>
+
+                    <div class="col-sm">
+                      <?php
+                      $inputArray = [
+                        [
+                          "id" => 1,
+                          "display" => null,
                           "name" => "tahun",
                           "type" => "select",
                           "value" => [
                             array_merge([[0, "Semua"]], array_map(function ($yearObject) {
                               return [$yearObject[0], $yearObject[0]];
-                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT DISTINCT YEAR(dibuat) FROM siswa ORDER BY dibuat DESC;")))), isset($_POST["tahun"]) ? $_POST["tahun"] : null
+                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT DISTINCT YEAR(dibuat) FROM siswa ORDER BY dibuat DESC;")))), isset($_POST["tahun"]) ? $_POST["tahun"] : 0
                           ],
                           "placeholder" => "Pilih tahun disini",
                           "enable" => true
@@ -144,7 +168,7 @@ roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama"
                               [10, "Oktober"],
                               [11, "November"],
                               [12, "Desember"]
-                            ], isset($_POST["bulan"]) ? $_POST["bulan"] : null
+                            ], isset($_POST["bulan"]) ? $_POST["bulan"] : 0
                           ],
                           "placeholder" => "Pilih bulan disini",
                           "enable" => true
@@ -189,6 +213,8 @@ roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama"
                           $currentDate = date("Y-m-d H:i:s");
 
                           $extraFilter = "";
+                          $statusFilter = isset($_POST["status"]) ? $_POST["status"] : 0;
+
                           if (isset($_POST["tahun"])) {
                             $tahunFilter = $_POST["tahun"];
                             if ($tahunFilter != 0) {
@@ -217,63 +243,67 @@ roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama"
                             $id = $data["id"];
                             $totalNominal = mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(spp.nominal) AS `total` FROM spp_detail INNER JOIN spp ON spp_detail.id_spp=spp.id WHERE spp_detail.id_siswa='$id';"))["total"];
                             $totalSudahDibayar = mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(pembayaran.jumlah_pembayaran) AS `total` FROM pembayaran INNER JOIN spp_detail ON pembayaran.id_spp_detail=spp_detail.id WHERE spp_detail.id_siswa='$id';"))["total"];
+
+                            if ($statusFilter == 0 || ($statusFilter == 1 && $totalNominal != $totalSudahDibayar) || ($statusFilter == 2 && $totalNominal == $totalSudahDibayar)) {
                           ?>
-                            <tr>
-                              <td class="text-center align-middle"><?php echo $i + 1; ?>.</td>
-                              <td class="text-center align-middle"><?php echo $data["nisn"]; ?></td>
-                              <td class="text-center align-middle"><?php echo $data["nis"]; ?></td>
-                              <td class="text-center align-middle"><?php echo $data["nama"]; ?></td>
-                              <td class="text-center align-middle"><?php echo $data["rombel"]; ?></td>
-                              <td class="text-center align-middle"><?php echo $data["kompetensi_keahlian"]; ?></td>
-                              <td class="text-center align-middle"><?php echo $data["jurusan"]; ?></td>
-                              <td class="text-center align-middle"><?php echo $data["tingkat"]; ?></td>
-                              <td class="text-center align-middle"><?php echo $data["alamat"]; ?></td>
-                              <td class="text-center align-middle"><?php echo $data["telepon"]; ?></td>
-                              <td class="text-center align-middle"><?php echo numberToCurrency($totalNominal); ?></td>
-                              <td class="text-center align-middle"><?php echo numberToCurrency($totalSudahDibayar); ?></td>
-                              <td class="text-center align-middle"><?php echo numberToCurrency($totalNominal - $totalSudahDibayar); ?></td>
-                              <?php
-                              if ($totalNominal == $totalSudahDibayar) {
-                              ?>
-                                <td class="text-center align-middle">Sudah Lunas</td>
-                              <?php
-                              } else {
-                              ?>
-                                <td class="text-center align-middle">Belum Lunas</td>
-                              <?php
-                              };
-                              ?>
+                              <tr>
+                                <td class="text-center align-middle"><?php echo $i + 1; ?>.</td>
+                                <td class="text-center align-middle"><?php echo $data["nisn"]; ?></td>
+                                <td class="text-center align-middle"><?php echo $data["nis"]; ?></td>
+                                <td class="text-center align-middle"><?php echo $data["nama"]; ?></td>
+                                <td class="text-center align-middle"><?php echo $data["rombel"]; ?></td>
+                                <td class="text-center align-middle"><?php echo $data["kompetensi_keahlian"]; ?></td>
+                                <td class="text-center align-middle"><?php echo $data["jurusan"]; ?></td>
+                                <td class="text-center align-middle"><?php echo $data["tingkat"]; ?></td>
+                                <td class="text-center align-middle"><?php echo $data["alamat"]; ?></td>
+                                <td class="text-center align-middle"><?php echo $data["telepon"]; ?></td>
+                                <td class="text-center align-middle"><?php echo numberToCurrency($totalNominal); ?></td>
+                                <td class="text-center align-middle"><?php echo numberToCurrency($totalSudahDibayar); ?></td>
+                                <td class="text-center align-middle"><?php echo numberToCurrency($totalNominal - $totalSudahDibayar); ?></td>
 
-                              <td class="text-center align-middle"><?php echo $data["dibuat"]; ?></td>
-                              <td class="text-center align-middle"><?php echo dateInterval($data["diubah"], $currentDate); ?></td>
+                                <?php
+                                if ($totalNominal == $totalSudahDibayar) {
+                                ?>
+                                  <td class="text-center align-middle">Sudah Lunas</td>
+                                <?php
+                                } else {
+                                ?>
+                                  <td class="text-center align-middle">Belum Lunas</td>
+                                <?php
+                                };
+                                ?>
 
-                              <td class="text-center align-middle">
-                                <div class="btn-group">
-                                  <a class="btn btn-app bg-primary m-0" href="./spp?id=<?php echo $data['id']; ?>">
-                                    <i class="fas fa-clipboard"></i> SPP
-                                  </a>
+                                <td class="text-center align-middle"><?php echo $data["dibuat"]; ?></td>
+                                <td class="text-center align-middle"><?php echo dateInterval($data["diubah"], $currentDate); ?></td>
 
-                                  <?php
-                                  if (roleCheckMinimum($sessionLevel, "admin")) {
-                                  ?>
-                                    <a class="btn btn-app bg-warning m-0" href="./ubah.php?id=<?php echo $data['id']; ?>">
-                                      <i class="fas fa-edit"></i> Ubah
+                                <td class="text-center align-middle">
+                                  <div class="btn-group">
+                                    <a class="btn btn-app bg-primary m-0" href="./spp?id=<?php echo $data['id']; ?>">
+                                      <i class="fas fa-clipboard"></i> SPP
                                     </a>
 
-                                    <a class="btn btn-app bg-danger m-0" href="./ubah-password.php?id=<?php echo $data['id']; ?>">
-                                      <i class="fas fa-lock"></i> Ubah Password
-                                    </a>
+                                    <?php
+                                    if (roleCheckMinimum($sessionLevel, "admin")) {
+                                    ?>
+                                      <a class="btn btn-app bg-warning m-0" href="./ubah.php?id=<?php echo $data['id']; ?>">
+                                        <i class="fas fa-edit"></i> Ubah
+                                      </a>
 
-                                    <a class="btn btn-app bg-danger m-0" href="./hapus.php?id=<?php echo $data['id']; ?>">
-                                      <i class="fas fa-trash"></i> Hapus
-                                    </a>
-                                  <?php
-                                  };
-                                  ?>
-                                </div>
-                              </td>
-                            </tr>
+                                      <a class="btn btn-app bg-danger m-0" href="./ubah-password.php?id=<?php echo $data['id']; ?>">
+                                        <i class="fas fa-lock"></i> Ubah Password
+                                      </a>
+
+                                      <a class="btn btn-app bg-danger m-0" href="./hapus.php?id=<?php echo $data['id']; ?>">
+                                        <i class="fas fa-trash"></i> Hapus
+                                      </a>
+                                    <?php
+                                    };
+                                    ?>
+                                  </div>
+                                </td>
+                              </tr>
                           <?php
+                            };
                           };
                           ?>
                         </tbody>
