@@ -119,19 +119,6 @@ roleGuardMinimum($sessionLevel, "siswa", "/$originalPath");
                             ],
                             [
                               "id" => 4,
-                              "display" => "Rombel",
-                              "name" => "id_rombel",
-                              "type" => "select",
-                              "value" => [
-                                array_map(function ($itemObject) {
-                                  return [$itemObject[0], $itemObject[1] . " - " . $itemObject[2] . " - " . $itemObject[3] . " - " . $itemObject[4]];
-                                }, mysqli_fetch_all(mysqli_query($connection, "SELECT rombel.id, rombel.rombel, kompetensi_keahlian.singkatan, jurusan.singkatan, tingkat.tingkat FROM rombel INNER JOIN kompetensi_keahlian ON rombel.id_kompetensi_keahlian=kompetensi_keahlian.id INNER JOIN jurusan ON rombel.id_jurusan=jurusan.id INNER JOIN tingkat ON rombel.id_tingkat=tingkat.id ORDER BY rombel.dibuat DESC;"))), isset($_POST["id_rombel"]) ? $_POST["id_rombel"] : $sessionIdRombel
-                              ],
-                              "placeholder" => "Masukkan rombel disini",
-                              "enable" => true
-                            ],
-                            [
-                              "id" => 5,
                               "display" => "Alamat",
                               "name" => "alamat",
                               "type" => "text",
@@ -140,7 +127,7 @@ roleGuardMinimum($sessionLevel, "siswa", "/$originalPath");
                               "enable" => true
                             ],
                             [
-                              "id" => 6,
+                              "id" => 5,
                               "display" => "Telepon",
                               "name" => "telepon",
                               "type" => "number",
@@ -207,12 +194,11 @@ roleGuardMinimum($sessionLevel, "siswa", "/$originalPath");
       $nisn = $_POST["nisn"];
       $nis = $_POST["nis"];
       $nama = $_POST["nama"];
-      $idRombel = $_POST["id_rombel"];
       $alamat = $_POST["alamat"];
       $telepon = $_POST["telepon"];
 
       try {
-        $result = mysqli_query($connection, "UPDATE siswa SET nisn='$nisn', nis='$nis', nama='$nama', id_rombel='$idRombel', alamat='$alamat', telepon='$telepon' WHERE id='$sessionId';");
+        $result = mysqli_query($connection, "UPDATE siswa SET nisn='$nisn', nis='$nis', nama='$nama', alamat='$alamat', telepon='$telepon' WHERE id='$sessionId';");
 
         if ($result) {
           echo "<script>successModal(null, './ubah.php');</script>";
