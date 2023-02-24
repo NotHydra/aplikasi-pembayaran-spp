@@ -169,7 +169,7 @@ if ($data["nominal"] == $data["sudah_dibayar"]) {
                             "display" => "Jumlah Pembayaran",
                             "name" => "jumlah_pembayaran",
                             "type" => "display",
-                            "value" => $dataSPPDetail["nominal"] / 12,
+                            "value" => numberToCurrency($dataSPPDetail["nominal"] / 12),
                             "placeholder" => "Masukkan jumlah pembayaran disini",
                             "enable" => true
                           ]
@@ -204,7 +204,7 @@ if ($data["nominal"] == $data["sudah_dibayar"]) {
     $buktiPembayaran = date("Ymdhis") . "-" . $_FILES["bukti_pembayaran"]["name"];
     $tanggalPembayaran = $_POST["tanggal_pembayaran"];
     $bulanPembayaran = $_POST["bulan_pembayaran"];
-    $jumlahPembayaran = $_POST["jumlah_pembayaran"];
+    $jumlahPembayaran = $dataSPPDetail["nominal"] / 12;
 
     try {
       move_uploaded_file($_FILES['bukti_pembayaran']['tmp_name'], $sourcePath . '/public/dist/img/storage/' . $buktiPembayaran);
