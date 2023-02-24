@@ -94,6 +94,8 @@
 
     function idle() {
         let idleTime;
+        let idleStatus = false;
+
         window.onload = idleReset;
         window.onmousemove = idleReset;
         window.onmousedown = idleReset;
@@ -104,12 +106,15 @@
         window.addEventListener('scroll', idleReset, true);
 
         function idleAction() {
+            idleStatus = true;
             errorModal("Anda terlalu lama idle", "/<?php echo $originalPath ?>/sources/models/authentication/logout.php");
         };
 
         function idleReset() {
-            clearTimeout(idleTime);
-            idleTime = setTimeout(idleAction, 60 * 1000);
+            if (!idleStatus) {
+                clearTimeout(idleTime);
+                idleTime = setTimeout(idleAction, 600 * 1000);
+            }
         };
     };
 
