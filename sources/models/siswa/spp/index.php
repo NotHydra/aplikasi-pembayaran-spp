@@ -153,12 +153,36 @@ if (mysqli_num_rows($result) <= 0) {
                         [
                           "id" => 1,
                           "display" => null,
+                          "name" => "status",
+                          "type" => "select",
+                          "value" => [
+                            [
+                              [0, "Semua"],
+                              [1, "Belum Lunas"],
+                              [2, "Sudah Lunas"]
+                            ], isset($_POST["status"]) ? $_POST["status"] : 0
+                          ],
+                          "placeholder" => "Pilih status disini",
+                          "enable" => true
+                        ]
+                      ];
+
+                      include "$sourcePath/components/input/detail.php";
+                      ?>
+                    </div>
+
+                    <div class="col-sm">
+                      <?php
+                      $inputArray = [
+                        [
+                          "id" => 1,
+                          "display" => null,
                           "name" => "tahun",
                           "type" => "select",
                           "value" => [
                             array_merge([[0, "Semua"]], array_map(function ($yearObject) {
                               return [$yearObject[0], $yearObject[0]];
-                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT DISTINCT spp.tahun FROM spp_detail INNER JOIN spp ON spp_detail.id_spp=spp.id WHERE spp_detail.id_siswa='$id' ORDER BY spp.tahun DESC;")))), isset($_POST["tahun"]) ? $_POST["tahun"] : null
+                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT DISTINCT spp.tahun FROM spp_detail INNER JOIN spp ON spp_detail.id_spp=spp.id WHERE spp_detail.id_siswa='$id' ORDER BY spp.tahun DESC;")))), isset($_POST["tahun"]) ? $_POST["tahun"] : 0
                           ],
                           "placeholder" => "Pilih tahun disini",
                           "enable" => true
@@ -194,6 +218,8 @@ if (mysqli_num_rows($result) <= 0) {
                           $currentDate = date("Y-m-d H:i:s");
 
                           $extraFilter = "";
+                          $statusFilter = isset($_POST["status"]) ? $_POST["status"] : 0;
+
                           if (isset($_POST["tahun"])) {
                             $tahunFilter = $_POST["tahun"];
                             if ($tahunFilter != 0) {
@@ -204,41 +230,44 @@ if (mysqli_num_rows($result) <= 0) {
                           $result = mysqli_query($connection, "SELECT spp_detail.id, spp.tahun, spp.nominal, SUM(pembayaran.jumlah_pembayaran) AS `sudah_dibayar`, spp_detail.dibuat FROM spp_detail INNER JOIN spp ON spp_detail.id_spp=spp.id LEFT JOIN pembayaran ON spp_detail.id=pembayaran.id_spp_detail WHERE spp_detail.id_siswa='$id' $extraFilter GROUP BY spp_detail.id ORDER BY spp_detail.dibuat DESC;");
                           foreach ($result as $i => $data) {
                             $idSPPDetail = $data["id"];
+
+                            if ($statusFilter == 0 || ($statusFilter == 1 && $data["nominal"] != $data["sudah_dibayar"]) || ($statusFilter == 2 && $data["nominal"] == $data["sudah_dibayar"])) {
                           ?>
-                            <tr>
-                              <td class="text-center align-middle"><?php echo $i + 1; ?>.</td>
-                              <td class="text-center align-middle"><?php echo $data["tahun"]; ?></td>
-                              <td class="text-center align-middle"><?php echo numberToCurrency($data["nominal"]); ?></td>
-                              <td class="text-center align-middle"><?php echo numberToCurrency($data["sudah_dibayar"]); ?></td>
-                              <td class="text-center align-middle"><?php echo numberToCurrency($data["nominal"] - $data["sudah_dibayar"]); ?></td>
+                              <tr>
+                                <td class="text-center align-middle"><?php echo $i + 1; ?>.</td>
+                                <td class="text-center align-middle"><?php echo $data["tahun"]; ?></td>
+                                <td class="text-center align-middle"><?php echo numberToCurrency($data["nominal"]); ?></td>
+                                <td class="text-center align-middle"><?php echo numberToCurrency($data["sudah_dibayar"]); ?></td>
+                                <td class="text-center align-middle"><?php echo numberToCurrency($data["nominal"] - $data["sudah_dibayar"]); ?></td>
 
-                              <?php
-                              if ($data["nominal"] == $data["sudah_dibayar"]) {
-                              ?>
-                                <td class="text-center align-middle">Sudah Lunas</td>
-                              <?php
-                              } else {
-                              ?>
-                                <td class="text-center align-middle">Belum Lunas</td>
-                              <?php
-                              };
-                              ?>
+                                <?php
+                                if ($data["nominal"] == $data["sudah_dibayar"]) {
+                                ?>
+                                  <td class="text-center align-middle">Sudah Lunas</td>
+                                <?php
+                                } else {
+                                ?>
+                                  <td class="text-center align-middle">Belum Lunas</td>
+                                <?php
+                                };
+                                ?>
 
-                              <td class="text-center align-middle"><?php echo $data["dibuat"]; ?></td>
+                                <td class="text-center align-middle"><?php echo $data["dibuat"]; ?></td>
 
-                              <td class="text-center align-middle">
-                                <div class="btn-group">
-                                  <a class="btn btn-app bg-primary m-0" href="./pembayaran?id=<?php echo $id; ?>&idSPPDetail=<?php echo $idSPPDetail; ?>">
-                                    <i class="fas fa-envelope"></i> Pembayaran
-                                  </a>
+                                <td class="text-center align-middle">
+                                  <div class="btn-group">
+                                    <a class="btn btn-app bg-primary m-0" href="./pembayaran?id=<?php echo $id; ?>&idSPPDetail=<?php echo $idSPPDetail; ?>">
+                                      <i class="fas fa-envelope"></i> Pembayaran
+                                    </a>
 
-                                  <a class="btn btn-app bg-danger m-0" href="./hapus.php?id=<?php echo $id; ?>&idSPPDetail=<?php echo $idSPPDetail; ?>">
-                                    <i class="fas fa-trash"></i> Hapus
-                                  </a>
-                                </div>
-                              </td>
-                            </tr>
+                                    <a class="btn btn-app bg-danger m-0" href="./hapus.php?id=<?php echo $id; ?>&idSPPDetail=<?php echo $idSPPDetail; ?>">
+                                      <i class="fas fa-trash"></i> Hapus
+                                    </a>
+                                  </div>
+                                </td>
+                              </tr>
                           <?php
+                            };
                           };
                           ?>
                         </tbody>
