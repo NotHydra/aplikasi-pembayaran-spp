@@ -41,7 +41,6 @@ roleGuardMinimum($sessionLevel, "siswa", "/$originalPath");
             <div class="col-sm">
               <div class="card">
                 <?php
-                $pageItemObject = $pageArray[$navActive[0]]["child"][$navActive[1]];
                 $extraTitle = [
                   [
                     "id" => 1,

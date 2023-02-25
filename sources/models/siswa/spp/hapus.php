@@ -54,7 +54,6 @@ if (mysqli_num_rows($result) <= 0) {
             <div class="col-sm">
               <div class="card">
                 <?php
-                $pageItemObject = $pageArray[$navActive[0]];
                 $extraTitle = [
                   [
                     "id" => 1,

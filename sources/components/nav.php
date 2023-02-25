@@ -230,3 +230,11 @@
         </nav>
     </div>
 </aside>
+
+<?php
+if ($navActive[1] == null) {
+    $pageItemObject = $pageArray[$navActive[0]];
+} else {
+    $pageItemObject = $pageArray[$navActive[0]]["child"][$navActive[1]];
+};
+?>

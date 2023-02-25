@@ -40,7 +40,6 @@ roleGuardMinimum($sessionLevel, "siswa", "/$originalPath");
             <div class="col-sm">
               <div class="card">
                 <?php
-                $pageItemObject = $pageArray[$navActive[0]];
                 $extraTitle = null;
                 include "$sourcePath/components/content/head.php";
                 ?>

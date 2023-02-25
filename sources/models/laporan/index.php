@@ -43,7 +43,6 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
             <div class="col-sm">
               <div class="card">
                 <?php
-                $pageItemObject = $pageArray[$navActive[0]];
                 $extraTitle = [
                   [
                     "id" => 1,
