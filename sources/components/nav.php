@@ -144,8 +144,21 @@
                         "id" => 7,
                         "title" => "Laporan",
                         "icon" => "fas fa-list",
-                        "link" => "sources/models/laporan",
-                        "child" => null
+                        "link" => null,
+                        "child" => [
+                            1 => [
+                                "id" => 1,
+                                "title" => "Keseluruhan",
+                                "icon" => "fas fa-globe",
+                                "link" => "sources/models/laporan/keseluruhan",
+                            ],
+                            2 => [
+                                "id" => 2,
+                                "title" => "Keuangan",
+                                "icon" => "fas fa-money-bill",
+                                "link" => "sources/models/laporan/keuangan",
+                            ]
+                        ]
                     ];
                 };
 
