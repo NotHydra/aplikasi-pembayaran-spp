@@ -157,14 +157,14 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
                           if (isset($_POST["tahun"])) {
                             $tahunFilter = $_POST["tahun"];
                             if ($tahunFilter != 0) {
-                              $extraFilter = $extraFilter . " AND YEAR(dibuat)='$tahunFilter'";
+                              $extraFilter = $extraFilter . " AND YEAR(rombel.dibuat)='$tahunFilter'";
                             };
                           };
 
                           if (isset($_POST["bulan"])) {
                             $bulanFilter = $_POST["bulan"];
                             if ($bulanFilter != 0) {
-                              $extraFilter = $extraFilter . " AND MONTH(dibuat)='$bulanFilter'";
+                              $extraFilter = $extraFilter . " AND MONTH(rombel.dibuat)='$bulanFilter'";
                             };
                           };
 
