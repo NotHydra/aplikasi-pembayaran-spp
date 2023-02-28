@@ -94,6 +94,10 @@ if (mysqli_num_rows($result) <= 0) {
 
                       <form method="POST" onsubmit="return confirmModal('form', this);">
                         <?php
+                        $sppArray = array_map(function ($sppObject) {
+                          return $sppObject[0];
+                        }, mysqli_fetch_all(mysqli_query($connection, "SELECT DISTINCT id_spp FROM spp_detail WHERE id_siswa='$id';")));
+
                         $inputArray = [
                           [
                             "id" => 1,
@@ -102,7 +106,9 @@ if (mysqli_num_rows($result) <= 0) {
                             "type" => "select",
                             "value" => [
                               array_map(function ($itemObject) {
-                                return [$itemObject[0], $itemObject[1] . " - " . numberToCurrency($itemObject[2])];
+                                global $sppArray;
+
+                                return [$itemObject[0], $itemObject[1] . " - " . numberToCurrency($itemObject[2]) .  (in_array($itemObject[0], $sppArray) ? " (Sudah Digunakan)" : "")];
                               }, mysqli_fetch_all(mysqli_query($connection, "SELECT id, tahun, nominal FROM spp ORDER BY dibuat DESC;"))), isset($_POST["id_spp"]) ? $_POST["id_spp"] : null
                             ],
                             "placeholder" => "Masukkan SPP disini",
@@ -144,7 +150,7 @@ if (mysqli_num_rows($result) <= 0) {
 
       if ($result) {
         activity("Membuat SPP Siswa");
-        echo "<script>successModal(null, null);</script>";
+        echo "<script>successModal(null, '?id=$id');</script>";
       } else {
         echo "<script>errorModal(null, null);</script>";
       };
