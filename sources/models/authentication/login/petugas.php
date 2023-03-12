@@ -25,7 +25,11 @@ include "$sourcePath/utilities/date.php";
   <div class="login-box" id="login-container">
     <div class="card card-outline card-primary">
       <div class="card-header text-center">
-        <a href="/<?php echo $originalPath; ?>" class="h1"><b>Pembayaran SPP</b></a>
+        <a href="/<?php echo $originalPath; ?>" class="h1">
+          <b>Pembayaran SPP</b>
+
+          <img class="mt-2" src="<?php echo $sourcePath; ?>/public/dist/img/rpl-logo.png" height="200px" class="img-fluid">
+        </a>
       </div>
 
       <div class="card-body">
