@@ -30,8 +30,18 @@
 
     <div class="sidebar">
         <a class="user-panel mt-3 pb-3 mb-3 d-flex" style="align-items: center;" href="/<?php echo $originalPath; ?>/sources/models/pengaturan/data-pribadi">
-            <div>
-                <i class="fas fa-user-circle" style="font-size: 2.25rem;"></i>
+            <div id="aside-user-background-theme" style="width: 2.75rem; padding: 0.5rem; border-radius: 50%; display: flex; justify-content: center;">
+                <?php
+                if (in_array($sessionLevel, ["siswa", "petugas"])) {
+                    $iconName = "fa-user";
+                } else if ($sessionLevel == "admin") {
+                    $iconName = "fa-user-tie";
+                } else if ($sessionLevel == "superadmin") {
+                    $iconName = "fa-user-secret";
+                };
+                ?>
+
+                <i id="aside-user-icon-theme" class="fas <?php echo $iconName; ?>" style="font-size: 1.75rem;"></i>
             </div>
 
             <div class="info">

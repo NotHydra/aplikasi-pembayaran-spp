@@ -8,6 +8,8 @@
             const bodyElement = document.getElementById("body-theme");
             const navElement = document.getElementById("nav-theme");
             const asideElement = document.getElementById("aside-theme");
+            const asideUserBackgroundElement = document.getElementById("aside-user-background-theme");
+            const asideUserIconElement = document.getElementById("aside-user-icon-theme");
             const iconElement = document.getElementById("icon-theme");
             const textElement = document.getElementById("text-theme");
 
@@ -18,6 +20,8 @@
                 navElement.classList.add("navbar-light");
 
                 asideElement.classList.add("sidebar-light-primary");
+                asideUserBackgroundElement.style.backgroundColor = "#343a40";
+                asideUserIconElement.style.color = "white";
 
                 $('.small-box').addClass('bg-white');
 
@@ -29,6 +33,8 @@
                 navElement.classList.add("navbar-dark");
 
                 asideElement.classList.add("sidebar-dark-primary");
+                asideUserBackgroundElement.style.backgroundColor = "#ced4da";
+                asideUserIconElement.style.color = "#343a40";
 
                 $('.small-box').addClass('bg-dark');
 
@@ -42,6 +48,8 @@
         const bodyElement = document.getElementById("body-theme");
         const navElement = document.getElementById("nav-theme");
         const asideElement = document.getElementById("aside-theme");
+        const asideUserBackgroundElement = document.getElementById("aside-user-background-theme");
+        const asideUserIconElement = document.getElementById("aside-user-icon-theme");
         const iconElement = document.getElementById("icon-theme");
         const textElement = document.getElementById("text-theme");
 
@@ -55,6 +63,8 @@
 
             asideElement.classList.remove("sidebar-light-primary");
             asideElement.classList.add("sidebar-dark-primary");
+            asideUserBackgroundElement.style.backgroundColor = "#ced4da";
+            asideUserIconElement.style.color = "#343a40";
 
             $('.small-box').removeClass('bg-white');
             $('.small-box').addClass('bg-dark');
@@ -74,6 +84,8 @@
 
             asideElement.classList.remove("sidebar-dark-primary");
             asideElement.classList.add("sidebar-light-primary");
+            asideUserBackgroundElement.style.backgroundColor = "#343a40";
+            asideUserIconElement.style.color = "white";
 
             $('.small-box').removeClass('bg-dark');
             $('.small-box').addClass('bg-white');
