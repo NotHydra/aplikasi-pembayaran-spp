@@ -182,6 +182,10 @@ include "$sourcePath/utilities/date.php";
             <a href="/<?php echo $originalPath ?>/sources/models/authentication/login/petugas.php" class="btn btn-primary" style="margin-left: 1rem;">
               Login
             </a>
+
+            <a href="/<?php echo $originalPath ?>/sources/models/authentication/register/petugas.php" class="btn btn-primary" style="margin-left: 1rem;">
+              Register
+            </a>
           </h3>
 
           <div class="row">
