@@ -91,33 +91,6 @@ roleGuardMinimum($sessionLevel, "siswa", "/$originalPath");
                           $inputArray = [
                             [
                               "id" => 1,
-                              "display" => "NISN",
-                              "name" => "nisn",
-                              "type" => "number",
-                              "value" => isset($_POST["nisn"]) ? $_POST["nisn"] : $sessionNISN,
-                              "placeholder" => "Masukkan NISN disini",
-                              "enable" => true
-                            ],
-                            [
-                              "id" => 2,
-                              "display" => "NIS",
-                              "name" => "nis",
-                              "type" => "number",
-                              "value" => isset($_POST["nis"]) ? $_POST["nis"] : $sessionNIS,
-                              "placeholder" => "Masukkan NIS disini",
-                              "enable" => true
-                            ],
-                            [
-                              "id" => 3,
-                              "display" => "Nama",
-                              "name" => "nama",
-                              "type" => "text",
-                              "value" => isset($_POST["nama"]) ? $_POST["nama"] : $sessionNama,
-                              "placeholder" => "Masukkan nama disini",
-                              "enable" => true
-                            ],
-                            [
-                              "id" => 4,
                               "display" => "Alamat",
                               "name" => "alamat",
                               "type" => "text",
@@ -126,7 +99,7 @@ roleGuardMinimum($sessionLevel, "siswa", "/$originalPath");
                               "enable" => true
                             ],
                             [
-                              "id" => 5,
+                              "id" => 2,
                               "display" => "Telepon",
                               "name" => "telepon",
                               "type" => "number",
@@ -190,14 +163,11 @@ roleGuardMinimum($sessionLevel, "siswa", "/$originalPath");
         echo "<script>errorModal('$message', null);</script>";
       };
     } else if ($sessionType == "siswa") {
-      $nisn = $_POST["nisn"];
-      $nis = $_POST["nis"];
-      $nama = $_POST["nama"];
       $alamat = $_POST["alamat"];
       $telepon = $_POST["telepon"];
 
       try {
-        $result = mysqli_query($connection, "UPDATE siswa SET nisn='$nisn', nis='$nis', nama='$nama', alamat='$alamat', telepon='$telepon' WHERE id='$sessionId';");
+        $result = mysqli_query($connection, "UPDATE siswa SET alamat='$alamat', telepon='$telepon' WHERE id='$sessionId';");
 
         if ($result) {
           echo "<script>successModal(null, './ubah.php');</script>";
@@ -205,18 +175,7 @@ roleGuardMinimum($sessionLevel, "siswa", "/$originalPath");
           echo "<script>errorModal(null, null);</script>";
         };
       } catch (exception $e) {
-        $message = null;
-        $errorMessage = mysqli_error($connection);
-
-        if (str_contains($errorMessage, "Duplicate entry")) {
-          if (str_contains($errorMessage, "'nisn'")) {
-            $message = "NISN sudah digunakan";
-          } else if (str_contains($errorMessage, "'nis'")) {
-            $message = "NIS sudah digunakan";
-          };
-        };
-
-        echo "<script>errorModal('$message', null);</script>";
+        echo "<script>errorModal(null, null);</script>";
       };
     };
   };
