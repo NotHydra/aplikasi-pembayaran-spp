@@ -138,14 +138,70 @@ roleGuardSingle($sessionLevel, "siswa", "/$originalPath/sources/models/utama");
                         [
                           "id" => 1,
                           "display" => null,
+                          "name" => "tahun_spp",
+                          "type" => "select",
+                          "value" => [
+                            array_merge([[0, "Semua"]], array_map(function ($yearObject) {
+                              return [$yearObject[0], $yearObject[0]];
+                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT DISTINCT spp.tahun FROM spp_detail INNER JOIN spp ON spp_detail.id_spp=spp.id WHERE spp_detail.id_siswa='$sessionId' ORDER BY spp.tahun DESC;")))), isset($_POST["tahun_spp"]) ? $_POST["tahun_spp"] : 0
+                          ],
+                          "placeholder" => "Pilih tahun disini",
+                          "enable" => true
+                        ]
+                      ];
+
+                      include "$sourcePath/components/input/detail.php";
+                      ?>
+                    </div>
+
+                    <div class="col-sm">
+                      <?php
+                      $inputArray = [
+                        [
+                          "id" => 1,
+                          "display" => null,
                           "name" => "tahun",
                           "type" => "select",
                           "value" => [
                             array_merge([[0, "Semua"]], array_map(function ($yearObject) {
                               return [$yearObject[0], $yearObject[0]];
-                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT DISTINCT spp.tahun FROM spp_detail INNER JOIN spp ON spp_detail.id_spp=spp.id WHERE spp_detail.id_siswa='$sessionId' ORDER BY spp.tahun DESC;")))), isset($_POST["tahun"]) ? $_POST["tahun"] : 0
+                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT DISTINCT YEAR(spp_detail.dibuat) FROM spp_detail WHERE spp_detail.id_siswa='$sessionId' ORDER BY spp_detail.dibuat DESC;")))), isset($_POST["tahun"]) ? $_POST["tahun"] : 0
                           ],
-                          "placeholder" => "Pilih tahun SPP disini",
+                          "placeholder" => "Pilih tahun pembuatan disini",
+                          "enable" => true
+                        ]
+                      ];
+
+                      include "$sourcePath/components/input/detail.php";
+                      ?>
+                    </div>
+
+                    <div class="col-sm">
+                      <?php
+                      $inputArray = [
+                        [
+                          "id" => 1,
+                          "display" => null,
+                          "name" => "bulan",
+                          "type" => "select",
+                          "value" => [
+                            [
+                              [0, "Semua"],
+                              [1, "Januari"],
+                              [2, "Februari"],
+                              [3, "Maret"],
+                              [4, "April"],
+                              [5, "Mei"],
+                              [6, "Juni"],
+                              [7, "Juli"],
+                              [8, "Agustus"],
+                              [9, "September"],
+                              [10, "Oktober"],
+                              [11, "November"],
+                              [12, "Desember"]
+                            ], isset($_POST["bulan"]) ? $_POST["bulan"] : 0
+                          ],
+                          "placeholder" => "Pilih bulan pembuatan disini",
                           "enable" => true
                         ]
                       ];
@@ -181,10 +237,24 @@ roleGuardSingle($sessionLevel, "siswa", "/$originalPath/sources/models/utama");
                           $extraFilter = "";
                           $statusFilter = isset($_POST["status"]) ? $_POST["status"] : 0;
 
+                          if (isset($_POST["tahun_spp"])) {
+                            $tahunSPPFilter = $_POST["tahun_spp"];
+                            if ($tahunSPPFilter != 0) {
+                              $extraFilter = $extraFilter . " AND spp.tahun='$tahunSPPFilter'";
+                            };
+                          };
+
                           if (isset($_POST["tahun"])) {
                             $tahunFilter = $_POST["tahun"];
                             if ($tahunFilter != 0) {
-                              $extraFilter = $extraFilter . " AND tahun='$tahunFilter'";
+                              $extraFilter = $extraFilter . " AND YEAR(spp_detail.dibuat)='$tahunFilter'";
+                            };
+                          };
+
+                          if (isset($_POST["bulan"])) {
+                            $bulanFilter = $_POST["bulan"];
+                            if ($bulanFilter != 0) {
+                              $extraFilter = $extraFilter . " AND MONTH(spp_detail.dibuat)='$bulanFilter'";
                             };
                           };
 
