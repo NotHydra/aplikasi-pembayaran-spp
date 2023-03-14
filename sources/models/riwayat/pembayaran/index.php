@@ -169,6 +169,40 @@ if (mysqli_num_rows($result) <= 0) {
                         [
                           "id" => 1,
                           "display" => null,
+                          "name" => "bulan_pembayaran",
+                          "type" => "select",
+                          "value" => [
+                            [
+                              [0, "Semua"],
+                              [1, "Januari"],
+                              [2, "Februari"],
+                              [3, "Maret"],
+                              [4, "April"],
+                              [5, "Mei"],
+                              [6, "Juni"],
+                              [7, "Juli"],
+                              [8, "Agustus"],
+                              [9, "September"],
+                              [10, "Oktober"],
+                              [11, "November"],
+                              [12, "Desember"]
+                            ], isset($_POST["bulan_pembayaran"]) ? $_POST["bulan_pembayaran"] : 0
+                          ],
+                          "placeholder" => "Pilih bulan pembayaran disini",
+                          "enable" => true
+                        ]
+                      ];
+
+                      include "$sourcePath/components/input/detail.php";
+                      ?>
+                    </div>
+
+                    <div class="col-sm">
+                      <?php
+                      $inputArray = [
+                        [
+                          "id" => 1,
+                          "display" => null,
                           "name" => "tahun",
                           "type" => "select",
                           "value" => [
@@ -176,7 +210,7 @@ if (mysqli_num_rows($result) <= 0) {
                               return [$yearObject[0], $yearObject[0]];
                             }, mysqli_fetch_all(mysqli_query($connection, "SELECT DISTINCT YEAR(dibuat) FROM pembayaran WHERE id_spp_detail='$id' ORDER BY dibuat DESC;")))), isset($_POST["tahun"]) ? $_POST["tahun"] : 0
                           ],
-                          "placeholder" => "Pilih tahun disini",
+                          "placeholder" => "Pilih tahun pembuatan disini",
                           "enable" => true
                         ]
                       ];
@@ -210,7 +244,7 @@ if (mysqli_num_rows($result) <= 0) {
                               [12, "Desember"]
                             ], isset($_POST["bulan"]) ? $_POST["bulan"] : 0
                           ],
-                          "placeholder" => "Pilih bulan disini",
+                          "placeholder" => "Pilih bulan pembuatan disini",
                           "enable" => true
                         ]
                       ];
@@ -243,6 +277,13 @@ if (mysqli_num_rows($result) <= 0) {
                           $currentDate = date("Y-m-d H:i:s");
 
                           $extraFilter = "";
+                          if (isset($_POST["bulan_pembayaran"])) {
+                            $bulanPembayaranFilter = $_POST["bulan_pembayaran"];
+                            if ($bulanPembayaranFilter != 0) {
+                              $extraFilter = $extraFilter . " AND pembayaran.bulan_pembayaran='$bulanPembayaranFilter'";
+                            };
+                          };
+
                           if (isset($_POST["tahun"])) {
                             $tahunFilter = $_POST["tahun"];
                             if ($tahunFilter != 0) {
