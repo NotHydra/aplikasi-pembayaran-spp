@@ -107,111 +107,115 @@ roleGuardSingle($sessionLevel, "siswa", "/$originalPath/sources/models/utama");
                 ?>
 
                 <div class="card-body">
-                  <form class="row mb-2" method="POST">
-                    <div class="col-sm">
-                      <?php
-                      $inputArray = [
-                        [
-                          "id" => 1,
-                          "display" => null,
-                          "name" => "status",
-                          "type" => "select",
-                          "value" => [
-                            [
-                              [0, "Semua"],
-                              [1, "Belum Lunas"],
-                              [2, "Sudah Lunas"]
-                            ], isset($_POST["status"]) ? $_POST["status"] : 0
-                          ],
-                          "placeholder" => "Pilih status disini",
-                          "enable" => true
-                        ]
-                      ];
+                  <form class="mb-4" method="POST">
+                    <div class="row my-0">
+                      <div class="col-sm">
+                        <?php
+                        $inputArray = [
+                          [
+                            "id" => 1,
+                            "display" => "Tahun SPP",
+                            "name" => "tahun_spp",
+                            "type" => "select",
+                            "value" => [
+                              array_merge([[0, "Semua"]], array_map(function ($yearObject) {
+                                return [$yearObject[0], $yearObject[0]];
+                              }, mysqli_fetch_all(mysqli_query($connection, "SELECT DISTINCT spp.tahun FROM spp_detail INNER JOIN spp ON spp_detail.id_spp=spp.id WHERE spp_detail.id_siswa='$sessionId' ORDER BY spp.tahun DESC;")))), isset($_POST["tahun_spp"]) ? $_POST["tahun_spp"] : 0
+                            ],
+                            "placeholder" => "Pilih tahun SPP disini",
+                            "enable" => true
+                          ]
+                        ];
 
-                      include "$sourcePath/components/input/detail.php";
-                      ?>
+                        include "$sourcePath/components/input/detail.php";
+                        ?>
+                      </div>
+
+                      <div class="col-sm">
+                        <?php
+                        $inputArray = [
+                          [
+                            "id" => 1,
+                            "display" => "Status",
+                            "name" => "status",
+                            "type" => "select",
+                            "value" => [
+                              [
+                                [0, "Semua"],
+                                [1, "Belum Lunas"],
+                                [2, "Sudah Lunas"]
+                              ], isset($_POST["status"]) ? $_POST["status"] : 0
+                            ],
+                            "placeholder" => "Pilih status disini",
+                            "enable" => true
+                          ]
+                        ];
+
+                        include "$sourcePath/components/input/detail.php";
+                        ?>
+                      </div>
+
+                      <div class="col-sm">
+                        <?php
+                        $inputArray = [
+                          [
+                            "id" => 1,
+                            "display" => "Tahun Pembuatan",
+                            "name" => "tahun",
+                            "type" => "select",
+                            "value" => [
+                              array_merge([[0, "Semua"]], array_map(function ($yearObject) {
+                                return [$yearObject[0], $yearObject[0]];
+                              }, mysqli_fetch_all(mysqli_query($connection, "SELECT DISTINCT YEAR(spp_detail.dibuat) FROM spp_detail WHERE spp_detail.id_siswa='$sessionId' ORDER BY spp_detail.dibuat DESC;")))), isset($_POST["tahun"]) ? $_POST["tahun"] : 0
+                            ],
+                            "placeholder" => "Pilih tahun pembuatan disini",
+                            "enable" => true
+                          ]
+                        ];
+
+                        include "$sourcePath/components/input/detail.php";
+                        ?>
+                      </div>
+
+                      <div class="col-sm">
+                        <?php
+                        $inputArray = [
+                          [
+                            "id" => 1,
+                            "display" => "Bulan Pembuatan",
+                            "name" => "bulan",
+                            "type" => "select",
+                            "value" => [
+                              [
+                                [0, "Semua"],
+                                [1, "Januari"],
+                                [2, "Februari"],
+                                [3, "Maret"],
+                                [4, "April"],
+                                [5, "Mei"],
+                                [6, "Juni"],
+                                [7, "Juli"],
+                                [8, "Agustus"],
+                                [9, "September"],
+                                [10, "Oktober"],
+                                [11, "November"],
+                                [12, "Desember"]
+                              ], isset($_POST["bulan"]) ? $_POST["bulan"] : 0
+                            ],
+                            "placeholder" => "Pilih bulan pembuatan disini",
+                            "enable" => true
+                          ]
+                        ];
+
+                        include "$sourcePath/components/input/detail.php";
+                        ?>
+                      </div>
                     </div>
 
-                    <div class="col-sm">
-                      <?php
-                      $inputArray = [
-                        [
-                          "id" => 1,
-                          "display" => null,
-                          "name" => "tahun_spp",
-                          "type" => "select",
-                          "value" => [
-                            array_merge([[0, "Semua"]], array_map(function ($yearObject) {
-                              return [$yearObject[0], $yearObject[0]];
-                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT DISTINCT spp.tahun FROM spp_detail INNER JOIN spp ON spp_detail.id_spp=spp.id WHERE spp_detail.id_siswa='$sessionId' ORDER BY spp.tahun DESC;")))), isset($_POST["tahun_spp"]) ? $_POST["tahun_spp"] : 0
-                          ],
-                          "placeholder" => "Pilih tahun disini",
-                          "enable" => true
-                        ]
-                      ];
-
-                      include "$sourcePath/components/input/detail.php";
-                      ?>
-                    </div>
-
-                    <div class="col-sm">
-                      <?php
-                      $inputArray = [
-                        [
-                          "id" => 1,
-                          "display" => null,
-                          "name" => "tahun",
-                          "type" => "select",
-                          "value" => [
-                            array_merge([[0, "Semua"]], array_map(function ($yearObject) {
-                              return [$yearObject[0], $yearObject[0]];
-                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT DISTINCT YEAR(spp_detail.dibuat) FROM spp_detail WHERE spp_detail.id_siswa='$sessionId' ORDER BY spp_detail.dibuat DESC;")))), isset($_POST["tahun"]) ? $_POST["tahun"] : 0
-                          ],
-                          "placeholder" => "Pilih tahun pembuatan disini",
-                          "enable" => true
-                        ]
-                      ];
-
-                      include "$sourcePath/components/input/detail.php";
-                      ?>
-                    </div>
-
-                    <div class="col-sm">
-                      <?php
-                      $inputArray = [
-                        [
-                          "id" => 1,
-                          "display" => null,
-                          "name" => "bulan",
-                          "type" => "select",
-                          "value" => [
-                            [
-                              [0, "Semua"],
-                              [1, "Januari"],
-                              [2, "Februari"],
-                              [3, "Maret"],
-                              [4, "April"],
-                              [5, "Mei"],
-                              [6, "Juni"],
-                              [7, "Juli"],
-                              [8, "Agustus"],
-                              [9, "September"],
-                              [10, "Oktober"],
-                              [11, "November"],
-                              [12, "Desember"]
-                            ], isset($_POST["bulan"]) ? $_POST["bulan"] : 0
-                          ],
-                          "placeholder" => "Pilih bulan pembuatan disini",
-                          "enable" => true
-                        ]
-                      ];
-
-                      include "$sourcePath/components/input/detail.php";
-                      ?>
-                    </div>
-
-                    <div class="col-sm">
-                      <button class="btn btn-primary btn-block" type="submit"><i class="fa fa-search"></i> Cari</button>
+                    <div class="row my-0">
+                      <div class="col-sm">
+                        <button class="btn btn-primary btn-block" type="submit"><i class="fa fa-search"></i> Cari</button>
+                      </div>
                     </div>
                   </form>
 

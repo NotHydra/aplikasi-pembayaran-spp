@@ -1,5 +1,5 @@
 <?php
-$sourcePath = "../..";
+$sourcePath = "../../..";
 include "$sourcePath/utilities/environment.php";
 include "$sourcePath/utilities/connection.php";
 include "$sourcePath/utilities/session/start.php";
@@ -71,7 +71,7 @@ if (mysqli_num_rows($result) <= 0 or !roleCheckMinimum($sessionLevel, roleConver
                   [
                     "id" => 1,
                     "title" => "Aktivitas",
-                    "link" => "sources/models/petugas/aktivitas.php?id=$id"
+                    "link" => "sources/models/petugas/aktivitas/?id=$id"
                   ],
                   [
                     "id" => 2,
@@ -101,65 +101,69 @@ if (mysqli_num_rows($result) <= 0 or !roleCheckMinimum($sessionLevel, roleConver
                   include "$sourcePath/components/input/detail.php";
                   ?>
 
-                  <form class="row mb-2" method="POST">
-                    <div class="col-sm">
-                      <?php
-                      $inputArray = [
-                        [
-                          "id" => 1,
-                          "display" => null,
-                          "name" => "tahun",
-                          "type" => "select",
-                          "value" => [
-                            array_merge([[0, "Semua"]], array_map(function ($yearObject) {
-                              return [$yearObject[0], $yearObject[0]];
-                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT DISTINCT YEAR(dibuat) FROM aktivitas WHERE id_petugas='$id' ORDER BY dibuat DESC;")))), isset($_POST["tahun"]) ? $_POST["tahun"] : 0
-                          ],
-                          "placeholder" => "Pilih tahun disini",
-                          "enable" => true
-                        ]
-                      ];
+                  <form class="mb-4" method="POST">
+                    <div class="row my-0">
+                      <div class="col-sm">
+                        <?php
+                        $inputArray = [
+                          [
+                            "id" => 1,
+                            "display" => "Tahun Pembuatan",
+                            "name" => "tahun",
+                            "type" => "select",
+                            "value" => [
+                              array_merge([[0, "Semua"]], array_map(function ($yearObject) {
+                                return [$yearObject[0], $yearObject[0]];
+                              }, mysqli_fetch_all(mysqli_query($connection, "SELECT DISTINCT YEAR(dibuat) FROM aktivitas WHERE id_petugas='$id' ORDER BY dibuat DESC;")))), isset($_POST["tahun"]) ? $_POST["tahun"] : 0
+                            ],
+                            "placeholder" => "Pilih tahun pembuatan disini",
+                            "enable" => true
+                          ]
+                        ];
 
-                      include "$sourcePath/components/input/detail.php";
-                      ?>
+                        include "$sourcePath/components/input/detail.php";
+                        ?>
+                      </div>
+
+                      <div class="col-sm">
+                        <?php
+                        $inputArray = [
+                          [
+                            "id" => 1,
+                            "display" => "Bulan Pembuatan",
+                            "name" => "bulan",
+                            "type" => "select",
+                            "value" => [
+                              [
+                                [0, "Semua"],
+                                [1, "Januari"],
+                                [2, "Februari"],
+                                [3, "Maret"],
+                                [4, "April"],
+                                [5, "Mei"],
+                                [6, "Juni"],
+                                [7, "Juli"],
+                                [8, "Agustus"],
+                                [9, "September"],
+                                [10, "Oktober"],
+                                [11, "November"],
+                                [12, "Desember"]
+                              ], isset($_POST["bulan"]) ? $_POST["bulan"] : 0
+                            ],
+                            "placeholder" => "Pilih bulan pembuatan disini",
+                            "enable" => true
+                          ]
+                        ];
+
+                        include "$sourcePath/components/input/detail.php";
+                        ?>
+                      </div>
                     </div>
 
-                    <div class="col-sm">
-                      <?php
-                      $inputArray = [
-                        [
-                          "id" => 1,
-                          "display" => null,
-                          "name" => "bulan",
-                          "type" => "select",
-                          "value" => [
-                            [
-                              [0, "Semua"],
-                              [1, "Januari"],
-                              [2, "Februari"],
-                              [3, "Maret"],
-                              [4, "April"],
-                              [5, "Mei"],
-                              [6, "Juni"],
-                              [7, "Juli"],
-                              [8, "Agustus"],
-                              [9, "September"],
-                              [10, "Oktober"],
-                              [11, "November"],
-                              [12, "Desember"]
-                            ], isset($_POST["bulan"]) ? $_POST["bulan"] : 0
-                          ],
-                          "placeholder" => "Pilih bulan disini",
-                          "enable" => true
-                        ]
-                      ];
-
-                      include "$sourcePath/components/input/detail.php";
-                      ?>
-                    </div>
-
-                    <div class="col-sm">
-                      <button class="btn btn-primary btn-block" type="submit"><i class="fa fa-search"></i> Cari</button>
+                    <div class="row my-0">
+                      <div class="col-sm">
+                        <button class="btn btn-primary btn-block" type="submit"><i class="fa fa-search"></i> Cari</button>
+                      </div>
                     </div>
                   </form>
 
@@ -208,7 +212,7 @@ if (mysqli_num_rows($result) <= 0 or !roleCheckMinimum($sessionLevel, roleConver
                     </div>
                   </div>
 
-                  <a class="btn btn-danger btn-block mt-1" role="button" onclick="confirmModal('location', '.');"><i class="fa fa-undo"></i> Kembali</a>
+                  <a class="btn btn-danger btn-block mt-1" role="button" onclick="confirmModal('location', './..');"><i class="fa fa-undo"></i> Kembali</a>
                 </div>
               </div>
             </div>

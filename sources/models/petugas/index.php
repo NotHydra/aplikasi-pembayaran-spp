@@ -90,65 +90,118 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
                 ?>
 
                 <div class="card-body">
-                  <form class="row mb-2" method="POST">
-                    <div class="col-sm">
-                      <?php
-                      $inputArray = [
-                        [
-                          "id" => 1,
-                          "display" => null,
-                          "name" => "tahun",
-                          "type" => "select",
-                          "value" => [
-                            array_merge([[0, "Semua"]], array_map(function ($yearObject) {
-                              return [$yearObject[0], $yearObject[0]];
-                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT DISTINCT YEAR(dibuat) FROM petugas ORDER BY dibuat DESC;")))), isset($_POST["tahun"]) ? $_POST["tahun"] : 0
-                          ],
-                          "placeholder" => "Pilih tahun disini",
-                          "enable" => true
-                        ]
-                      ];
+                  <form class="mb-4" method="POST">
+                    <div class="row my-0">
+                      <div class="col-sm">
+                        <?php
+                        $inputArray = [
+                          [
+                            "id" => 1,
+                            "display" => "Level",
+                            "name" => "level",
+                            "type" => "select",
+                            "value" => [
+                              [
+                                [0, "Semua"],
+                                ["petugas", "Petugas"],
+                                ["admin", "Admin"],
+                                ["superadmin", "Superadmin"]
+                              ], isset($_POST["level"]) ? $_POST["level"] : 0
+                            ],
+                            "placeholder" => "Pilih level disini",
+                            "enable" => true
+                          ]
+                        ];
 
-                      include "$sourcePath/components/input/detail.php";
-                      ?>
+                        include "$sourcePath/components/input/detail.php";
+                        ?>
+                      </div>
+
+                      <div class="col-sm">
+                        <?php
+                        $inputArray = [
+                          [
+                            "id" => 1,
+                            "display" => "Status",
+                            "name" => "status",
+                            "type" => "select",
+                            "value" => [
+                              [
+                                [0, "Semua"],
+                                ["tidak aktif", "Tidak Aktif"],
+                                ["aktif", "Aktif"],
+                              ], isset($_POST["status"]) ? $_POST["status"] : 0
+                            ],
+                            "placeholder" => "Pilih status disini",
+                            "enable" => true
+                          ]
+                        ];
+
+                        include "$sourcePath/components/input/detail.php";
+                        ?>
+                      </div>
+
+                      <div class="col-sm">
+                        <?php
+                        $inputArray = [
+                          [
+                            "id" => 1,
+                            "display" => "Tahun Pembuatan",
+                            "name" => "tahun",
+                            "type" => "select",
+                            "value" => [
+                              array_merge([[0, "Semua"]], array_map(function ($yearObject) {
+                                return [$yearObject[0], $yearObject[0]];
+                              }, mysqli_fetch_all(mysqli_query($connection, "SELECT DISTINCT YEAR(dibuat) FROM petugas ORDER BY dibuat DESC;")))), isset($_POST["tahun"]) ? $_POST["tahun"] : 0
+                            ],
+                            "placeholder" => "Pilih tahun pembuatan disini",
+                            "enable" => true
+                          ]
+                        ];
+
+                        include "$sourcePath/components/input/detail.php";
+                        ?>
+                      </div>
+
+                      <div class="col-sm">
+                        <?php
+                        $inputArray = [
+                          [
+                            "id" => 1,
+                            "display" => "Bulan Pembuatan",
+                            "name" => "bulan",
+                            "type" => "select",
+                            "value" => [
+                              [
+                                [0, "Semua"],
+                                [1, "Januari"],
+                                [2, "Februari"],
+                                [3, "Maret"],
+                                [4, "April"],
+                                [5, "Mei"],
+                                [6, "Juni"],
+                                [7, "Juli"],
+                                [8, "Agustus"],
+                                [9, "September"],
+                                [10, "Oktober"],
+                                [11, "November"],
+                                [12, "Desember"]
+                              ], isset($_POST["bulan"]) ? $_POST["bulan"] : 0
+                            ],
+                            "placeholder" => "Pilih bulan pembuatan disini",
+                            "enable" => true
+                          ]
+                        ];
+
+                        include "$sourcePath/components/input/detail.php";
+                        ?>
+                      </div>
                     </div>
 
-                    <div class="col-sm">
-                      <?php
-                      $inputArray = [
-                        [
-                          "id" => 1,
-                          "display" => null,
-                          "name" => "bulan",
-                          "type" => "select",
-                          "value" => [
-                            [
-                              [0, "Semua"],
-                              [1, "Januari"],
-                              [2, "Februari"],
-                              [3, "Maret"],
-                              [4, "April"],
-                              [5, "Mei"],
-                              [6, "Juni"],
-                              [7, "Juli"],
-                              [8, "Agustus"],
-                              [9, "September"],
-                              [10, "Oktober"],
-                              [11, "November"],
-                              [12, "Desember"]
-                            ], isset($_POST["bulan"]) ? $_POST["bulan"] : 0
-                          ],
-                          "placeholder" => "Pilih bulan disini",
-                          "enable" => true
-                        ]
-                      ];
-
-                      include "$sourcePath/components/input/detail.php";
-                      ?>
-                    </div>
-
-                    <div class="col-sm">
-                      <button class="btn btn-primary btn-block" type="submit"><i class="fa fa-search"></i> Cari</button>
+                    <div class="row my-0">
+                      <div class="col-sm">
+                        <button class="btn btn-primary btn-block" type="submit"><i class="fa fa-search"></i> Cari</button>
+                      </div>
                     </div>
                   </form>
 
@@ -173,6 +226,20 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
                           $currentDate = date("Y-m-d H:i:s");
 
                           $extraFilter = "";
+                          if (isset($_POST["level"])) {
+                            $levelFilter = $_POST["level"];
+                            if ($levelFilter != 0) {
+                              $extraFilter = $extraFilter . " AND petugas.level='$levelFilter'";
+                            };
+                          };
+
+                          if (isset($_POST["status"])) {
+                            $statusFilter = $_POST["status"];
+                            if ($statusFilter != 0) {
+                              $extraFilter = $extraFilter . " AND petugas.status='$statusFilter'";
+                            };
+                          };
+
                           if (isset($_POST["tahun"])) {
                             $tahunFilter = $_POST["tahun"];
                             if ($tahunFilter != 0) {
@@ -208,7 +275,7 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
                                     <?php
                                     if (roleCheckMinimum($sessionLevel, "superadmin")) {
                                     ?>
-                                      <a class="btn btn-app bg-primary m-0" href="./aktivitas.php?id=<?php echo $data['id']; ?>">
+                                      <a class="btn btn-app bg-primary m-0" href="./aktivitas/?id=<?php echo $data['id']; ?>">
                                         <i class="fas fa-eye"></i> Aktivitas
                                       </a>
                                     <?php

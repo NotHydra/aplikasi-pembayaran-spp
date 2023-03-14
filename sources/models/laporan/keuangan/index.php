@@ -55,79 +55,83 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
                 ?>
 
                 <div class="card-body">
-                  <form class="row mb-2" method="POST">
-                    <div class="col-sm">
-                      <?php
-                      $tahunArray = [];
-                      foreach (["siswa"] as $tahunTableObject) {
-                        $tahunArray = array_merge($tahunArray, array_map(function ($yearObject) {
-                          return $yearObject[0];
-                        }, mysqli_fetch_all(mysqli_query($connection, "SELECT DISTINCT YEAR(dibuat) FROM $tahunTableObject;"))));
-                      };
+                  <form class="mb-4" method="POST">
+                    <div class="row my-0">
+                      <div class="col-sm">
+                        <?php
+                        $tahunArray = [];
+                        foreach (["siswa"] as $tahunTableObject) {
+                          $tahunArray = array_merge($tahunArray, array_map(function ($yearObject) {
+                            return $yearObject[0];
+                          }, mysqli_fetch_all(mysqli_query($connection, "SELECT DISTINCT YEAR(dibuat) FROM $tahunTableObject;"))));
+                        };
 
-                      rsort($tahunArray);
+                        rsort($tahunArray);
 
-                      $uniqueTahunArray = [];
-                      foreach (array_unique($tahunArray) as $tahunObject) {
-                        array_push($uniqueTahunArray, $tahunObject);
-                      };
+                        $uniqueTahunArray = [];
+                        foreach (array_unique($tahunArray) as $tahunObject) {
+                          array_push($uniqueTahunArray, $tahunObject);
+                        };
 
-                      $inputArray = [
-                        [
-                          "id" => 1,
-                          "display" => null,
-                          "name" => "tahun",
-                          "type" => "select",
-                          "value" => [
-                            array_merge([[0, "Semua"]], array_map(function ($uniqueTahunObject) {
-                              return [$uniqueTahunObject, $uniqueTahunObject];
-                            }, $uniqueTahunArray)), isset($_POST["tahun"]) ? $_POST["tahun"] : 0
-                          ],
-                          "placeholder" => "Pilih tahun disini",
-                          "enable" => true
-                        ]
-                      ];
+                        $inputArray = [
+                          [
+                            "id" => 1,
+                            "display" => "Tahun",
+                            "name" => "tahun",
+                            "type" => "select",
+                            "value" => [
+                              array_merge([[0, "Semua"]], array_map(function ($uniqueTahunObject) {
+                                return [$uniqueTahunObject, $uniqueTahunObject];
+                              }, $uniqueTahunArray)), isset($_POST["tahun"]) ? $_POST["tahun"] : 0
+                            ],
+                            "placeholder" => "Pilih tahun disini",
+                            "enable" => true
+                          ]
+                        ];
 
-                      include "$sourcePath/components/input/detail.php";
-                      ?>
+                        include "$sourcePath/components/input/detail.php";
+                        ?>
+                      </div>
+
+                      <div class="col-sm">
+                        <?php
+                        $inputArray = [
+                          [
+                            "id" => 1,
+                            "display" => "Bulan",
+                            "name" => "bulan",
+                            "type" => "select",
+                            "value" => [
+                              [
+                                [0, "Semua"],
+                                [1, "Januari"],
+                                [2, "Februari"],
+                                [3, "Maret"],
+                                [4, "April"],
+                                [5, "Mei"],
+                                [6, "Juni"],
+                                [7, "Juli"],
+                                [8, "Agustus"],
+                                [9, "September"],
+                                [10, "Oktober"],
+                                [11, "November"],
+                                [12, "Desember"]
+                              ], isset($_POST["bulan"]) ? $_POST["bulan"] : 0
+                            ],
+                            "placeholder" => "Pilih bulan disini",
+                            "enable" => true
+                          ]
+                        ];
+
+                        include "$sourcePath/components/input/detail.php";
+                        ?>
+                      </div>
                     </div>
 
-                    <div class="col-sm">
-                      <?php
-                      $inputArray = [
-                        [
-                          "id" => 1,
-                          "display" => null,
-                          "name" => "bulan",
-                          "type" => "select",
-                          "value" => [
-                            [
-                              [0, "Semua"],
-                              [1, "Januari"],
-                              [2, "Februari"],
-                              [3, "Maret"],
-                              [4, "April"],
-                              [5, "Mei"],
-                              [6, "Juni"],
-                              [7, "Juli"],
-                              [8, "Agustus"],
-                              [9, "September"],
-                              [10, "Oktober"],
-                              [11, "November"],
-                              [12, "Desember"]
-                            ], isset($_POST["bulan"]) ? $_POST["bulan"] : 0
-                          ],
-                          "placeholder" => "Pilih bulan disini",
-                          "enable" => true
-                        ]
-                      ];
-
-                      include "$sourcePath/components/input/detail.php";
-                      ?>
-                    </div>
-
-                    <div class="col-sm">
-                      <button class="btn btn-primary btn-block" type="submit"><i class="fa fa-search"></i> Cari</button>
+                    <div class="row my-0">
+                      <div class="col-sm">
+                        <button class="btn btn-primary btn-block" type="submit"><i class="fa fa-search"></i> Cari</button>
+                      </div>
                     </div>
                   </form>
 
