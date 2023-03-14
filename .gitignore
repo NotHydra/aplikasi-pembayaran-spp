@@ -2,3 +2,9 @@ note.txt
 
 sources/public/dist/img/storage/*
 !sources/public/dist/img/storage/*.gitkeep
+
+data/json/*
+!data/json/*.gitkeep
+
+data/sql/*
+!data/sql/*.gitkeep
