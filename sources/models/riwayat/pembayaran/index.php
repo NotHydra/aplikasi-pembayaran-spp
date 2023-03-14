@@ -302,7 +302,7 @@ if (mysqli_num_rows($result) <= 0) {
                             };
                           };
 
-                          $result = mysqli_query($connection, "SELECT pembayaran.id, petugas.nama AS `petugas_nama`, pembayaran.bukti_pembayaran, pembayaran.tanggal_pembayaran, pembayaran.bulan_pembayaran, pembayaran.jumlah_pembayaran, pembayaran.dibuat FROM pembayaran INNER JOIN petugas ON pembayaran.id_petugas=petugas.id WHERE pembayaran.id_spp_detail='$id' $extraFilter ORDER BY pembayaran.dibuat DESC;");
+                          $result = mysqli_query($connection, "SELECT pembayaran.id, petugas.nama AS `petugas_nama`, pembayaran.bukti_pembayaran, pembayaran.tanggal_pembayaran, pembayaran.bulan_pembayaran, pembayaran.jumlah_pembayaran, pembayaran.dibuat FROM pembayaran INNER JOIN petugas ON pembayaran.id_petugas=petugas.id WHERE pembayaran.id_spp_detail='$id' $extraFilter ORDER BY pembayaran.bulan_pembayaran DESC;");
                           foreach ($result as $i => $data) {
                           ?>
                             <tr>

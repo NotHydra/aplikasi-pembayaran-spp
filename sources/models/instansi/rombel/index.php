@@ -261,7 +261,7 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
                             };
                           };
 
-                          $result = mysqli_query($connection, "SELECT rombel.id, rombel.rombel, rombel.dibuat, rombel.diubah, kompetensi_keahlian.kompetensi_keahlian, kompetensi_keahlian.singkatan AS `kompetensi_keahlian_singkatan`, jurusan.jurusan, jurusan.singkatan AS `jurusan_singkatan`, tingkat.tingkat FROM rombel INNER JOIN kompetensi_keahlian ON rombel.id_kompetensi_keahlian=kompetensi_keahlian.id INNER JOIN jurusan ON rombel.id_jurusan=jurusan.id INNER JOIN tingkat ON rombel.id_tingkat=tingkat.id WHERE '1'='1' $extraFilter ORDER BY rombel.dibuat DESC;");
+                          $result = mysqli_query($connection, "SELECT rombel.id, rombel.rombel, rombel.dibuat, rombel.diubah, kompetensi_keahlian.kompetensi_keahlian, kompetensi_keahlian.singkatan AS `kompetensi_keahlian_singkatan`, jurusan.jurusan, jurusan.singkatan AS `jurusan_singkatan`, tingkat.tingkat FROM rombel INNER JOIN kompetensi_keahlian ON rombel.id_kompetensi_keahlian=kompetensi_keahlian.id INNER JOIN jurusan ON rombel.id_jurusan=jurusan.id INNER JOIN tingkat ON rombel.id_tingkat=tingkat.id WHERE '1'='1' $extraFilter ORDER BY rombel.rombel ASC;");
                           foreach ($result as $i => $data) {
                           ?>
                             <tr>

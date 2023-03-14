@@ -170,7 +170,7 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
                             };
                           };
 
-                          $result = mysqli_query($connection, "SELECT id, jurusan, singkatan, dibuat, diubah FROM jurusan WHERE '1'='1' $extraFilter ORDER BY dibuat DESC;");
+                          $result = mysqli_query($connection, "SELECT id, jurusan, singkatan, dibuat, diubah FROM jurusan WHERE '1'='1' $extraFilter ORDER BY jurusan ASC;");
                           foreach ($result as $i => $data) {
                           ?>
                             <tr>

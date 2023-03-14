@@ -357,7 +357,7 @@ roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama"
                             INNER JOIN jurusan ON rombel.id_jurusan=jurusan.id
                             INNER JOIN tingkat ON rombel.id_tingkat=tingkat.id
                             WHERE '1'='1' $extraFilter 
-                            ORDER BY siswa.dibuat DESC;
+                            ORDER BY siswa.id_rombel DESC;
                           ");
 
                           foreach ($result as $i => $data) {
