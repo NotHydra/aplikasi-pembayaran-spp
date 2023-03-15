@@ -190,9 +190,10 @@
 
                 <?php
                 foreach ($pageArray as $pageObject) {
+                    $pageObjectLink = $pageObject["link"];
                 ?>
                     <li class="nav-item<?php echo ($pageObject["id"] == $navActive[0] and $navActive[1] != null) ? " menu-open" : ""; ?>">
-                        <a href="/<?php echo $originalPath; ?>/<?php echo $pageObject["link"]; ?>" class="nav-link<?php echo ($pageObject["id"] == $navActive[0]) ? " active" : ""; ?>">
+                        <a href="<?php echo $pageObjectLink != null ? "/$originalPath/$pageObjectLink" : ""; ?>" class="nav-link<?php echo ($pageObject["id"] == $navActive[0]) ? " active" : ""; ?>">
                             <i class="nav-icon <?php echo $pageObject["icon"]; ?>"></i>
                             <p>
                                 <?php echo $pageObject["title"]; ?>
