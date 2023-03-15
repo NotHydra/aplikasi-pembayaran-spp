@@ -369,8 +369,8 @@ roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama"
                           ?>
                               <tr>
                                 <td class="text-center align-middle"><?php echo $i + 1; ?>.</td>
-                                <td class="text-center align-middle"><?php echo $data["nisn"]; ?></td>
-                                <td class="text-center align-middle"><?php echo $data["nis"]; ?></td>
+                                <td class="text-center align-middle"><?php echo (int) $data["nisn"]; ?></td>
+                                <td class="text-center align-middle"><?php echo (int) $data["nis"]; ?></td>
                                 <td class="text-center align-middle"><?php echo $data["nama"]; ?></td>
                                 <td class="text-center align-middle"><?php echo $data["rombel"]; ?></td>
                                 <td class="text-center align-middle"><?php echo $data["kompetensi_keahlian"]; ?></td>
@@ -436,6 +436,7 @@ roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama"
                   if (roleCheckMinimum($sessionLevel, "admin")) {
                   ?>
                     <a class="btn btn-primary btn-block mt-1" href="./buat.php"><i class="fa fa-plus"></i> Buat</a>
+                    <a class="btn btn-success btn-block" href="./import.php"><i class="fa fa-download"></i> Import</a>
                   <?php
                   };
                   ?>
