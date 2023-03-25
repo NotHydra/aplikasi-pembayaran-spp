@@ -424,6 +424,8 @@ roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama"
                                 </td>
                               </tr>
                           <?php
+                            } else {
+                              $i -= 1;
                             };
                           };
                           ?>

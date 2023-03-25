@@ -81,7 +81,7 @@ if (mysqli_num_rows($result) <= 0) {
                             "type" => "select",
                             "value" => [array_map(function ($itemObject) {
                               return [$itemObject[0], $itemObject[1] . " - " . $itemObject[2]];
-                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT id, kompetensi_keahlian, singkatan FROM kompetensi_keahlian ORDER BY dibuat DESC;"))), isset($_POST["id_kompetensi_keahlian"]) ? $_POST["id_kompetensi_keahlian"] : $data["id_kompetensi_keahlian"]],
+                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT id, kompetensi_keahlian, singkatan FROM kompetensi_keahlian ORDER BY kompetensi_keahlian ASC;"))), isset($_POST["id_kompetensi_keahlian"]) ? $_POST["id_kompetensi_keahlian"] : $data["id_kompetensi_keahlian"]],
                             "placeholder" => "Masukkan kompetensi keahlian disini",
                             "enable" => true
                           ],
@@ -92,7 +92,7 @@ if (mysqli_num_rows($result) <= 0) {
                             "type" => "select",
                             "value" => [array_map(function ($itemObject) {
                               return [$itemObject[0], $itemObject[1] . " - " . $itemObject[2]];
-                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT id, jurusan, singkatan FROM jurusan ORDER BY dibuat DESC;"))), isset($_POST["id_jurusan"]) ? $_POST["id_jurusan"] : $data["id_jurusan"]],
+                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT id, jurusan, singkatan FROM jurusan ORDER BY jurusan ASC;"))), isset($_POST["id_jurusan"]) ? $_POST["id_jurusan"] : $data["id_jurusan"]],
                             "placeholder" => "Masukkan jurusan disini",
                             "enable" => true
                           ],
@@ -103,7 +103,7 @@ if (mysqli_num_rows($result) <= 0) {
                             "type" => "select",
                             "value" => [array_map(function ($itemObject) {
                               return [$itemObject[0], $itemObject[1]];
-                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT id, tingkat FROM tingkat ORDER BY dibuat DESC;"))), isset($_POST["id_tingkat"]) ? $_POST["id_tingkat"] : $data["id_tingkat"]],
+                            }, mysqli_fetch_all(mysqli_query($connection, "SELECT id, tingkat FROM tingkat ORDER BY tingkat ASC;"))), isset($_POST["id_tingkat"]) ? $_POST["id_tingkat"] : $data["id_tingkat"]],
                             "placeholder" => "Masukkan tingkat disini",
                             "enable" => true
                           ]
