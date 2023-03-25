@@ -59,6 +59,96 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
                     <div class="row my-0">
                       <div class="col-sm">
                         <?php
+                        $inputArray = [
+                          [
+                            "id" => 1,
+                            "display" => "Rombel",
+                            "name" => "rombel",
+                            "type" => "select",
+                            "value" => [
+                              array_merge([[0, "Semua"]], array_map(function ($yearObject) {
+                                return [$yearObject[0], $yearObject[1]];
+                              }, mysqli_fetch_all(mysqli_query($connection, "SELECT id, rombel FROM rombel ORDER BY rombel ASC;")))), isset($_POST["rombel"]) ? $_POST["rombel"] : 0
+                            ],
+                            "placeholder" => "Pilih rombel disini",
+                            "enable" => true
+                          ]
+                        ];
+
+                        include "$sourcePath/components/input/detail.php";
+                        ?>
+                      </div>
+
+                      <div class="col-sm">
+                        <?php
+                        $inputArray = [
+                          [
+                            "id" => 1,
+                            "display" => "Kompetensi Keahlian",
+                            "name" => "kompetensi_keahlian",
+                            "type" => "select",
+                            "value" => [
+                              array_merge([[0, "Semua"]], array_map(function ($yearObject) {
+                                return [$yearObject[0], $yearObject[1]];
+                              }, mysqli_fetch_all(mysqli_query($connection, "SELECT id, singkatan FROM kompetensi_keahlian ORDER BY singkatan ASC;")))), isset($_POST["kompetensi_keahlian"]) ? $_POST["kompetensi_keahlian"] : 0
+                            ],
+                            "placeholder" => "Pilih kompetensi keahlian disini",
+                            "enable" => true
+                          ]
+                        ];
+
+                        include "$sourcePath/components/input/detail.php";
+                        ?>
+                      </div>
+
+                      <div class="col-sm">
+                        <?php
+                        $inputArray = [
+                          [
+                            "id" => 1,
+                            "display" => "Jurusan",
+                            "name" => "jurusan",
+                            "type" => "select",
+                            "value" => [
+                              array_merge([[0, "Semua"]], array_map(function ($yearObject) {
+                                return [$yearObject[0], $yearObject[1]];
+                              }, mysqli_fetch_all(mysqli_query($connection, "SELECT id, singkatan FROM jurusan ORDER BY singkatan ASC;")))), isset($_POST["jurusan"]) ? $_POST["jurusan"] : 0
+                            ],
+                            "placeholder" => "Pilih jurusan disini",
+                            "enable" => true
+                          ]
+                        ];
+
+                        include "$sourcePath/components/input/detail.php";
+                        ?>
+                      </div>
+
+                      <div class="col-sm">
+                        <?php
+                        $inputArray = [
+                          [
+                            "id" => 1,
+                            "display" => "Tingkat",
+                            "name" => "tingkat",
+                            "type" => "select",
+                            "value" => [
+                              array_merge([[0, "Semua"]], array_map(function ($yearObject) {
+                                return [$yearObject[0], $yearObject[1]];
+                              }, mysqli_fetch_all(mysqli_query($connection, "SELECT id, tingkat FROM tingkat ORDER BY tingkat ASC;")))), isset($_POST["tingkat"]) ? $_POST["tingkat"] : 0
+                            ],
+                            "placeholder" => "Pilih tingkat disini",
+                            "enable" => true
+                          ]
+                        ];
+
+                        include "$sourcePath/components/input/detail.php";
+                        ?>
+                      </div>
+                    </div>
+
+                    <div class="row my-0">
+                      <div class="col-sm">
+                        <?php
                         $tahunArray = [];
                         foreach (["siswa"] as $tahunTableObject) {
                           $tahunArray = array_merge($tahunArray, array_map(function ($yearObject) {
@@ -152,18 +242,55 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
                           $rowArray = !isset($_POST["tahun"]) || (isset($_POST["tahun"]) && $_POST["tahun"] == 0) ? array_merge(["Total"], $uniqueTahunArray) : array($_POST["tahun"]);
                           foreach ($rowArray as $rowObject) {
                             $extraFilter = "";
+
+                            if (isset($_POST["rombel"])) {
+                              $rombelFilter = $_POST["rombel"];
+                              if ($rombelFilter != 0) {
+                                $extraFilter = $extraFilter . " AND siswa.id_rombel='$rombelFilter'";
+                              };
+                            };
+
+                            if (isset($_POST["kompetensi_keahlian"])) {
+                              $kompetensiKeahlianFilter = $_POST["kompetensi_keahlian"];
+                              if ($kompetensiKeahlianFilter != 0) {
+                                $extraFilter = $extraFilter . " AND kompetensi_keahlian.id='$kompetensiKeahlianFilter'";
+                              };
+                            };
+
+                            if (isset($_POST["jurusan"])) {
+                              $jurusanFilter = $_POST["jurusan"];
+                              if ($jurusanFilter != 0) {
+                                $extraFilter = $extraFilter . " AND jurusan.id='$jurusanFilter'";
+                              };
+                            };
+
+                            if (isset($_POST["tingkat"])) {
+                              $tingkatFilter = $_POST["tingkat"];
+                              if ($tingkatFilter != 0) {
+                                $extraFilter = $extraFilter . " AND tingkat.id='$tingkatFilter'";
+                              };
+                            };
+
                             if ($rowObject != "Total") {
-                              $extraFilter = $extraFilter . " AND YEAR(dibuat)='$rowObject'";
+                              $extraFilter = $extraFilter . " AND YEAR(siswa.dibuat)='$rowObject'";
                             };
 
                             if (isset($_POST["bulan"])) {
                               $bulanFilter = $_POST["bulan"];
                               if ($bulanFilter != 0) {
-                                $extraFilter = $extraFilter . " AND MONTH(dibuat)='$bulanFilter'";
+                                $extraFilter = $extraFilter . " AND MONTH(siswa.dibuat)='$bulanFilter'";
                               };
                             };
 
-                            $resultSiswa = mysqli_query($connection, "SELECT id FROM siswa WHERE '1'='1' $extraFilter;");
+                            $resultSiswa = mysqli_query($connection, "SELECT siswa.id 
+                              FROM siswa 
+                              INNER JOIN rombel ON siswa.id_rombel=rombel.id 
+                              INNER JOIN kompetensi_keahlian ON rombel.id_kompetensi_keahlian=kompetensi_keahlian.id
+                              INNER JOIN jurusan ON rombel.id_jurusan=jurusan.id
+                              INNER JOIN tingkat ON rombel.id_tingkat=tingkat.id
+                              WHERE '1'='1' $extraFilter;
+                            ");
+
                             $totalNominal = 0;
                             $totalSudahDibayar = 0;
                             foreach ($resultSiswa as $dataSiswa) {
