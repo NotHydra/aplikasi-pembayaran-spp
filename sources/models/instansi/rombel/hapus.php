@@ -66,6 +66,15 @@ if (mysqli_num_rows($result) <= 0) {
                         $inputArray = [
                           [
                             "id" => 1,
+                            "display" => "Rombel",
+                            "name" => "rombel",
+                            "type" => "text",
+                            "value" => $data["rombel"],
+                            "placeholder" => "Masukkan rombel disini",
+                            "enable" => false
+                          ],
+                          [
+                            "id" => 2,
                             "display" => "Kompetensi Keahlian",
                             "name" => "id_kompetensi_keahlian",
                             "type" => "text",
@@ -74,7 +83,7 @@ if (mysqli_num_rows($result) <= 0) {
                             "enable" => false
                           ],
                           [
-                            "id" => 2,
+                            "id" => 3,
                             "display" => "Jurusan",
                             "name" => "id_jurusan",
                             "type" => "text",
@@ -83,21 +92,12 @@ if (mysqli_num_rows($result) <= 0) {
                             "enable" => false
                           ],
                           [
-                            "id" => 3,
+                            "id" => 4,
                             "display" => "Tingkat",
                             "name" => "id_tingkat",
                             "type" => "text",
                             "value" => $data["tingkat"],
                             "placeholder" => "Masukkan tingkat disini",
-                            "enable" => false
-                          ],
-                          [
-                            "id" => 4,
-                            "display" => "Rombel",
-                            "name" => "rombel",
-                            "type" => "text",
-                            "value" => $data["rombel"],
-                            "placeholder" => "Masukkan rombel disini",
                             "enable" => false
                           ]
                         ];

@@ -212,10 +212,10 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
                         <thead>
                           <tr>
                             <th class="text-center align-middle export">No.</th>
+                            <th class="text-center align-middle export">Rombel</th>
                             <th class="text-center align-middle export">Kompetensi Keahlian</th>
                             <th class="text-center align-middle export">Jurusan</th>
                             <th class="text-center align-middle export">Tingkat</th>
-                            <th class="text-center align-middle export">Rombel</th>
                             <th class="text-center align-middle export">Dibuat</th>
                             <th class="text-center align-middle export">Diubah</th>
                             <th class="text-center align-middle">Aksi</th>
@@ -266,10 +266,10 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
                           ?>
                             <tr>
                               <td class="text-center align-middle"><?php echo $i + 1; ?>.</td>
+                              <td class="text-center align-middle"><?php echo $data["rombel"]; ?></td>
                               <td class="text-center align-middle"><?php echo $data["kompetensi_keahlian"] . " - " . $data["kompetensi_keahlian_singkatan"]; ?></td>
                               <td class="text-center align-middle"><?php echo $data["jurusan"] . " - " . $data["jurusan_singkatan"]; ?></td>
                               <td class="text-center align-middle"><?php echo $data["tingkat"]; ?></td>
-                              <td class="text-center align-middle"><?php echo $data["rombel"]; ?></td>
                               <td class="text-center align-middle"><?php echo $data["dibuat"]; ?></td>
                               <td class="text-center align-middle"><?php echo dateInterval($data["diubah"], $currentDate); ?></td>
 

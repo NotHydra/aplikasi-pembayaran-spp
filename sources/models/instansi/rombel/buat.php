@@ -60,6 +60,15 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
                         $inputArray = [
                           [
                             "id" => 1,
+                            "display" => "Rombel",
+                            "name" => "rombel",
+                            "type" => "text",
+                            "value" => isset($_POST["rombel"]) ? $_POST["rombel"] : null,
+                            "placeholder" => "Masukkan rombel disini",
+                            "enable" => true
+                          ],
+                          [
+                            "id" => 2,
                             "display" => "Kompetensi Keahlian",
                             "name" => "id_kompetensi_keahlian",
                             "type" => "select",
@@ -70,7 +79,7 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
                             "enable" => true
                           ],
                           [
-                            "id" => 2,
+                            "id" => 3,
                             "display" => "Jurusan",
                             "name" => "id_jurusan",
                             "type" => "select",
@@ -81,7 +90,7 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
                             "enable" => true
                           ],
                           [
-                            "id" => 3,
+                            "id" => 4,
                             "display" => "Tingkat",
                             "name" => "id_tingkat",
                             "type" => "select",
@@ -89,15 +98,6 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
                               return [$itemObject[0], $itemObject[1]];
                             }, mysqli_fetch_all(mysqli_query($connection, "SELECT id, tingkat FROM tingkat ORDER BY dibuat DESC;"))), isset($_POST["id_tingkat"]) ? $_POST["id_tingkat"] : null],
                             "placeholder" => "Masukkan tingkat disini",
-                            "enable" => true
-                          ],
-                          [
-                            "id" => 4,
-                            "display" => "Rombel",
-                            "name" => "rombel",
-                            "type" => "text",
-                            "value" => isset($_POST["rombel"]) ? $_POST["rombel"] : null,
-                            "placeholder" => "Masukkan rombel disini",
                             "enable" => true
                           ]
                         ];
@@ -128,13 +128,13 @@ roleGuardMinimum($sessionLevel, "admin", "/$originalPath/sources/models/utama");
   include "$sourcePath/components/select/script.php";
 
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $rombel = $_POST["rombel"];
     $idKompetensiKeahlian = $_POST["id_kompetensi_keahlian"];
     $idJurusan = $_POST["id_jurusan"];
     $idTingkat = $_POST["id_tingkat"];
-    $rombel = $_POST["rombel"];
 
     try {
-      $result = mysqli_query($connection, "INSERT INTO rombel (id_kompetensi_keahlian, id_jurusan, id_tingkat, rombel) VALUES ('$idKompetensiKeahlian', '$idJurusan', '$idTingkat', '$rombel');");
+      $result = mysqli_query($connection, "INSERT INTO rombel (rombel, id_kompetensi_keahlian, id_jurusan, id_tingkat) VALUES ('$rombel', '$idKompetensiKeahlian', '$idJurusan', '$idTingkat');");
 
       if ($result) {
         activity("Membuat Rombel");

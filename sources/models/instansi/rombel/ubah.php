@@ -67,6 +67,15 @@ if (mysqli_num_rows($result) <= 0) {
                         $inputArray = [
                           [
                             "id" => 1,
+                            "display" => "Rombel",
+                            "name" => "rombel",
+                            "type" => "text",
+                            "value" => isset($_POST["rombel"]) ? $_POST["rombel"] : $data["rombel"],
+                            "placeholder" => "Masukkan rombel disini",
+                            "enable" => true
+                          ],
+                          [
+                            "id" => 2,
                             "display" => "Kompetensi Keahlian",
                             "name" => "id_kompetensi_keahlian",
                             "type" => "select",
@@ -77,7 +86,7 @@ if (mysqli_num_rows($result) <= 0) {
                             "enable" => true
                           ],
                           [
-                            "id" => 2,
+                            "id" => 3,
                             "display" => "Jurusan",
                             "name" => "id_jurusan",
                             "type" => "select",
@@ -88,7 +97,7 @@ if (mysqli_num_rows($result) <= 0) {
                             "enable" => true
                           ],
                           [
-                            "id" => 3,
+                            "id" => 4,
                             "display" => "Tingkat",
                             "name" => "id_tingkat",
                             "type" => "select",
@@ -96,15 +105,6 @@ if (mysqli_num_rows($result) <= 0) {
                               return [$itemObject[0], $itemObject[1]];
                             }, mysqli_fetch_all(mysqli_query($connection, "SELECT id, tingkat FROM tingkat ORDER BY dibuat DESC;"))), isset($_POST["id_tingkat"]) ? $_POST["id_tingkat"] : $data["id_tingkat"]],
                             "placeholder" => "Masukkan tingkat disini",
-                            "enable" => true
-                          ],
-                          [
-                            "id" => 4,
-                            "display" => "Rombel",
-                            "name" => "rombel",
-                            "type" => "text",
-                            "value" => isset($_POST["rombel"]) ? $_POST["rombel"] : $data["rombel"],
-                            "placeholder" => "Masukkan rombel disini",
                             "enable" => true
                           ]
                         ];
@@ -135,13 +135,13 @@ if (mysqli_num_rows($result) <= 0) {
   include "$sourcePath/components/select/script.php";
 
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $rombel = $_POST["rombel"];
     $idKompetensiKeahlian = $_POST["id_kompetensi_keahlian"];
     $idJurusan = $_POST["id_jurusan"];
     $idTingkat = $_POST["id_tingkat"];
-    $rombel = $_POST["rombel"];
 
     try {
-      $result = mysqli_query($connection, "UPDATE rombel SET id_kompetensi_keahlian='$idKompetensiKeahlian', id_jurusan='$idJurusan', id_tingkat='$idTingkat', rombel='$rombel' WHERE id='$id';");
+      $result = mysqli_query($connection, "UPDATE rombel SET rombel='$rombel', id_kompetensi_keahlian='$idKompetensiKeahlian', id_jurusan='$idJurusan', id_tingkat='$idTingkat' WHERE id='$id';");
 
       if ($result) {
         activity("Mengubah Rombel");
