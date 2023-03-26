@@ -302,7 +302,7 @@ if (mysqli_num_rows($result) <= 0) {
                           <tr>
                             <th class="text-center align-middle export">No.</th>
                             <th class="text-center align-middle export">Petugas</th>
-                            <th class="text-center align-middle export">Bukti Pembayaran</th>
+                            <th class="text-center align-middle">Bukti Pembayaran</th>
                             <th class="text-center align-middle export">Tanggal Pembayaran</th>
                             <th class="text-center align-middle export">Bulan Pembayaran</th>
                             <th class="text-center align-middle export">Jumlah Pembayaran</th>
