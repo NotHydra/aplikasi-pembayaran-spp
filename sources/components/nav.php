@@ -47,7 +47,32 @@
             <div class="info">
                 <div class="d-block">
                     <p class="h5 m-0 p-0"><?php echo $sessionType == "petugas" ? ucwords($sessionUsername) : ucwords($sessionNama); ?></p>
-                    <p class="h6 m-0 p-0" style="opacity: 0.6;"><?php echo ucwords($sessionLevel); ?></p>
+
+                    <?php
+                    if ($sessionType == "petugas") {
+                    ?>
+                        <p class="h6 m-0 p-0" style="opacity: 0.6;"><?php echo ucwords($sessionLevel); ?></p>
+
+                        <?php
+                    } else if ($sessionType == "siswa") {
+                        $totalNominal = mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(spp.nominal) AS `total` FROM spp_detail INNER JOIN spp ON spp_detail.id_spp=spp.id WHERE spp_detail.id_siswa='$sessionId';"))["total"];
+                        $totalSudahDibayar = mysqli_fetch_assoc(mysqli_query($connection, "SELECT SUM(pembayaran.jumlah_pembayaran) AS `total` FROM pembayaran INNER JOIN spp_detail ON pembayaran.id_spp_detail=spp_detail.id WHERE spp_detail.id_siswa='$sessionId';"))["total"];
+
+                        if ($totalNominal == $totalSudahDibayar) {
+                        ?>
+                            <div class="bg-success text-center" style="padding: 0.2rem; border-radius: 4px; font-size: 0.75rem">
+                                <b>Sudah Lunas</b>
+                            </div>
+                        <?php
+                        } else {
+                        ?>
+                            <div class="bg-danger text-center" style="padding: 0.2rem; border-radius: 4px; font-size: 0.75rem">
+                                <b>Belum Lunas</b>
+                            </div>
+                    <?php
+                        };
+                    };
+                    ?>
                 </div>
             </div>
         </a>
