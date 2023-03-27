@@ -385,11 +385,19 @@ roleGuardMinimum($sessionLevel, "petugas", "/$originalPath/sources/models/utama"
                                 <?php
                                 if ($totalNominal == $totalSudahDibayar) {
                                 ?>
-                                  <td class="text-center align-middle">Sudah Lunas</td>
+                                  <td class="text-center align-middle">
+                                    <div class="bg-success text-center" style="padding: 0.2rem; border-radius: 4px;">
+                                      Sudah Lunas
+                                    </div>
+                                  </td>
                                 <?php
                                 } else {
                                 ?>
-                                  <td class="text-center align-middle">Belum Lunas</td>
+                                  <td class="text-center align-middle">
+                                    <div class="bg-danger text-center" style="padding: 0.2rem; border-radius: 4px;">
+                                      Belum Lunas
+                                    </div>
+                                  </td>
                                 <?php
                                 };
                                 ?>
