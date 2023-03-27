@@ -25,7 +25,21 @@ if (roleCheckMinimum($sessionLevel, "admin")) {
     ]);
 
     array_push($tableButton, [
+        "extend" => "csv",
+        "exportOptions" => [
+            "columns" => [".export"]
+        ]
+    ]);
+
+    array_push($tableButton, [
         "extend" => "pdf",
+        "exportOptions" => [
+            "columns" => [".export"]
+        ]
+    ]);
+
+    array_push($tableButton, [
+        "extend" => "print",
         "exportOptions" => [
             "columns" => [".export"]
         ]
