@@ -60,13 +60,13 @@
 
                         if ($totalNominal == $totalSudahDibayar) {
                         ?>
-                            <div class="bg-success text-center" style="padding: 0.2rem; border-radius: 4px; font-size: 0.75rem">
+                            <div class="bg-success text-center py-1" style="border-radius: 4px; font-size: 0.8rem">
                                 <b>Sudah Lunas</b>
                             </div>
                         <?php
                         } else {
                         ?>
-                            <div class="bg-danger text-center" style="padding: 0.2rem; border-radius: 4px; font-size: 0.75rem">
+                            <div class="bg-danger text-center py-1" style="border-radius: 4px; font-size: 0.8rem">
                                 <b>Belum Lunas</b>
                             </div>
                     <?php
