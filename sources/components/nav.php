@@ -1,3 +1,7 @@
+<div class="preloader flex-column justify-content-center align-items-center">
+    <img src="<?php echo $sourcePath; ?>/public/dist/img/app-logo.png" height="120" width="120">
+</div>
+
 <nav class="main-header navbar navbar-expand" id="nav-theme">
     <ul class="navbar-nav">
         <li class="nav-item">
