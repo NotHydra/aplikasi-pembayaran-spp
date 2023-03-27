@@ -8,7 +8,9 @@
  <link rel="stylesheet" href="<?php echo $sourcePath; ?>/public/dist/css/adminlte.min.css">
 
  <style>
-     td {
-         white-space: nowrap;
+     @media (min-width: 800px) {
+         td {
+             white-space: nowrap;
+         }
      }
  </style>
