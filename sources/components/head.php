@@ -1,6 +1,7 @@
  <meta charset="utf-8">
  <meta name="viewport" content="width=device-width, initial-scale=1">
  <title><?php echo $headTitle != null ? "Pembayaran SPP | $headTitle" : "Pembayaran SPP"; ?></title>
+ <link rel="shortcut icon" href="<?php echo $sourcePath; ?>/public/dist/img/app-logo.png">
 
  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
  <link rel="stylesheet" href="<?php echo $sourcePath; ?>/public/plugins/fontawesome-free/css/all.min.css">
